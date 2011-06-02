@@ -1,0 +1,55 @@
+<apex:page controller="newVFCaseController" renderAs="pdf" ContentType="application/pdf" showHeader="false" sidebar="false" >
+<html>
+<head>
+<title> Confirmation Page</title>
+<apex:stylesheet value="{!URLFOR($Resource.PSGSalesforce, '/SpryMenuBarVerticalCSS.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.PSGSalesforce, '/PSGSFGlobalStyleCSS.css')}"/>
+<apex:stylesheet value="{!URLFOR($Resource.PSGSalesforce, '/PSGSFSecondaryStyleCSS.css')}"/>
+
+</head>
+
+<div id="wrapper">
+	<span id="j_id0:j_id6">	 
+		<div id="header"> 
+			<apex:image url="{!URLFOR($Resource.PSGSalesforce, '/PSGSF_Header_Left.gif')}" width="21.5%"/>
+			<apex:image url="{!URLFOR($Resource.PSGSalesforce, '/PSGSF_Header_Right.jpg')}" width="70%"/>      
+		</div>
+	</span>
+</div>
+<br/> 
+<div id="content">        
+	<P>{!oldcase.suppliedname}, thank you for submitting case number: {!oldcase.casenumber}. Please retain this information for your records. </P>
+</div>         
+	<apex:panelGrid columns="2">
+		<apex:outputText value="Case Number: " style="font-weight:bold"/>
+		<apex:outputText value="{!oldcase.casenumber}"/>
+		<apex:outputText value="Time Submitted: " style="font-weight:bold"/>
+		<apex:outputText value="{!oldcase.createddate}"/>
+		<apex:outputText value="Submitted By: " style="font-weight:bold" />
+		<apex:outputText value="{!oldcase.suppliedname}"/>
+		<apex:outputText value="Company: " style="font-weight:bold"/>
+		<apex:outputText value="{!oldcase.suppliedcompany}"/>
+		<apex:outputText value="Email: " style="font-weight:bold"/>
+		<apex:outputText value="{!oldcase.suppliedemail}"/>
+		<apex:outputText value="Subject: " style="font-weight:bold"/>
+		<apex:outputText value="{!oldcase.subject}"/>
+		<apex:outputText value="Description: " style="font-weight:bold"/>
+		<apex:outputText value="{!oldcase.description}"/>
+	</apex:panelGrid>
+	<br/>
+		<apex:outputText value="Attachments" style="font-weight:bold; text-decoration:underline"/><br/>          
+		<apex:outputText value="None" style="font-style:italic" rendered="{!AttachedSize == 0}"/>
+		<apex:repeat value="{!attachInsert}" var="newAtt">	
+			<apex:outputText value="File Name: " style="font-weight:bold" rendered="{!newAtt.name != NULL}"  />				 
+			<apex:outputText escape="false" value="{!newAtt.name} <br>" rendered="{!newAtt.name != NULL}"/>					 	
+		</apex:repeat>      
+	    <br></br>
+	    <font color="red">
+		    <apex:outputText value="Attachments Not Uploaded" style="font-weight:bold; text-decoration:underline" rendered="{!ShouldIRender}"/><br/>          
+			<apex:repeat value="{!attachIgnore}" var="ignAtt">	
+				<apex:outputText value="File Name: " style="font-weight:bold" />				 
+				<apex:outputText escape="false" value="{!ignAtt.name} <br>" rendered="{!ignAtt.name != NULL}"/>
+			</apex:repeat>	      			
+		</font>
+</html>
+</apex:page>

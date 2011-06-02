@@ -1,5 +1,5 @@
 trigger NancyTrigger on Case (after update) {
-	
+  // Adding a comment
   Map<String, Id> queueNameToId = new Map<String, Id>();
   Map<String, Id> queueNameToRecordTypeId = new Map<String, Id>();
   Map<Id, String> RecordTypeIdToName = new Map<Id, String>();

@@ -3,6 +3,8 @@ Profile name of Sites user must be 'Destination Services Profile' for this to wo
 **/
 
 public class sitesVFCaseController {
+	
+	public boolean sendConfirmationEmail{get; set;}	
 	  
 	//Id for holding the CaseID  
 	Public Id cid;
@@ -80,7 +82,8 @@ CURRENTLY NOT USING THIS PART. Can be used to allow the user to add more attachm
 	// instantiate the list with a 5 attachments. Can change the number of attachments that are displayed
 	// On the page by changing number of lines here.
 	public sitesVFCaseController() // This is a constructor; will ALWAYS run before page generation beings
-	{		
+	{	
+		sendConfirmationEmail = true;	
 		newAttachments=new List<Attachment>{new Attachment()};
 		newAttachments.add(new Attachment());
 		newAttachments.add(new Attachment());
@@ -129,7 +132,7 @@ CURRENTLY NOT USING THIS PART. Can be used to allow the user to add more attachm
 
 	//When saved, the Assignment Rules are set, the case is uploaded, the case ID is added to the attachments
 	// and then they are uploaded.
-	public PageReference save() {
+	public PageReference save() {		
     
     //Do validation that the Visualforce page can't do with a required = 'true' tag because '--None--' is technically a value for the Case Type picklist. 
     //If we removed that option, it would simply default to the first option, and not have the user pick, however then validation would be done by VF.
@@ -208,6 +211,11 @@ CURRENTLY NOT USING THIS PART. Can be used to allow the user to add more attachm
     Page.ThankYou.setRedirect(true); //needed to solve an error that would sporadically come up
   	newAttachments.clear(); // clear all attachments, used incase we want to upload more attachments on the next page
   	newAttachments=new List<Attachment>{new Attachment()}; // recreate the new attachment. however, only one choice instead of three, because this will only be used when there was an error uploading a restricted file
+  	
+  	if (sendConfirmationEmail == true){
+			this.sendConfirmationEmail();
+		}
+  	
   	//Go to the Thank You Page
   	return Page.ThankYou;         
 	}
@@ -221,6 +229,30 @@ CURRENTLY NOT USING THIS PART. Can be used to allow the user to add more attachm
    		else{
    			return false;
 		}
+   }
+   
+   public void sendConfirmationEmail(){
+   	List<String> toAddresses = new List<String>{vfcase.SuppliedEmail};
+   	List<String> ccAddresses = new List<String>();
+   	String subject = 'RE: ' + getOldCase().Subject + 'Case Number: '+ getOldCase().CaseNumber + Utilities.getCaseThreadId(getOldCase().Id);
+   	String plainTextBody = vfcase.SuppliedName + ', thank you for submitting case number: '+ getOldCase().CaseNumber + '. Please retain this information for your records.'
+   						   + '\n\nCase Number: ' + getOldCase().CaseNumber
+   						   + '\nTime Submitted: ' + getOldCase().CreatedDate + ' Pacific Time'
+   						   + '\nSubmitted By: ' + getOldCase().SuppliedName
+   						   + '\nCompany: ' + getOldCase().SuppliedCompany
+   						   + '\nEmail: ' + getOldCase().SuppliedEmail
+   						   + '\nRequest Type: ' + getOldCase().Type
+   						   + '\nActivity Name: ' + getOldCase().Offer_Name__c
+   						   + '\nOFID: ' + getOldCase().OFID__c
+   						   + '\nPriority: ' + getOldCase().Priority
+   						   + '\nSubject: ' + getOldCase().Subject
+   						   + '\nDetails: ' + getOldCase().Description; 
+   	
+   	String replyTo = 'test@test.com';
+   	String senderDisplayName = 'Test User';   	
+   	EmailUtilities.sendSingleEmailMessage(toAddresses, ccAddresses, replyTo, senderDisplayName, plainTextBody, subject, null);   	
+   	//sendConfirmationEmail = false;
+   	// need a method to log the outgoing email on the case. Users could then reply to this with the details, or have a record of it???
    }
  
  /** 

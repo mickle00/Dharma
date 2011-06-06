@@ -34,5 +34,11 @@ public with sharing class Utilities {
 		
 		return email + ':' + lastName + ':' + firstName;
 	}
+	public static String truncateField(String myFieldValue, Integer maxLength, String newLine){
+		String errorMessage = '***TRUNCATED***';
+		if (newLine == '<br/>') errorMessage = '<font color="red">' + errorMessage + '</font>';
+		Integer usedCharacters = (newLine + newLine + errorMessage).length();
+		return myFieldValue.substring(0,maxLength-usedCharacters) + newLine + newLine + errorMessage;
+	}
 	
 }

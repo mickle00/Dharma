@@ -184,14 +184,19 @@ public class CaseClass {
     	
     	String plainTextEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '\n');
     	String htmlBodyEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '<br/>');
+    	
+    	String plainTextDescription = plainTextEmailRecipientsList + email.plainTextBody;
+    	if (plainTextDescription.length() > 32000) plainTextDescription = Utilities.truncateField(plainTextDescription, 32000, '\n');
+    	String richTextDescription = htmlBodyEmailRecipientsList + email.htmlBody;
+    	if (richTextDescription.length() > 32000) richTextDescription = Utilities.truncateField(richTextDescription, 32000, '<br/>');
     	    	
-    	Case myCase = new Case(Description = truncateDescription(plainTextEmailRecipientsList + email.plainTextBody, false)
+    	Case myCase = new Case(Description = plainTextDescription
     	                      ,Subject = email.subject
     	                      ,SuppliedEmail = email.fromAddress
     	                      ,SuppliedName = email.fromName
     	                      ,RecordTypeId = mapRecordTypes.get(recordType).Id
     	                      ,Origin = 'Email'
-    	                      ,Description_Rich_Text__c = truncateDescription(htmlBodyEmailRecipientsList + email.htmlBody, true)
+    	                      ,Description_Rich_Text__c = richTextDescription
     	                      //MPS ADDED
     	                      ,Email_Recipients__c = EmailUtilities.buildEmailRecipientsField(email.toAddresses, email.ccAddresses));
     	
@@ -283,30 +288,8 @@ public class CaseClass {
       
       return myCase;
     	
-    }
-    
-    private String truncateDescription (String myDescription, boolean HTML){
-    	// It appears that most of the time it's the Rich Text field that's going over the limit, as it has to deal with all of the extra HTML characters
-    	// However, to be on the safe side, might as well make sure that both the description and the rich text description obey the 32k limit
-    	string newLine;
-    	string errorMessage;
-    	if (HTML == true){
-    		newLine = '<br>';
-    		errorMessage = '<font color="red">***DESCRIPTION TRUNCATED SEE RELATED LIST FOR COMPLETE EMAIL***</font>';
-    	}
-    	else {
-    		newLine = '\n';
-    		errorMessage = '***DESCRIPTION TRUNCATED SEE RELATED LIST FOR COMPLETE EMAIL***';
-    	}
-    	String returnText;
-    	if (myDescription.length() > 32000){    		
-    		returnText = myDescription.substring(0,31900) + newLine + newLine + errorMessage;
-    	}
-    	else {
-    		returnText = myDescription;
-    	}
-    	return returnText;
-    }
+    }   
+
     private void editMaps(Account_Contact__c accountContact) {
        // add the contacts id to the map emailcid with email address as the key
          this.emailContactId.put(accountContact.contact__r.email, accountContact.contact__c);

@@ -1,0 +1,5 @@
+<apex:component id="emailLanguage" access="Global" controller="visualforceEmail">
+	<apex:attribute name="Case_Id" type="Id" description="The Case Id" assignTo="{!Case_Id}"  />
+	<apex:attribute name="emailTemplateType" type="String" description="The Template Type" assignTo="{!emailTemplateType}"  />
+	<apex:outputText value="{!EmailBody}" escape="false"/>
+</apex:component>

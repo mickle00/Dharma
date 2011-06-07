@@ -54,7 +54,7 @@ public with sharing class troubleshootingCaseControllerExtension {
           all.add(new SelectOption('Unknown','Unknown'));
           all.add(new SelectOption('No','No'));
           all.add(new SelectOption('Yes (Not Owner)','Yes (Not Owner)'));
-        all.add(new SelectOption('Owner','Owner', false));
+          all.add(new SelectOption('Owner','Owner', false));
     return all;
     }
         

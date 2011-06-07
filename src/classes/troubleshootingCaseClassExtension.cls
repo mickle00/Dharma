@@ -1,8 +1,5 @@
 public with sharing class troubleshootingCaseClassExtension {
 
-
-// Will add to the Case Class? Should we break it out separately? 
-
 //for Before Insert
 public void beforeNewTroubleshootingCase(List<Case> myCases){
   for (Case myCase : myCases){
@@ -17,6 +14,15 @@ public void beforeNewTroubleshootingCase(List<Case> myCases){
 public void beforeUpdateTroubleshootingCase(Map<Id, Case> newCaseIDtoCaseMap, Map<Id, Case> oldCaseIDtoCaseMap){
   for (Case myCase : newCaseIDtoCaseMap.values()){
     if (myCase.OwnerId == troubleshootingQueueId) myCase.RecordTypeId = troubleshootingRecordType;
+    // build logic for transferring a non-troubleshooting case
+    try {
+    	if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId != troubleshootingRecordType){
+    		myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
+    	}
+    }
+    catch (Exception e){
+    	system.debug ('*** ERROR ' + e +' ***');
+    }
     if (oldCaseIDtoCaseMap.get(myCase.id).RecordTypeId != troubleshootingRecordType && newCaseIDtoCaseMap.get(myCase.id).RecordTypeId == troubleshootingRecordType){
       myCase.Involved__c = getAllInvolvedTeamsPicklistValue();
     }
@@ -70,19 +76,22 @@ public void afterUpdateTroubleshootingCase(Map<Id, Case> newCaseIDtoCaseMap, Map
 
 PRIVATE METHODS
 
-
-
-TODO
-
-Private to scope down to troubleshooting cases
 **/
 
-// Can I reuse some methods in your Utilities Class to get this Queue && Record Type??
-private Id troubleshootingRecordType = [SELECT Id 
-                                        FROM RecordType 
-                                        WHERE DeveloperName ='Troubleshooting' 
-                                        AND sObjectType = 'Case' LIMIT 1].Id;
-                                        
+private Id troubleshootingRecordType = teamNameToRecordTypeMap().get('Troubleshooting').Id;
+
+private Map<String, RecordType> teamNameToRecordTypeMap(){
+	Map<String, RecordType> teamNameToRecordTypeMap = new Map<String, RecordType>();
+	for (RecordType myRecordType : 
+									[SELECT Id
+											,Name 
+                                      FROM  RecordType 
+                                     WHERE  sObjectType = 'Case']){
+ 		teamNameToRecordTypeMap.put(myRecordType.Name, myRecordType);
+	}
+	return teamNameToRecordTypeMap;
+}
+                                
 private Id troubleshootingQueueId = [SELECT Id
                                             ,Name
                                             ,(SELECT Id
@@ -92,6 +101,38 @@ private Id troubleshootingQueueId = [SELECT Id
                                       FROM Group 
                                       WHERE Type = 'Queue' 
                                       AND Name = 'Troubleshooting Transport Queue' LIMIT 1].Id;
+                                      
+private Map<Id, String> troubleshootingQueueIdToNameMap = new Map<Id, String>();
+
+private Set<Id> transportQueueIds(){
+	Set<Id> buildingTransportQueueIds = new Set<Id>();
+	Set<String> transportTeamQueueNames = new Set<String>{'ADM'
+														  ,'Air CPR'
+														  ,'CarOps'
+														  ,'Commissions'
+														  ,'Fare Filing'
+														  ,'Quality'
+														  ,'Regional Team'
+														  ,'Schedule Change'
+														  ,'Settlement & Reporting'
+														  ,'Ticketing'
+														  ,'Training'
+														  };
+	
+	for (Group myGroup : [SELECT Id
+                                 ,Name
+                                 ,(SELECT Id
+                                          ,SobjectType 
+                                     FROM QueueSobjects 
+                                    WHERE SobjectType = 'Case') 
+                            FROM Group 
+                           WHERE Type = 'Queue' 
+                             AND Name IN :transportTeamQueueNames]){                
+   		buildingTransportQueueIds.add(myGroup.Id);
+   		troubleshootingQueueIdToNameMap.put(myGroup.Id, myGroup.Name);
+        }
+    return buildingTransportQueueIds;                             
+} 
 
 // List of all of the Checkoff Teams. Currently 11 Teams.
 private List<Process_Team__c> processTeams = [SELECT Id 

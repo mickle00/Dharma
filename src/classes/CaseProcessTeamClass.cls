@@ -5,6 +5,7 @@ public with sharing class CaseProcessTeamClass {
   public void beforeInsertCaseProcessTeam(List<Case_Process_Team__c> myCaseProcessTeams){
     for (Case_Process_Team__c myCaseProcessTeam : myCaseProcessTeams){
       myCaseProcessTeam.Ready_to_Close__c = 'No';
+      myCaseProcessTeam.Involved__c = 'Unknown';
     }
   }
   
@@ -110,7 +111,7 @@ public with sharing class CaseProcessTeamClass {
       String caseProcessTeamName = CaseProcessTeamIDtoTeamNameMap.get(myCaseProcessTeam.Id);
       if (myCase.Involved__c == null) myCase.Involved__c = '';
       if (!caseStatusCount.containsKey(myCaseProcessTeam.Case__c)){
-        if (myCase.OwnerId == queueNametoID.get('Troubleshooting Transport Queue')){
+        if (myCase.OwnerId == queueNametoID.get('Troubleshooting Transport Queue') || myCase.Status == 'No Teams Involved'){
           // do whatever they want to do for when no team accepts ownership
           // need to be careful for cases created via email. will set up a special view to monitor
           myCase = noTeamsInvolved(myCase);
@@ -137,9 +138,18 @@ public with sharing class CaseProcessTeamClass {
         }
       }
       if (myCaseProcessTeam.Involved__c == 'Yes (Not Owner)' || myCaseProcessTeam.Involved__c == 'Unknown' || myCaseProcessTeam.Involved__c == 'Owner'){
-        if (caseStatusCount.containsKey(myCaseProcessTeam.Case__c) && (myCase.Status == 'New' || myCase.Status == 'Closed' || myCase.Status == 'No Teams Involved')){
+        if (caseStatusCount.containsKey(myCaseProcessTeam.Case__c) && (myCase.Status == 'New' || myCase.Status == 'Closed' || myCase.Status == 'No Teams Involved' || myCase.Status == 'Transferred')){
           myCase.Status = 'Open';
         }
+        // if it's ready to be closed 
+        if (!caseStatusCount.containsKey(myCaseProcessTeam.Case__c) && myCase.Status == 'No Teams Involved' && myCaseProcessTeam.Ready_to_Close__c == 'Yes' 
+        	&& (myCaseProcessTeam.Involved__c == 'Yes (Not Owner)' || myCaseProcessTeam.Involved__c == 'Owner')){
+          myCase.Status = 'Closed';
+          if (myCaseProcessTeam.Involved__c == 'Owner' && myCase.OwnerId == queueNametoID.get('Troubleshooting Transport Queue')){
+          	myCase.OwnerId = queueNametoID.get(caseProcessTeamName);          	
+          }          
+        }
+        
         if (caseProcessTeamName != NULL && !myCase.Involved__c.contains(caseProcessTeamName)){
           myCase.Involved__c = myCase.Involved__c + ';' + caseProcessTeamName;
         }

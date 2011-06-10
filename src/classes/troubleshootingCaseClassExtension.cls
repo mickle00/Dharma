@@ -3,6 +3,8 @@ public with sharing class troubleshootingCaseClassExtension {
 //for Before Insert
 public void beforeNewTroubleshootingCase(List<Case> myCases){
   for (Case myCase : myCases){
+  	// If initially creating a Troubleshooting Case, then set the owner to the Troubleshooting Queue
+  	// and build out the picklist values
     if (myCase.RecordTypeId == troubleshootingRecordType){
       myCase.OwnerId = troubleshootingQueueId;
       myCase.Involved__c = getAllInvolvedTeamsPicklistValue();
@@ -13,16 +15,24 @@ public void beforeNewTroubleshootingCase(List<Case> myCases){
 // for Before Update
 public void beforeUpdateTroubleshootingCase(Map<Id, Case> newCaseIDtoCaseMap, Map<Id, Case> oldCaseIDtoCaseMap){
   for (Case myCase : newCaseIDtoCaseMap.values()){
+  	// All cases that the Troubleshooting Queue owns should be Troubleshooting Record Type
     if (myCase.OwnerId == troubleshootingQueueId) myCase.RecordTypeId = troubleshootingRecordType;
-    // build logic for transferring a non-troubleshooting case
+    // build logic for transferring a Case
     try {
+    	// Transferring from Non-Troubleshooting to Non-Troubleshooting
     	if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId != troubleshootingRecordType){
     		myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
+    	}
+    	// Transferring from Troubleshooting to non-Troubleshooting
+    	if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId == troubleshootingRecordType){
+    		myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
+    		myCase = removeInvolvedTeams(myCase);
     	}
     }
     catch (Exception e){
     	system.debug ('*** ERROR ' + e +' ***');
     }
+    // If transferring from a non-Troubleshooting Case to a Troubleshooting Case, build out the picklist values.
     if (oldCaseIDtoCaseMap.get(myCase.id).RecordTypeId != troubleshootingRecordType && newCaseIDtoCaseMap.get(myCase.id).RecordTypeId == troubleshootingRecordType){
       myCase.Involved__c = getAllInvolvedTeamsPicklistValue();
     }
@@ -77,6 +87,13 @@ public void afterUpdateTroubleshootingCase(Map<Id, Case> newCaseIDtoCaseMap, Map
 PRIVATE METHODS
 
 **/
+
+private Case removeInvolvedTeams (Case myCase){
+	List<Case_Process_Team__c> involvedCaseProcessTeams = [SELECT Id, Involved__c FROM Case_Process_Team__c WHERE Case__c = :myCase.Id];
+	delete involvedCaseProcessTeams;
+	myCase.Involved__c = '';
+	return myCase;
+}
 
 private Id troubleshootingRecordType = teamNameToRecordTypeMap().get('Troubleshooting').Id;
 

@@ -40,5 +40,14 @@ public with sharing class Utilities {
 		Integer usedCharacters = (newLine + newLine + errorMessage).length();
 		return myFieldValue.substring(0,maxLength-usedCharacters) + newLine + newLine + errorMessage;
 	}
+	// return the current instance URL for Salesforce. If this is called from the Email Services Handler
+	// Or anything via API (data loader/eclipse/etc) The Base URL will contain -api 
+	public static String sfdcUrl(){
+		String myURL = URL.getSalesforceBaseUrl().toExternalForm() + '/';
+		if (myURL.contains('-api')){
+			myURL = myURL.replaceFirst('-api', '');
+		}
+		return myURL;
+	}
 	
 }

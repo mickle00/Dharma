@@ -11,8 +11,11 @@ public class CaseClass {
   public Map<String,List<Contact>> emailToListOfContacts = new Map<String,List<Contact>>(); 
   //----------------------------------------------------
     
-  public String sfdcURL = 'https://na8.salesforce.com/'; // CHANGE Per environment
-  public CaseClass(){}
+  //public String sfdcURL = 'https://cs7.salesforce.com/'; // CHANGE Per environment
+  //public String sfdcURL = URL.getSalesforceBaseUrl().toExternalForm() + '/'; // CHANGE Per environment
+  public String sfdcURL = Utilities.sfdcUrl();
+  
+  public CaseClass(){}  
     
   public Case processEmail(Messaging.Inboundemail email, String recordType) {
         

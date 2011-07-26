@@ -1,4 +1,5 @@
 @isTest
+testtesttest
 private class TestM2MTrigger {
 	static testMethod void testTrigger(){
 		

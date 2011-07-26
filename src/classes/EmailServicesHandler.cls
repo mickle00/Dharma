@@ -31,15 +31,15 @@ global class EmailServicesHandler implements Messaging.InboundEmailHandler {
          envelope.toAddress.toLowerCase().contains('production.ff@4jq6lfeg7jro9rdn6fl1aanls.cpxqgmak.c.apex.salesforce.com')) { 
        // Transport Fare Filing case
       system.debug('***EmailServicesHandler => Before processEmail for FF'); 
-      objCase.processEmail(email, 'Fare_Filing');
+      objCase.processEmail(email, 'Troubleshooting');
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.adm@21iuj73fmwqq0v3z0gds544gt.l8dajmay.l.apex.sandbox.salesforce.com') ||
+    else if (envelope.toAddress.toLowerCase().contains('dharma.rtamer@17uvv2bl6m4ecri7drl8nmxdk.mcofzma0.m.apex.sandbox.salesforce.com') ||
           envelope.toAddress.toLowerCase().contains('production.adm@a-6i470490emrqee8d8jisxlptj.cpxqgmak.c.apex.salesforce.com')) {       
       system.debug('***EmailServicesHandler => Before processEmail for ADM');
       //ADM case 
-      objCase.processEmail(email, 'ADM');
+      objCase.processEmail(email, 'Troubleshooting');
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.aircpr@1y34b9nz8hvzaraun3wgzj278.l8dajmay.l.apex.sandbox.salesforce.com') ||
+    else if (envelope.toAddress.toLowerCase().contains('dharma.aircpr@z-4im36z14tbjl1boj7lni5gd0y.mcofzma0.m.apex.sandbox.salesforce.com') ||
           envelope.toAddress.toLowerCase().contains('production.aircpr@k-1l0klq6ojlnax1zlx2pc6v934.cpxqgmak.c.apex.salesforce.com')) {        
       system.debug('***EmailServicesHandler => Before processEmail for Air CPR');
       //Air CPR case 
@@ -76,10 +76,10 @@ global class EmailServicesHandler implements Messaging.InboundEmailHandler {
       //Settlement case 
       objCase.processEmail(email, 'Settlement_Reporting');
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.afps@7c0wbjptdd0psvwzfr1quj78m.l8dajmay.l.apex.sandbox.salesforce.com')) {      
+    else if (envelope.toAddress.toLowerCase().contains('dharma.quality@2tpne6jo6xmz23mk0u8otcufk.mcofzma0.m.apex.sandbox.salesforce.com')) {      
     system.debug('***EmailServicesHandler => Before processEmail for Air Fulfillment Process & Support');
     //Air Fulfillment Process & Support
-    objCase.processEmail(email, 'Air_Fulfillment_Process_Support');
+    objCase.processEmail(email, 'Quality');
   }
     else { // email not handled so forward on
         // REMOVED Because any email addresses this was sent to not handled would kickout an email.

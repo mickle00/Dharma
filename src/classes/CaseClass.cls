@@ -11,8 +11,11 @@ public class CaseClass {
   public Map<String,List<Contact>> emailToListOfContacts = new Map<String,List<Contact>>(); 
   //----------------------------------------------------
     
-  public String sfdcURL = 'https://na8.salesforce.com/'; // CHANGE Per environment
-  public CaseClass(){}
+  //public String sfdcURL = 'https://cs7.salesforce.com/'; // CHANGE Per environment
+  //public String sfdcURL = URL.getSalesforceBaseUrl().toExternalForm() + '/'; // CHANGE Per environment
+  public String sfdcURL = Utilities.sfdcUrl();
+  
+  public CaseClass(){}  
     
   public Case processEmail(Messaging.Inboundemail email, String recordType) {
         
@@ -184,14 +187,19 @@ public class CaseClass {
     	
     	String plainTextEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '\n');
     	String htmlBodyEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '<br/>');
+    	
+    	String plainTextDescription = plainTextEmailRecipientsList + email.plainTextBody;
+    	if (plainTextDescription.length() > 32000) plainTextDescription = Utilities.truncateField(plainTextDescription, 32000, '\n');
+    	String richTextDescription = htmlBodyEmailRecipientsList + email.htmlBody;
+    	if (richTextDescription.length() > 32000) richTextDescription = Utilities.truncateField(richTextDescription, 32000, '<br/>');
     	    	
-    	Case myCase = new Case(Description = plainTextEmailRecipientsList + email.plainTextBody
+    	Case myCase = new Case(Description = plainTextDescription
     	                      ,Subject = email.subject
     	                      ,SuppliedEmail = email.fromAddress
     	                      ,SuppliedName = email.fromName
     	                      ,RecordTypeId = mapRecordTypes.get(recordType).Id
     	                      ,Origin = 'Email'
-    	                      ,Description_Rich_Text__c = htmlBodyEmailRecipientsList + email.htmlBody
+    	                      ,Description_Rich_Text__c = richTextDescription
     	                      //MPS ADDED
     	                      ,Email_Recipients__c = EmailUtilities.buildEmailRecipientsField(email.toAddresses, email.ccAddresses));
     	
@@ -283,7 +291,8 @@ public class CaseClass {
       
       return myCase;
     	
-    }  
+    }   
+
     private void editMaps(Account_Contact__c accountContact) {
        // add the contacts id to the map emailcid with email address as the key
          this.emailContactId.put(accountContact.contact__r.email, accountContact.contact__c);

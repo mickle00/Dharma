@@ -93,7 +93,8 @@ public with sharing class EmailUtilities {
         System.debug('Binary Attachments - size: ' +   email.binaryAttachments[i].mimeTypeSubType);
             
         Attachment a = new Attachment(ParentId = caseId,
-                                      Name = email.binaryAttachments[i].filename, 
+                                      Name = email.binaryAttachments[i].filename,
+                                      //Name = getFileExtension(email.binaryAttachments[i].filename, email.binaryAttachments[i].body), 
                                       Body = email.binaryAttachments[i].body);
           insert a;
         }
@@ -105,7 +106,8 @@ public with sharing class EmailUtilities {
           System.debug('Text Attachments - filename: ' + email.textAttachments[i].filename);
           System.debug('Text Attachments - size: ' +   email.textAttachments[i].mimeTypeSubType);
           Attachment b = new Attachment(ParentId = caseId,
-                                        Name = email.textAttachments[i].filename, 
+                                        Name = email.textAttachments[i].filename,
+                                        //Name = getFileExtension(email.textAttachments[i].filename,Blob.valueOf(email.textAttachments[i].body)), 
                                         Body = Blob.valueOf(email.textAttachments[i].body));
           insert b;
        }
@@ -190,6 +192,7 @@ public with sharing class EmailUtilities {
   	if (recordType == 'Destination_Services') return 'dsmaint@expedia.com';
   	if (recordType == 'Ticketing') return 'tktwfm@expedia.com';
   	if (recordType == 'Schedule_Change') return 'ascwfm@expedia.com';
+  	if (recordType == 'Quality') return 'dharma.quality@2tpne6jo6xmz23mk0u8otcufk.mcofzma0.m.apex.sandbox.salesforce.com';
   	
   	return 'donotreply.gso@expedia.com';
   }
@@ -199,6 +202,7 @@ public with sharing class EmailUtilities {
   	if (recordType == 'Destination_Services') return 'Destination Services Content Maintenance';
   	if (recordType == 'Ticketing') return 'GTP Support';
   	if (recordType == 'Schedule_Change') return 'ASC Support';
+  	if (recordType == 'Quality') return 'Dharma Test -- Quality';
   	
   	return 'Expedia GSO';
   	
@@ -290,5 +294,31 @@ public with sharing class EmailUtilities {
      formattedEmailAddress = emailAddress;
     }
     return formattedEmailAddress;
+  }
+  
+  private string getFileExtension(String filename, Blob body){
+  	if (filename.contains('.')){
+  		//Look for the . near the end of the filename
+  		Integer dotPlace = filename.length() - filename.lastIndexOf('.');
+  		system.debug('####FILENAME#### ' + filename);
+  		system.debug('####DOTPLACE#### ' + dotPlace);
+  		
+  		// Verify if the last . has between 2 and 4 characters after it
+  		// ie a typical file extension
+  		// Trying not to do this for My.File.6.16.11   		
+  		if (dotPlace > 2 && dotplace < 6){
+  			return filename;
+  		}
+  	}
+  	
+  	String myBody = body.toString();
+  	
+  	// not closing HTML tag as most are something like <html xmlns		
+  	if (myBody.toLowerCase().contains('<html')){
+  		return filename +'.html';
+  	}
+  	else{
+  		return filename + '.txt';
+  	}  	  	
   }
 }

@@ -4,7 +4,6 @@ public with sharing class troubleshootingCaseControllerExtension {
     public List <Case_Process_Team__c> caseProcessTeams;
     
     // Whether or not the Owner is rendered as an available picklist option
-    //public boolean renderOwner;
     
     public boolean hasOwner{get;}
     
@@ -14,19 +13,7 @@ public with sharing class troubleshootingCaseControllerExtension {
     }
         return false;
     }
-    
-    /**
-    // Update  to see if Owner has been selected by any team
-    public void getRenderOwner(){
-      renderOwner = True;
-      for (Case_Process_Team__c myCheckoffJunction : caseProcessTeams){    
-          if (myCheckoffJunction.Involvement_Needed__c == 'Owner') renderOwner = False;     
-      }
-    }
-    
-    **/
-    //public Id troubleshootingQueueId = [SELECT Id, Name,(SELECT Id,SobjectType FROM QueueSobjects WHERE SobjectType = 'case') FROM Group WHERE type = 'Queue' and Name = 'Troubleshooting Transport Queue' LIMIT 1].Id;
-    
+       
     private final Case finalCase;
     
     public Id getCaseId(){
@@ -49,12 +36,12 @@ public with sharing class troubleshootingCaseControllerExtension {
     }
         
     // All Options for the Involvement Needed Picklist
-    public List<SelectOption> getallOptions(){
+  public List<SelectOption> getallOptions(){
     List<SelectOption> all = new List<SelectOption>();
           all.add(new SelectOption('Unknown','Unknown'));
           all.add(new SelectOption('No','No'));
           all.add(new SelectOption('Yes (Not Owner)','Yes (Not Owner)'));
-        all.add(new SelectOption('Owner','Owner', false));
+          all.add(new SelectOption('Owner','Owner', false));
     return all;
     }
         
@@ -82,7 +69,7 @@ public with sharing class troubleshootingCaseControllerExtension {
       options.add(new SelectOption('No','No'));
       options.add(new SelectOption('Yes','Yes'));
     return options;
-  }
+  	}
 
   public List<Case_Process_Team__c> getCaseProcessTeams(){
     return caseProcessTeams;
@@ -141,43 +128,16 @@ public with sharing class troubleshootingCaseControllerExtension {
   public PageReference cancelTeams() {
     return reloadPage(false);
   }
-     
-  //Used for Team PreBooking Button
-    //button to remove certain teams from junction table
-  /**
-  public PageReference teamPreBooking() {
-    List<Case_Process_Team__c> obsoleteTeams = [SELECT Id, Involvement_Needed__c 
-                                                FROM Case_Process_Team__c 
-                                                WHERE(
-                                                                                  Case_Checkoff__r.Name = 'Air Fulfillment Process & Support' OR
-                                                                                  Case_Checkoff__r.Name = 'Quality' OR
-                                                                                  Case_Checkoff__r.Name = 'Regional Team' OR
-                                                                                  Case_Checkoff__r.Name = 'Settlement & Reporting' OR
-                                                                                  Case_Checkoff__r.Name = 'Schedule Change' OR
-                                                                                  Case_Checkoff__r.Name = 'Ticketing' OR
-                                                                                  Case_Checkoff__r.Name = 'Training'                        
-                                                                        )
-                                                                        AND Case__c = :getCaseId()];
-      
-    for (Case_Process_Team__c myCheckoffJunction : obsoleteTeams){
-      myCheckoffJunction.Involvement_Needed__c = 'No';
-      myCheckoffJunction.Ready_to_Close2__c = 'Yes';
-      }
-      update obsoleteTeams;
-      PageReference nextPage = new PageReference('/'+ getCaseId());
-      return nextPage;
-  }
-  **/
   
   public PageReference teamPreBooking(){        
-    removeObsoleteTeams(new List<String>{'Training', 'Ticketing', 'Air Fulfillment Process & Support', 'Quality', 'Settlement & Reporting', 'Regional Team', 'Schedule Change'});
+    removeUninvolvedTeams(new List<String>{'Ticketing', 'Air Fulfillment Process & Support', 'Regional Team', 'Schedule Change'});
     return reloadPage(false);
   }
 
      
     //Used for Team Fulfillment button
     public PageReference teamFulfillment() {
-    removeObsoleteTeams(new List<String>{'Air CPR', 'ADM', 'CarOps', 'Commissions', 'Fare Filing', 'Regional Team'});
+    removeUninvolvedTeams(new List<String>{'Air CPR', 'ADM', 'CarOps', 'Commissions', 'Fare Filing', 'Regional Team'});
         return reloadPage(false);
     }
     
@@ -189,34 +149,7 @@ public with sharing class troubleshootingCaseControllerExtension {
             return 'nonWorkingTeam';
         }
     }
-    
-    /**
-    public PageReference teamFulfillment() {
-    List<Case_Process_Team__c> obsoleteTeams = [SELECT Id, Involvement_Needed__c 
-                                                FROM Case_Process_Team__c 
-                                                                        WHERE(
-                                                                          Case_Checkoff__r.Name = 'Air CPR' OR
-                                                                          Case_Checkoff__r.Name = 'ADM' OR
-                                                                          Case_Checkoff__r.Name = 'CarOps' OR
-                                                                          Case_Checkoff__r.Name = 'Commissions' OR
-                                                                          Case_Checkoff__r.Name = 'Fare Filing' OR
-                                                                          Case_Checkoff__r.Name = 'Regional Team'                         
-                                                                        )
-                                                                        AND Case__c = :getCaseId()];
-    
-      
-    for (Case_Process_Team__c myCheckoffJunction : obsoleteTeams){
-      myCheckoffJunction.Involvement_Needed__c = 'No';
-      myCheckoffJunction.Ready_to_Close2__c = 'Yes';
-    }
-      update obsoleteTeams;
-      
-      
-      PageReference nextPage = new PageReference('/'+ getCaseId());
-      return nextPage;
-  }
-  **/
-    
+        
     //incase we want to do anything else when page is refreshsed/updated
     public void UpdateRecords(){
     //getRenderOwner();
@@ -235,17 +168,17 @@ public with sharing class troubleshootingCaseControllerExtension {
     if (setRedirect == false) nextPage.setredirect(false);
     return nextPage;
   }  
-  
-  private void removeObsoleteTeams(List<String> myObsoleteTeams){
+
+  private void removeUninvolvedTeams(List<String> myUninvolvedTeams){
     string queryWhere = '';
-    if (myObsoleteTeams.size() == 1){
-        queryWhere = 'Process_Team__r.Name = \'' + myObsoleteTeams[0] + '\'';
+    if (myUninvolvedTeams.size() == 1){
+        queryWhere = 'Process_Team__r.Name = \'' + myUninvolvedTeams[0] + '\'';
     }
-    if (myObsoleteTeams.size() > 1){
+    if (myUninvolvedTeams.size() > 1){
         Integer teamCount = 1;
-        for (String teamName : myObsoleteTeams){
+        for (String teamName : myUninvolvedTeams){
          queryWhere = queryWhere + 'Process_Team__r.Name = \'' + teamName + '\''; // + '\'OR ';
-         if (teamCount < myObsoleteTeams.size()){
+         if (teamCount < myUninvolvedTeams.size()){
           queryWhere = queryWhere + 'OR ';
          }
          teamCount = teamCount + 1;
@@ -254,48 +187,15 @@ public with sharing class troubleshootingCaseControllerExtension {
     }
     //Wrapping this in a try/catch method.....better safe than sorry
     try{
-        List<Case_Process_Team__c> obsoleteCheckoffJunctions = Database.query('SELECT Id, Involved__c FROM Case_Process_Team__c WHERE (' + queryWhere + ')AND Case__c = \'' + getCaseId() + '\'');                                                               
+        List<Case_Process_Team__c> uninvolvedCheckoffJunctions = Database.query('SELECT Id, Involved__c FROM Case_Process_Team__c WHERE (' + queryWhere + ')AND Case__c = \'' + getCaseId() + '\'');                                                               
       
-        for (Case_Process_Team__c myCaseProcessTeam : obsoleteCheckoffJunctions){
+        for (Case_Process_Team__c myCaseProcessTeam : uninvolvedCheckoffJunctions){
           myCaseProcessTeam.Involved__c = 'No';
           myCaseProcessTeam.Ready_to_Close__c = 'Yes';
         }
-        update obsoleteCheckoffJunctions;
+        update uninvolvedCheckoffJunctions;
     } catch (Exception e){
         system.debug ('troubleshootingCaseControllerExtension Error: ' + e + 'Case #: ' + getCaseId());
     }
-  }
-  
-  /**
-  
-  TEST METHODS
-  
-  **/
-      
-  private static testMethod void testTroubleshootingCaseControllerExtension() {     
-    Id rId = [SELECT Id FROM RecordType WHERE SobjectType = 'Case' AND DeveloperName = 'Troubleshooting' limit 1].id;
-      Case cs = new Case(Subject = 'Test Case', RecordTypeId = rId, Status = 'New');
-      insert cs;
-          
-      ApexPages.StandardController stdCon = new ApexPages.StandardController(cs);
-      troubleshootingCaseControllerExtension contTest = new troubleshootingCaseControllerExtension(stdCon);
-        
-      //Id qId = contTest.troubleshootingQueueId;
-        
-    //contTest.getRenderOwner();
-    contTest.getCaseId();
-    
-    contTest.getallOptions();
-    contTest.getYNList();
-    contTest.getInvolvementList();
-    contTest.getCaseProcessTeams();
-    contTest.editTeams();
-    contTest.saveTeams();
-    contTest.cancelTeams();
-    contTest.teamPreBooking();
-    contTest.teamFulfillment();
-    contTest.UpdateRecords();
-    
-    //build in assertions
   }
 }

@@ -25,13 +25,13 @@ public with sharing class CasePointOfSaleClass {
       List<Case_Point_of_Sale__c> casePointsOfSaleToDelete = new List<Case_Point_of_Sale__c>(); 
     
       List<Case_Point_of_Sale__c> currentCasePointsofSaleList =  [SELECT 
-                                                                                              Id
-                                                                                             ,Case__c
-                                                                                             ,Travel_Product__r.Name
-                                                                                             ,Travel_Product__r.Brand__c
-                                                                                             ,Travel_Product__r.TPID__c // always need to query, so we can bulid the buildKeyForPicklistValue
-                                                                           FROM Case_Point_of_Sale__c 
-                                                                         WHERE Case__c IN: newCaseIdtoCaseMap.keyset()];
+                                                                  Id
+                                                                  ,Case__c
+                                                                  ,Travel_Product__r.Name
+                                                                  ,Travel_Product__r.Brand__c
+                                                                  ,Travel_Product__r.TPID__c // always need to query, so we can bulid the buildKeyForPicklistValue
+                                                                  FROM Case_Point_of_Sale__c 
+                                                                  WHERE Case__c IN: newCaseIdtoCaseMap.keyset()];
 
       for (Case myCase : newCaseIdtoCaseMap.values()){      
           if(newCaseIdtoCaseMap.get(myCase.id).Points_of_Sale__c == oldCaseIdtoCaseMap.get(myCase.id).Points_of_Sale__c){
@@ -96,7 +96,7 @@ public with sharing class CasePointOfSaleClass {
   //build a unique name from the TravelProduct Name & TPID to be able to map to the picklist value
   // if we change the picklist values, we can just update the code here, and the rest will work
   private static string buildKeyForPicklistValue(Travel_Product__c myTravelProduct){
-    return myTravelProduct.Name + '-' + myTravelProduct.TPID__c;  
+    return myTravelProduct.TPID__c + '-' + myTravelProduct.Name;  
   }
 
   //build a map of the TravelProduct key (as defined by the Picklist), to Travel_Product__c Id

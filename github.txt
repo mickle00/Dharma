@@ -1,2 +1,6 @@
+<<<<<<< HEAD
 test for github
 adding more stuff
+=======
+this is a test for github
+>>>>>>> c0be51de8801edd84d66bdf1c3bee3162b957dd6

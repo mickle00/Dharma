@@ -93,8 +93,13 @@ public with sharing class EmailUtilities {
         System.debug('Binary Attachments - size: ' +   email.binaryAttachments[i].mimeTypeSubType);
             
         Attachment a = new Attachment(ParentId = caseId,
+<<<<<<< HEAD
                                       Name = email.binaryAttachments[i].filename,
                                       //Name = getFileExtension(email.binaryAttachments[i].filename, email.binaryAttachments[i].body), 
+=======
+                                      //Name = email.binaryAttachments[i].filename,
+                                      Name = getFileExtension(email.binaryAttachments[i].filename, email.binaryAttachments[i].body), 
+>>>>>>> 5b9b776e3d763a4cb116e0eabb30a1a414befc5e
                                       Body = email.binaryAttachments[i].body);
           insert a;
         }
@@ -106,8 +111,13 @@ public with sharing class EmailUtilities {
           System.debug('Text Attachments - filename: ' + email.textAttachments[i].filename);
           System.debug('Text Attachments - size: ' +   email.textAttachments[i].mimeTypeSubType);
           Attachment b = new Attachment(ParentId = caseId,
+<<<<<<< HEAD
                                         Name = email.textAttachments[i].filename,
                                         //Name = getFileExtension(email.textAttachments[i].filename,Blob.valueOf(email.textAttachments[i].body)), 
+=======
+                                        //Name = email.textAttachments[i].filename,
+                                        Name = getFileExtension(email.textAttachments[i].filename,Blob.valueOf(email.textAttachments[i].body)), 
+>>>>>>> 5b9b776e3d763a4cb116e0eabb30a1a414befc5e
                                         Body = Blob.valueOf(email.textAttachments[i].body));
           insert b;
        }
@@ -298,11 +308,18 @@ public with sharing class EmailUtilities {
   
   private string getFileExtension(String filename, Blob body){
   	if (filename.contains('.')){
+<<<<<<< HEAD
   		//Look for the . near the end of the filename
   		Integer dotPlace = filename.length() - filename.lastIndexOf('.');
   		system.debug('####FILENAME#### ' + filename);
   		system.debug('####DOTPLACE#### ' + dotPlace);
   		
+=======
+  		Integer dotPlace = filename.length() - filename.lastIndexOf('.');
+  		system.debug('####FILENAME#### ' + filename);
+  		system.debug('####DOTPLACE#### ' + dotPlace);
+  		//Look for the . near the end of the filename
+>>>>>>> 5b9b776e3d763a4cb116e0eabb30a1a414befc5e
   		// Verify if the last . has between 2 and 4 characters after it
   		// ie a typical file extension
   		// Trying not to do this for My.File.6.16.11   		

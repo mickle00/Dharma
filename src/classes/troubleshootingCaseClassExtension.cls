@@ -96,6 +96,7 @@ private Case removeInvolvedTeams (Case myCase){
 }
 
 private Id troubleshootingRecordType = teamNameToRecordTypeMap().get('Troubleshooting').Id;
+<<<<<<< HEAD
 
 private Map<String, RecordType> teamNameToRecordTypeMap(){
 	Map<String, RecordType> teamNameToRecordTypeMap = new Map<String, RecordType>();
@@ -110,6 +111,21 @@ private Map<String, RecordType> teamNameToRecordTypeMap(){
 }
 
                               
+=======
+
+private Map<String, RecordType> teamNameToRecordTypeMap(){
+	Map<String, RecordType> teamNameToRecordTypeMap = new Map<String, RecordType>();
+	for (RecordType myRecordType : 
+									[SELECT Id
+											,Name 
+                                      FROM  RecordType 
+                                     WHERE  sObjectType = 'Case']){
+ 		teamNameToRecordTypeMap.put(myRecordType.Name, myRecordType);
+	}
+	return teamNameToRecordTypeMap;
+}
+                                
+>>>>>>> 5b9b776e3d763a4cb116e0eabb30a1a414befc5e
 private Id troubleshootingQueueId = [SELECT Id
                                             ,Name
                                             ,(SELECT Id
@@ -122,8 +138,11 @@ private Id troubleshootingQueueId = [SELECT Id
                                       
 private Map<Id, String> troubleshootingQueueIdToNameMap = new Map<Id, String>();
 
+<<<<<<< HEAD
 
 //TODO - Clean this up to reduce the number of queries  
+=======
+>>>>>>> 5b9b776e3d763a4cb116e0eabb30a1a414befc5e
 private Set<Id> transportQueueIds(){
 	Set<Id> buildingTransportQueueIds = new Set<Id>();
 	Set<String> transportTeamQueueNames = new Set<String>{'ADM'

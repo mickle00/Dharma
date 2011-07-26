@@ -25,10 +25,14 @@ public with sharing class OutOfOfficeNoticeClass {
     	thisGroup.Active__c = notice.Status__c == 'Active' ? 'True' : 'False';
       groupsToUpdate.add(thisGroup);
     }
+<<<<<<< HEAD
     List<Database.SaveResult> SR = database.update(groupsToUpdate);
     for (Database.SaveResult err : SR){
     	system.debug(err.getErrors());
     }
     //update groupsToUpdate;
+=======
+    update groupsToUpdate;
+>>>>>>> 5b9b776e3d763a4cb116e0eabb30a1a414befc5e
   }
 }

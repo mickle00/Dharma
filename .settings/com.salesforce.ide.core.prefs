@@ -1,8 +1,8 @@
-#Thu Jun 02 13:25:18 PDT 2011
+#Tue Jul 26 14:07:37 PDT 2011
 eclipse.preferences.version=1
 endpointApiVersion=20.0
-endpointEnvironment=Sandbox
-endpointServer=test.salesforce.com
+endpointEnvironment=Production/Developer Edition
+endpointServer=www.salesforce.com
 httpsProtocol=true
 ideVersion=20.0
 keependpoint=false
@@ -10,4 +10,4 @@ metadataFormatVersion=20.0
 namespacePrefix=
 packageName=unpackaged
 readTimeout=400
-username=mistewart@expedia.com.dharma
+username=developer@michaelpatrickstewart.com

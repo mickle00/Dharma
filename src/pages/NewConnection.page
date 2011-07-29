@@ -1,28 +1,61 @@
 <apex:page controller="ConnectionController">
-    <apex:form >
-        <apex:pageBlock title="Create a New Connection">
-            <apex:pageBlockButtons >     
-                <apex:commandButton value="Save" action="{!Save}"/>
+<script>
+function setFocusOnLoad(){}
+// did not like how the focus was going to the 1st field...seemed odd. this overrides
+</script>
+
+        <apex:form >
+        <apex:pageBlock mode="edit">
+            <apex:pageMessages />
+            <apex:pageBlockButtons >  
+                <apex:commandButton value="Save New Connection" action="{!Save}"/>
+                <apex:commandButton value="Save & New Connection" action="{!SaveAndNew}"/>
                 <apex:commandButton value="Cancel" action="{!returnToCase}" immediate="true"/>
             </apex:pageBlockButtons>
-                <apex:pageBlockSection columns="1" >
-                <apex:inputField value="{!myConnection.Case__c}" />
-                <apex:inputField value="{!myConnection.Account__c}"/>
-                <apex:inputField value="{!myConnection.Connectivity_System__c}"/>
-                <apex:inputField value="{!myConnection.Type__c}"/>
-                <apex:inputField value="{!myConnection.Platform__c}"/>
-                <apex:inputField value="{!myConnection.Status__c}"/>
+                <apex:pageBlockSection columns="2" title="New Connection">
+                    <apex:outputField value="{!myConnection.Case__c}" />
+                    <apex:inputField value="{!myConnection.Type__c}" required="true"/>
+                    <apex:inputField value="{!myConnection.Account__c}" />
+                    <apex:inputField value="{!myConnection.Status__c}" required="true"/>
+                    <apex:inputField value="{!myConnection.Connectivity_System__c}"/>
+                    <apex:inputField value="{!myConnection.Platform__c}" required="true"/>
+                    <apex:outputText />
+                    <apex:inputField value="{!myConnection.Go_Date__c}" required="false"/>
                 </apex:pageBlockSection>
-
-        </apex:pageBlock>
+                <apex:pageBlockSection columns="1" title="(Optional) Add a Note">
+                    <apex:inputField value="{!myNote.title}" required="false" id="noteTitle" style="width:75%" />
+                    <apex:inputField value="{!myNote.body}" id="noteBody" style="width:75%; height:100px" />
+                </apex:pageBlockSection>
+        </apex:pageBlock> 
     </apex:form>
-    <!--
-
-
-    <apex:pageBlock title="Existing Connections>
-
-    </apex:pageBlock>
-
-    Related List of Connections related to Account
-    -->
+    <apex:form >
+        <apex:pageBlock rendered="{!RenderRelatedList}" mode="maindetail">
+            <apex:outputText escape="false" >
+                <p style="font-size:1.3em"><b><u>{!myCase.Account.Name}'s Existing Connections</u></b></p><br/> <!-- ' fixing editor-->
+            </apex:outputText>
+            <apex:pageBlockTable value="{!accountConnections}" var="ac">
+                <apex:column width="10%">
+                    <apex:facet name="header">Action</apex:facet>
+                    <apex:outputLink value="/{!ac.Id}">View</apex:outputLink>&nbsp;|&nbsp;
+                    <apex:outputLink value="/{!ac.Id}/e">Edit</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!ac.Connectivity_System__c}"/>
+                <apex:column >
+                    <apex:facet name="header">Connectivity Vendor</apex:facet>
+                    <apex:outputLink value="/{!ac.Connectivity_System__r.Connectivity_Vendor__c}">{!ac.Connectivity_System__r.Connectivity_Vendor__r.Name}</apex:outputLink>
+                </apex:column>
+                <apex:column value="{!ac.Platform__c}"/>
+                <apex:column value="{!ac.Status__c}"/>
+                <apex:column value="{!ac.Go_Date__c}"/>
+                <apex:column value="{!ac.LastModifiedDate}" width="15%"/>
+                <apex:column width="15%" style="text-align: left">
+                    <apex:facet name="header"> Last Modified By </apex:facet>
+                    <apex:outputText value="{!ac.LastModifiedBy.FirstName} {!ac.LastModifiedBy.LastName}"/>
+                </apex:column>
+            </apex:pageBlockTable>
+        </apex:pageBlock>
+        <apex:outputText escape="false" rendered="{!RenderRelatedList == false}" >
+            <p style="font-size:1.3em"><b>{!myCase.Account.Name} has no existing connections</b></p>
+        </apex:outputText>
+    </apex:form>
 </apex:page>

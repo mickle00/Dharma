@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Group Member</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Group Members</value>
+    </caseValues>
+    <fields>
+        <help><!-- If False, then include user in Round Robin assignments. --></help>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+        <picklistValues>
+            <masterLabel>False</masterLabel>
+            <translation><!-- False --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>True</masterLabel>
+            <translation><!-- True --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Group Name --></label>
+        <name>Group_Name__c</name>
+        <relationshipLabel><!-- Group Members --></relationshipLabel>
+    </fields>
+    <fields>
+        <help><!-- Last time case was assigned to this person --></help>
+        <label><!-- Last Assignment --></label>
+        <name>Last_Assignment__c</name>
+    </fields>
+    <fields>
+        <label><!-- Millisecond --></label>
+        <name>Millisecond__c</name>
+    </fields>
+    <fields>
+        <help><!-- If Status and User Status are True --></help>
+        <label><!-- Status --></label>
+        <name>Status__c</name>
+    </fields>
+    <fields>
+        <help><!-- True if &quot;Assignment Group Active&quot; and &quot;Active&quot; fields on the user record are checked.  If True the users is available for this and all Assignment Groups. --></help>
+        <label><!-- User Active --></label>
+        <name>User_Active__c</name>
+    </fields>
+    <fields>
+        <label><!-- User --></label>
+        <name>User__c</name>
+        <relationshipLabel><!-- Group Members --></relationshipLabel>
+    </fields>
+    <layouts>
+        <layout>Assignment Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+        <sections>
+            <label><!-- New Test Section --></label>
+            <section>New Test Section</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

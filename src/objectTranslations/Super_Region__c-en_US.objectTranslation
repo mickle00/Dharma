@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Super Region</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Super Regions</value>
+    </caseValues>
+    <fields>
+        <label><!-- PSG Name --></label>
+        <name>PSG_Name__c</name>
+    </fields>
+    <layouts>
+        <layout>Super Region Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

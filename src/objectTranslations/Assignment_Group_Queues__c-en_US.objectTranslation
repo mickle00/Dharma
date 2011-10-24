@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>AG-Queue</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>AG-Queues</value>
+    </caseValues>
+    <fields>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+        <picklistValues>
+            <masterLabel>False</masterLabel>
+            <translation><!-- False --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>True</masterLabel>
+            <translation><!-- True --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Assignment Group Name --></label>
+        <name>Assignment_Group_Name__c</name>
+        <relationshipLabel><!-- AG-Queues --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- QueueId --></label>
+        <name>QueueId__c</name>
+    </fields>
+    <fields>
+        <label><!-- Valid Queue --></label>
+        <name>Valid_Queue__c</name>
+    </fields>
+    <layouts>
+        <layout>Assignment Group-Queue Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+    <validationRules>
+        <errorMessage><!-- Queue already belongs to an Assignment Group.  Please remove from Assignment Group or choose another Queue --></errorMessage>
+        <name>Queue_Name_is_Unique</name>
+    </validationRules>
+</CustomObjectTranslation>

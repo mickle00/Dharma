@@ -1,0 +1,4 @@
+Last Case Comment: {!Case.Last_Case_Comment}
+
+Self Service: {!Case.HasCommentsUnreadByOwner}
+SS: {!Case.HasSelfServiceComments}

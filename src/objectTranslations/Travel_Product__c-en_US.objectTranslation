@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Travel Product</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Travel Products</value>
+    </caseValues>
+    <fields>
+        <label><!-- Brand --></label>
+        <name>Brand__c</name>
+        <picklistValues>
+            <masterLabel>Egencia</masterLabel>
+            <translation><!-- Egencia --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>Expedia</masterLabel>
+            <translation><!-- Expedia --></translation>
+        </picklistValues>
+        <picklistValues>
+            <masterLabel>WWTE</masterLabel>
+            <translation><!-- WWTE --></translation>
+        </picklistValues>
+    </fields>
+    <fields>
+        <label><!-- Country --></label>
+        <name>Country__c</name>
+        <relationshipLabel><!-- Travel Products --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- TPID --></label>
+        <name>TPID__c</name>
+    </fields>
+    <layouts>
+        <layout>Travel Product Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

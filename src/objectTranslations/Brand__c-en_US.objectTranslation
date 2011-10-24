@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Brand</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Brands</value>
+    </caseValues>
+    <fields>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+    </fields>
+    <fields>
+        <label><!-- Chain --></label>
+        <name>Chain__c</name>
+        <relationshipLabel><!-- Brands --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Expedia Brand Id --></label>
+        <name>Expedia_Brand_Id__c</name>
+    </fields>
+    <fields>
+        <label><!-- External Brand Id --></label>
+        <name>External_Brand_Id__c</name>
+    </fields>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

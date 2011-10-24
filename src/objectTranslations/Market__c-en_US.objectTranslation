@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObjectTranslation xmlns="http://soap.sforce.com/2006/04/metadata">
+    <caseValues>
+        <plural>false</plural>
+        <value>Market</value>
+    </caseValues>
+    <caseValues>
+        <plural>true</plural>
+        <value>Markets</value>
+    </caseValues>
+    <fields>
+        <label><!-- Active --></label>
+        <name>Active__c</name>
+    </fields>
+    <fields>
+        <label><!-- Expedia Market Id --></label>
+        <name>Expedia_Market_Id__c</name>
+    </fields>
+    <fields>
+        <label><!-- External Market Id --></label>
+        <name>External_Market_Id__c</name>
+    </fields>
+    <fields>
+        <label><!-- Region --></label>
+        <name>Region__c</name>
+        <relationshipLabel><!-- Markets --></relationshipLabel>
+    </fields>
+    <fields>
+        <label><!-- Super Region --></label>
+        <name>Super_Region__c</name>
+    </fields>
+    <layouts>
+        <layout>Market Layout</layout>
+        <sections>
+            <label><!-- Custom Links --></label>
+            <section>Custom Links</section>
+        </sections>
+    </layouts>
+    <startsWith>Consonant</startsWith>
+</CustomObjectTranslation>

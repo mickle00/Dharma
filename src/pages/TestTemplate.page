@@ -1,0 +1,10 @@
+<apex:page showheader="false" sidebar="false">
+  <apex:composition template="GSO_Template">
+    <apex:define name="body">  
+      <center>
+      THIS IS WHERE THE CENTER GOES
+      </center>
+      <br/>
+    </apex:define>
+  </apex:composition>
+</apex:page>

@@ -1,222 +1,309 @@
 global class EmailServicesHandler implements Messaging.InboundEmailHandler {
     
     global Messaging.InboundEmailResult handleInboundEmail(Messaging.InboundEmail email, Messaging.InboundEnvelope envelope) {
-        Messaging.InboundEmailResult result = new Messaging.InboundEmailresult();
-        
+    Messaging.InboundEmailResult result = new Messaging.InboundEmailresult();
+       
     system.debug('*** EmailServicesHandler => envelope.toAddress = ' + envelope.toAddress + ' ***');      
     CaseClass objCase = new CaseClass();
     
+    // Lookup the record type and team based on the envelope.toAddress
+    Case_Team__c caseTeam = CaseTeamClass.FindBy('Email_Service_Address__c = \'' + String.escapeSingleQuotes(envelope.toAddress) + '\'');
+    
+    if(caseTeam != null) {
+	  // Look at To envelope.toAddress and call appropriate case, passing correct record type
+      objCase.processEmail(email, caseTeam.Record_Type_Developer_Name__c, caseTeam.Team__c);    	
+    }else {
+      // email not handled so create a
+      //Support Request
+      objCase.processEmail(email, 'Support_Request', null);
+    }
+
+    system.debug('***EmailServicesHandler => Before Return***');    
+    return result;  
+  }
+    
+/*    global Messaging.InboundEmailResult handleInboundEmail(Messaging.InboundEmail email, Messaging.InboundEnvelope envelope) {
+        Messaging.InboundEmailResult result = new Messaging.InboundEmailresult();
+        
+    try {
+    system.debug('*** EmailServicesHandler => envelope.toAddress = ' + envelope.toAddress + ' ***');      
+    CaseClass objCase = new CaseClass();
+    
+    // get mapping of email service addresses from custom settings
+    Map<String, Email_Service_Addresses__c> mapEmailServiceAddresses = Email_Service_Addresses__c.getAll();
+
     // Look at To envelope.toAddress and call appropriate case, passing correct record type
-    if (envelope.toAddress.toLowerCase().contains('staging.adm@21iuj73fmwqq0v3z0gds544gt.l8dajmay.l.apex.sandbox.salesforce.com') ||
-        envelope.toAddress.toLowerCase().contains('production.adm@a-6i470490emrqee8d8jisxlptj.cpxqgmak.c.apex.salesforce.com')) {       
+    if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'ADM')) {       
       system.debug('***EmailServicesHandler => Before processEmail for ADM');
       //ADM case 
       objCase.processEmail(email, 'ADM',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.aircpr@1y34b9nz8hvzaraun3wgzj278.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.aircpr@k-1l0klq6ojlnax1zlx2pc6v934.cpxqgmak.c.apex.salesforce.com')) {        
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'AIR_CPR')) {        
       system.debug('***EmailServicesHandler => Before processEmail for Air CPR');
       //Air CPR case 
       objCase.processEmail(email, 'Air_CPR',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.afps@7c0wbjptdd0psvwzfr1quj78m.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.aftps@f-39ndjn2azog3lt1xr50jg7kmq.cpxqgmak.c.apex.salesforce.com')) {        
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'AIR_FULFILLMENT_PROCESS_SUPPORT')) {        
       system.debug('***EmailServicesHandler => Before processEmail for Air Fulfillment Process & Support');
       //Air Fulfillment Process & Support
       objCase.processEmail(email, 'Air_Fulfillment_Process_Support',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.carops@3dulustn4ht0j00ldvwcyfbn8.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.carops@5kluk84albaort7ezk4pbgupo.cpxqgmak.c.apex.salesforce.com')) {        
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'CAR_OPS')) {        
       system.debug('***EmailServicesHandler => Before processEmail for Car OPS');
       //Car Ops case 
       objCase.processEmail(email, 'CarOps',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.comm@t-33899g2egp7cs2tv0wtwaob1l.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.comm@5378nex8cajd3zop3d3bcppak.cpxqgmak.c.apex.salesforce.com')) {        
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'COMMISSIONS')) {        
       system.debug('***EmailServicesHandler => Before processEmail for Commissions');
       //Commissions case 
       objCase.processEmail(email, 'Commissions',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('hoth.ds@c-6859oj86mt4dydkot0vyguvb4.m8nm4maa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('staging.ds@k-3k02tg17q1kgtvm7y7vlloa34.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.ds@o-fei89ah5uzxln65dwgfaoscs.cpxqgmak.c.apex.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('dsmaint@expedia.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'DESTINATION_SERVICES') ||
+              IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'DS_MAINTENANCE')) {
       
       //Destination services case 
       system.debug('***EmailServicesHandler => Before processEmail for DS');
       objCase.processEmail(email, 'Destination_Services',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.ff@7kb6cdhskfdhhh87b838h3y1r.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.ff@4jq6lfeg7jro9rdn6fl1aanls.cpxqgmak.c.apex.salesforce.com')) { 
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TRANSPORT_FARE')) { 
       // Transport Fare Filing case
       system.debug('***EmailServicesHandler => Before processEmail for FF'); 
       objCase.processEmail(email, 'Fare_Filing',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('hoth.geo@4-4uqisn6ksetmougqamyqvhfso.m8nm4maa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('staging.geo@7-784n906edwt50gfdo7vjxb3qj.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.geo@5zvrzbr7vhfamla3bi2pqf6qc.cpxqgmak.c.apex.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('geosup@expedia.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'GEOGRAPHY') ||
+              IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'GEO_SUP')) {
       
       //Geography case 
       system.debug('***EmailServicesHandler => Before processEmail for GEO');
       objCase.processEmail(email, 'Geography',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.hdm@3qeizs0ka8zz77opsu2o3dc1r.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.hdm@3gb2pn0wdtm5zpv6bu1pkkgu0.cpxqgmak.c.apex.salesforce.com')){
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HDM')){
       system.debug('***EmailServicesHandler => Before processEmail for HDM');
       //HDM
       objCase.processEmail(email, 'HDM',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.health_safety@j-6ni28465bwsl23sfb5hslry7l.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.health_safety@4gnirzdg1szv016mb8yobjsc.cpxqgmak.c.apex.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HEALTH_SAFETY')) {
       system.debug('***EmailServicesHandler => Before processEmail for Health & Safety');
       //Health & Safety
       objCase.processEmail(email,'Health_Safety',null);   
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.hsts_dchelp@5lday4rc0bppovkotqpm79ho7.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.hsts_dchelp@3ctqaspbtkhmhkfvu9kweeb.cpxqgmak.c.apex.salesforce.com') ||
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HSTS_DCHELP') ||
              envelope.toAddress.toLowerCase().contains('codeproof.hsts_dchelp@p-whjeqqayfquejy5nxrhm03l3.m9uqhmau.m.apex.sandbox.salesforce.com')){        
       system.debug('***EmailServicesHandler => Before processEmail for HSTS dchelp');
       //HSTS dchelp
       objCase.processEmail(email, 'Hotel_Systems_Technical_Support','DC Help');
     }
-    else if (envelope.toAddress.toLowerCase().contains('production.hsts_eqchelp@j-5mbdawbefkyw86qqdz47esafs.cpxqgmak.c.apex.salesforce.com')){        
-      system.debug('***EmailServicesHandler => Before processEmail for HSTS EQC');
-      //HSTS EQC Help
-      objCase.processEmail(email, 'Hotel_Systems_Technical_Support','EQC Help');
-    }
-    
-    else if (envelope.toAddress.toLowerCase().contains('staging.hsts_hothelp@30o7ryb3t2hbyc44m44raw95g.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.hsts_hothelp@q-3gidx5snfag809vrhti5qinl3.cpxqgmak.c.apex.salesforce.com') ||
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HSTS_HOTHELP') ||
              envelope.toAddress.toLowerCase().contains('codeproof.hsts_hothelp@bdxvupxxlur1zzjc0ljxhgj5.m9uqhmau.m.apex.sandbox.salesforce.com')){        
       system.debug('***EmailServicesHandler => Before processEmail for HSTS Hothelp');
       //HSTS Hothelp
       objCase.processEmail(email, 'Hotel_Systems_Technical_Support','Hothelp');
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.hsts_nonenglish@h-72s35gcre4lyc22vb5wfkew0y.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-            envelope.toAddress.toLowerCase().contains('production.hsts_nonenglish@10qla7thdc6g97tanzogw16z2.cpxqgmak.c.apex.salesforce.com') ||
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HSTS_NONENGLISH') ||
             envelope.toAddress.toLowerCase().contains('codeproof.hsts_nonenglish@77wkg5qimblv9qasmlqou78kx.m9uqhmau.m.apex.sandbox.salesforce.com')){        
       system.debug('***EmailServicesHandler => Before processEmail for HSTS non english');
       //HSTS non english
       objCase.processEmail(email, 'Hotel_Systems_Technical_Support','Non-English');
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.hsts_nyctech@3l1enklim4xgmhid06jkwpjjb.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-            envelope.toAddress.toLowerCase().contains('production.hsts_nyctech@3-2uvd39qbxrwxddvn25cy9v95l.cpxqgmak.c.apex.salesforce.com') ||
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HSTS_NYCTECH') ||
             envelope.toAddress.toLowerCase().contains('codeproof.hsts_nyc_tech@2-6q5bqa9cffenqmpnayqvm4swz.m9uqhmau.m.apex.sandbox.salesforce.com')){        
       system.debug('***EmailServicesHandler => Before processEmail for HSTS NYC Tech');
       //HSTS nyc tech
       objCase.processEmail(email, 'Hotel_Systems_Technical_Support','NYC Tech');
     }
-    else if (envelope.toAddress.toLowerCase().contains('production.hsts_vchelp@k-1va7oga8qgtq2ipzcvvvuw0w0.cpxqgmak.c.apex.salesforce.com')){        
-      system.debug('***EmailServicesHandler => Before processEmail for HSTS VC Help');
-      //HSTS EQC VC Help
-      objCase.processEmail(email, 'Hotel_Systems_Technical_Support','VC Help');
-    }
-    
-    else if (envelope.toAddress.toLowerCase().contains('production.esrlocalisation@w-6u6jxubs6bg0tw4ja7se6xzif.cpxqgmak.c.apex.salesforce.com') ||
-			 envelope.toAddress.toLowerCase().contains('production.localreq@6wh35r6dbm93h41kpvu4qex2y.cpxqgmak.c.apex.salesforce.com')) {    
-      system.debug('***EmailServicesHandler => Before processEmail for Localisation');
-      //Localisation
-      objCase.processEmail(email,'Localisation',null);  
-    }
-    else if (envelope.toAddress.toLowerCase().contains('staging.lodging_content@29gm0y1maulujgq47zrgs5222.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.lodging_content@h-1250no0qbwzkjruqmtd5bahag.cpxqgmak.c.apex.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'LODGING_CONTENT')) {
         system.debug('***EmailServicesHandler => Before processEmail for Lodging Content');
       //Lodging Content
         objCase.processEmail(email,'Lodging_Content',null);     
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.lodging_content_apacont@7-74lb12spsmhj2jj7blq2x67bp.m4cfzmaa.m.apex.sandbox.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'LOCALISATION')) {
+        system.debug('***EmailServicesHandler => Before processEmail for Localisation');
+      //Lodging Content
+        objCase.processEmail(email,'Localisation',null);     
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'LODGING_CONTENT_APACONT')) {
       system.debug('***EmailServicesHandler => Before processEmail for Lodging Content - apacont');
       //Lodging Content - APACONT
       objCase.processEmail(email,'Lodging_Content','apacont');   
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.lodging_content_emea@w-3svzbbmz61je6a3olkc4s51cd.m4cfzmaa.m.apex.sandbox.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'LODGING_CONTENT_EMEA')) {
       system.debug('***EmailServicesHandler => Before processEmail for Lodging Content - EMEA');
       //Lodging Content - EMEA
       objCase.processEmail(email,'Lodging_Content','emea');   
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.lodging_content_infosite@v-4zw571afu1qvpekr80kh6blqv.m4cfzmaa.m.apex.sandbox.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'LODGING_CONTENT_INFOSITE')) {
       system.debug('***EmailServicesHandler => Before processEmail for Lodging Content - Infosite');
       //Lodging Content - INFOSITE
       objCase.processEmail(email,'Lodging_Content','infosite');   
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.media_content@4-543qsbulkgxuab25cz8ga44o5.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.content_media@r-6py89m491mynb4j1rqq9990j8.cpxqgmak.c.apex.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'Financial_Operations')) {
+      //Lodging Operations - Finops Breakage
+      system.debug('***EmailServicesHandler => Financial_Operations'); 
+      objCase.processEmail(email, 'Financial_Operations',null);
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'Media_Content') ||
+             envelope.toAddress.toLowerCase().contains('staging.mediacontent@6uin9ht7wuyx2j81kxjo0h55b.mcsk1mac.m.apex.sandbox.salesforce.com')){        
       system.debug('***EmailServicesHandler => Before processEmail for Media Content');
       //Media Content
-      objCase.processEmail(email,'Media_Content','Media');
+      objCase.processEmail(email, 'Media_Content','Media');
     }
-    else if (envelope.toAddress.toLowerCase().contains('production.mediaops@5x226dg8gq4cffcvazsq1cqvu.cpxqgmak.c.apex.salesforce.com')) {
-      system.debug('***EmailServicesHandler => Before processEmail for Media Ops');
-      //Media Ops
-      objCase.processEmail(email,'Media_Content','Media Ops');    	  
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'Media_Asset_Operations') ||
+             envelope.toAddress.toLowerCase().contains('staging.mediaassetoperations@u-r3at5q5niuh3ad5fpw5yl1lo.mcsk1mac.m.apex.sandbox.salesforce.com')){        
+      system.debug('***EmailServicesHandler => Before processEmail for Media Asset Operations');
+      //Media Asset Operations
+      objCase.processEmail(email, 'Media_Content','Media Asset Operations');
     }
-    else if (envelope.toAddress.toLowerCase().contains('production.quality@x-4que5oamrxedooj27rz5j4joq.cpxqgmak.c.apex.salesforce.com')){
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TRANSPORT_QUALITY')){
       system.debug('***EmailServicesHandler => Before processEmail for Quality');
       //Transport - Quality
       objCase.processEmail(email,'Quality',null);   
     }    
-    else if (envelope.toAddress.toLowerCase().contains('staging.sched@h-5yu243xkx4ilvfnk986sde3mt.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.sched@6-77frurhrk37duk7nui8iyasvu.cpxqgmak.c.apex.salesforce.com')) {      
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'SCHEDULE_CHANGE')) {      
       system.debug('***EmailServicesHandler => Before processEmail for Schedule Change');
       //Schedule Change case 
       objCase.processEmail(email, 'Schedule_Change',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.settle@j-kc9lk9tjo84reycjvqxfzhhy.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.settle@4bbte27ao7xc1h9zsapbtucdf.cpxqgmak.c.apex.salesforce.com')) {       
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'SETTLEMENT')) {       
       system.debug('***EmailServicesHandler => Before processEmail for Settlement');
       //Settlement case 
       objCase.processEmail(email, 'Settlement_Reporting',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.star@z-3jfynxn6omgzqmjtxer1wxgy1.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.star_rating@9-5xbm837l8mya4zsykom8s4n7a.cpxqgmak.c.apex.salesforce.com')){        
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'STAR_RATING')){        
       system.debug('***EmailServicesHandler => Before processEmail for Star Ratings');
       //Star Ratings
       objCase.processEmail(email, 'Star_Ratings',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.gsosfsup@74l2vc3j965xqw3npmgdonw1j.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.gsosfsup@76e3skfzszc0q9z7jtzrxs793.cpxqgmak.c.apex.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'SUPPORT_REQUEST')) {
       system.debug('***EmailServicesHandler => Before processEmail for HSTS non english');
       //Support Request
       objCase.processEmail(email, 'Support_Request', null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.ticket@h-5yu243xkx4ilvfnk986sde3mt.l8dajmay.l.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.ticket@0-16p21ob3vpjgw63c4xukvxh0i.cpxqgmak.c.apex.salesforce.com')) {      
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TICKETING')) {      
       system.debug('***EmailServicesHandler => Before processEmail for Ticketing');
       //Ticketing case 
       objCase.processEmail(email, 'Ticketing',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('production.training@759h7d8pe8zfulfp470nxeogx.cpxqgmak.c.apex.salesforce.com')){
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TRANSPORT_TRAINING')){
       system.debug('***EmailServicesHandler => Before processEmail for Training');
       //Transport - Training
       objCase.processEmail(email,'Curriculum_Design_Training',null);   
     }    
-    else if (envelope.toAddress.toLowerCase().contains('production.trouble@5f1qin463du2unpotqva62a7.cpxqgmak.c.apex.salesforce.com') ||
-      envelope.toAddress.toLowerCase().contains('production.rtamer@4202xc6jrw8o0136ty03f0vnp.cpxqgmak.c.apex.salesforce.com') ||
-      envelope.toAddress.toLowerCase().contains('production.rtapac@0-k5vzz715002ojd3zbsm7su40.cpxqgmak.c.apex.salesforce.com') ||
-      envelope.toAddress.toLowerCase().contains('production.rtemea@k-6py1d0qyms8yg5f2775n6mgmv.cpxqgmak.c.apex.salesforce.com') ||
-      envelope.toAddress.toLowerCase().contains('production.3pp@1-1ipxnn8gcxctzpen001h4dtis.cpxqgmak.c.apex.salesforce.com')) {        
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TROUBLESHOOTING') ||
+             IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TROUBLESHOOTING_3PP') ||
+             IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TROUBLESHOOTING_AMER') ||
+             IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TROUBLESHOOTING_APAC') ||
+             IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'TROUBLESHOOTING_EMEA')) {        
       system.debug('***EmailServicesHandler => Before processEmail for Transport Troubleshooting Case');
       //Troubleshooting Case
       objCase.processEmail(email, 'Troubleshooting',null);
     }
-    else if (envelope.toAddress.toLowerCase().contains('production.ugc@s-ga9ts831ttltlw3pwzr2jigh.cpxqgmak.c.apex.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'USER_GENERATED_CONTENT')) {
       system.debug('***EmailServicesHandler => Before processEmail for User Generated Content');
       //User Generated Content
-      objCase.processEmail(email,'User_Generated_Content',null);
+      objCase.processEmail(email,'User_Generated_Content',null);   
     }
-    else if (envelope.toAddress.toLowerCase().contains('staging.virtual_tours_content@9-62zj97lqxxoq82eyuxlnpnlb3.m4cfzmaa.m.apex.sandbox.salesforce.com') ||
-             envelope.toAddress.toLowerCase().contains('production.content_virtual_tours@mey824r0tv0j8jnp90d8on4r.cpxqgmak.c.apex.salesforce.com')) {
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'VIRTUAL_TOURS_CONTENT')) {
       system.debug('***EmailServicesHandler => Before processEmail for Virtual Tours Content');
       //Virtual Tours Content
       objCase.processEmail(email,'Virtual_Tours_Content',null);   
     }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HSTS_EQC')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HSTS EQC');
+      //HSTS EQC
+      objCase.processEmail(email,'Hotel_Systems_Technical_Support','EQC Help');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HSTS_VC')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HSTS VC');
+      //HSTS VC
+      objCase.processEmail(email,'Hotel_Systems_Technical_Support','VC Help');   
+    }    
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations',null);   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_INTERNATIONAL')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations',null);   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_DOMESTIC')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations',null);   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_EXPPAY')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations','Expedia Pay');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_EXPPAYNU')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations','Expedia Pay');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_VIRTUALCARDSS')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations','Expedia Virtual Card');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_VENDOR_BANKING')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations', 'Vendor Banking');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'FINOPS_BREAKAGE')) {
+      system.debug('***EmailServicesHandler => Before processEmail for FinOps');      
+      objCase.processEmail(email,'Financial_Operations','Breakage');   
+    }
+
+    /// MPS prefaced all HPS team values with HPS 10/12/11
+
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HPS')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Lodging_Operations_HPS','HPS-General');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HPS_CLOSEOOUT')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Lodging_Operations_HPS','HPS-DS Closeouts');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HPS_RELOMGT')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Lodging_Operations_HPS','HPS-Relo Management');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HPS_DS')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Lodging_Operations_HPS','HPS-Destination Services');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HPS_ELITE_PLUS')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Lodging_Operations_HPS','HPS-Elite Plus VIP');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'HPS_STPSEL')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Lodging_Operations_HPS','HPS-DS Stopsell');   
+    }
+    else if (IsCaseType(mapEmailServiceAddresses, envelope.toAddress, 'SCORE')) {
+      system.debug('***EmailServicesHandler => Before processEmail for HPS');      
+      objCase.processEmail(email,'Score',null);   
+    }
+    
     else { 
         // email not handled so create a
       //Support Request
       objCase.processEmail(email, 'Support_Request', null);
     }
     system.debug('***EmailServicesHandler => Before Return***');    
+
+    }catch (Exception ex) {
+        system.debug('***EmailServicesHandler => Exception***');
+        ExceptionClass objException = new ExceptionClass();
+        objException.InsertException(email, ex);
+    }
+
     return result;  
   }
+
+  /////// Private Methods
+  private Boolean IsCaseType(Map<String, Email_Service_Addresses__c> mapEmailServiceAddresses, String toAddress, String customSetting) {
+    //locate the custom setting for the case type
+    Email_Service_Addresses__c emailServiceAddress = mapEmailServiceAddresses.get(customSetting);
+
+    //if a custom setting is found determine if the enevelop.toAddress matches the email address of the custom setting
+    return (emailServiceAddress != null ? toAddress.toLowerCase().contains(emailServiceAddress.Email_Address__c) : false);
+  }
+*/
 }

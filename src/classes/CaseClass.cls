@@ -204,24 +204,25 @@ public class CaseClass {
       }    
     }// end for loop      
     insert casesToInsert;
+  }    
+    
+  public void assignCaseToLinguist(Case parentCase, List<String> languages) {
+    
+    // create a child case for each language selected
+  	for(Language__c language : [Select Id, Name From Language__c Where Id IN : languages]) {
+        // Clone case into child case
+        Case clonedCase = cloneChildCase(parentCase, language);
+        casesToInsert.add(clonedCase);
+    }// end for loop
+    
+    insert casesToInsert;
   }
   
-	public static Case findById(Id myCaseId){
+  public static Case findById(Id myCaseId){
         CaseClass caseObj = new CaseClass();
         return caseObj.getCase(myCaseId);
-    }    
-    
-	public void assignCaseToLinguist(Case parentCase, List<String> languages) {
-	  	
-	  	// create a child case for each language selected
-	  	for(Language__c language : [Select Id, Name From Language__c Where Id IN : languages]) {
-	  		// Clone case into child case
-	  		Case clonedCase = cloneChildCase(parentCase, language);
-	  		casesToInsert.add(clonedCase);
-	  	}// end for loop
-	  	
-	  	insert casesToInsert;
-	}
+    }
+
     /////// Private Methods
         
     private Map<String, Id> queueNameToId = new Map<String, Id>();
@@ -262,13 +263,13 @@ public class CaseClass {
           richTextDescription = plainTextEmailRecipientsList + '<br/><br/>' + parseStarRatingsEmailFromEPC(htmlBody, '<br/>');
         }
         else {
-        	system.debug('plainTextBody=' + plainTextBody);
-        	if(plainTextBody == null) {
-        		plainTextBody = htmlbody;
-        		plainTextBody = plainTextBody.replace('<br>', '\n');
-        		plainTextBody = plainTextBody.replace('<br/>', '\n');
-        		system.debug('IN PLAIN TEXT=' + plainTextBody);
-        	}
+            system.debug('plainTextBody=' + plainTextBody);
+            if(plainTextBody == null) {
+                plainTextBody = htmlbody;
+                plainTextBody = plainTextBody.replace('<br>', '\n');
+                plainTextBody = plainTextBody.replace('<br/>', '\n');
+                system.debug('IN PLAIN TEXT=' + plainTextBody);
+            }
           plainTextDescription = plainTextEmailRecipientsList + plainTextBody;     
           richTextDescription = htmlBodyEmailRecipientsList + htmlBody;
         }
@@ -559,6 +560,9 @@ public class CaseClass {
       if (recordType == 'Air_CPR') teamSignature = 'Air CPR Workflow Management';
       if (recordType == 'ADM') teamSignature = 'ADM Workflow Management';
       if (recordType == 'CarOps') teamSignature = 'Car Operations Workflow Management';
+      if (recordType == 'Localisation') teamSignature = 'Localisation';
+      if (recordType == 'User_Generated_Content') teamSignature = 'User Generated Content';
+      
       
       return 'Thank you for contacting Expedia Support. A case has been created to help track your issue through its resolution.' +
              '\n\n' +
@@ -579,7 +583,7 @@ public class CaseClass {
         
     private Case getCase(Id caseId) {
       return [Select Id
-      				,AccountId
+                    ,AccountId
                     ,Status
                     ,isClosed
                     ,OwnerId
@@ -615,25 +619,23 @@ public class CaseClass {
     private Case cloneChildCase(Case parentCase, Language__c language){
       String caseDescription = ''; 
       if (parentCase.Description != null) caseDescription = parentCase.Description; 
-	  queueNameToId = Utilities.getQueueNameToIdMap('Case');   
+      queueNameToId = Utilities.getQueueNameToIdMap('Case');   
       
       Case newCase = new Case (Subject = parentCase.Subject
                             ,ParentId = parentCase.Id
-      						,Description = 'Transferred from Case Number: '+ parentCase.CaseNumber +'\n Old Case Id: ' + parentCase.Id + '\n Transferred from: ' + RecordTypeIdToName.get(parentCase.RecordTypeId) + '\n-----------------------------------------------------------\n\n' + caseDescription
+                            ,Description = 'Transferred from Case Number: '+ parentCase.CaseNumber +'\n Old Case Id: ' + parentCase.Id + '\n Transferred from: ' + RecordTypeIdToName.get(parentCase.RecordTypeId) + '\n-----------------------------------------------------------\n\n' + caseDescription
                             ,Description_Rich_Text__c = parentCase.Description_Rich_Text__c
                             ,suppliedEmail = parentCase.suppliedEmail
                             ,suppliedName = parentCase.suppliedName
+                            ,ContactId = parentCase.ContactId
+                            ,AccountId = parentCase.AccountId
                             ,Status = 'Internal - Transfer'  
                             ,OwnerId = queueNameToId.get('Localisation')
       						,Team__c = 'Localisation - ' + language.Name
       						,Language__c = language.Id
-      						,Allocated__c = true
+                            ,Allocated__c = true
       						,Origin = parentCase.Origin
                             ,RecordTypeId = parentCase.RecordTypeId);
-    
-      // set the contact and account id. an invalid id exception is thrown if the ids are null. unable to test for null in an if statement
-      try { newCase.ContactId = parentCase.ContactId; } catch(Exception ex) {}
-      try { newCase.AccountId = parentCase.AccountId; } catch(Exception ex) {}
       
       return newCase;
   }
@@ -665,7 +667,7 @@ public class CaseClass {
   
   private Boolean fromExpediaPartnerCentral(String emailAddress) {
     return emailAddress.contains('@expediapartnercentral.com') &&
-           !emailAddress.contains('askexpedia@');
+           !emailAddress.contains('askexpedia');
   }
   
   private Boolean fromAskExpedia(String emailAddress) {
@@ -748,6 +750,6 @@ public class CaseClass {
   }
 
   private Boolean sendAutoResponseEmail(String emailAddress) {
-  	return !EmailUtilities.suppressSpamEmails(emailAddress) && !EmailUtilities.suppressEmailAutoResponse(emailAddress);
+    return !EmailUtilities.suppressSpamEmails(emailAddress) && !EmailUtilities.suppressEmailAutoResponse(emailAddress);
   }
 }

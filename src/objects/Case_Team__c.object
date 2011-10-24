@@ -51,6 +51,16 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Language__c</fullName>
+        <externalId>false</externalId>
+        <label>Language</label>
+        <referenceTo>Language__c</referenceTo>
+        <relationshipLabel>CaseTeams</relationshipLabel>
+        <relationshipName>CaseTeams</relationshipName>
+        <required>false</required>
+        <type>Lookup</type>
+    </fields>
+    <fields>
         <fullName>Record_Type_Developer_Name__c</fullName>
         <description>Developer name of the record type</description>
         <externalId>false</externalId>
@@ -79,6 +89,11 @@
         <columns>Email_Service_Address__c</columns>
         <columns>Record_Type_Developer_Name__c</columns>
         <columns>Team__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <listViews>
+        <fullName>All1</fullName>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>

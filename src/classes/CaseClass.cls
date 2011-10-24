@@ -14,7 +14,7 @@ public class CaseClass {
   public String sfdcURL = 'https://na8.salesforce.com/'; // CHANGE Per environment
   public CaseClass(){}
     
-  public Case processEmail(Messaging.Inboundemail email, String recordType, String team) {
+  public Case processEmail(Messaging.Inboundemail email, String recordType, String team, id languageId) {
         
     Case myCase = new Case();
     EmailMessage newEmail = new EmailMessage();
@@ -28,7 +28,7 @@ public class CaseClass {
       myCase = this.updateCase(replyEmailCaseParentId, email);  
     }
     else{ // New Case  
-      myCase = this.insertCase(email,recordType, mapRecordTypes, team);  
+      myCase = this.insertCase(email,recordType, mapRecordTypes, team, languageId);  
     }
     
     if(myCase != null){ //handle any attachments
@@ -230,7 +230,7 @@ public class CaseClass {
     private Map<Id, String> RecordTypeIdToName = new Map<Id, String>();
     private List<Case> casesToInsert = new List<Case>();  
     
-    private Case insertCase(Messaging.InboundEmail email, String recordType, Map<String,RecordType> mapRecordTypes, String team) {
+    private Case insertCase(Messaging.InboundEmail email, String recordType, Map<String,RecordType> mapRecordTypes, String team, id languageId) {
       
       String plainTextEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '\n');
       String htmlBodyEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '<br/>');
@@ -284,7 +284,8 @@ public class CaseClass {
                             ,Description_Rich_Text__c = Utilities.truncateField(richTextDescription, 32000, '<br/>')
                             ,Email_Recipients__c = Utilities.truncateField(emailRecipients, 255,'\n')
                             ,Send_auto_response__c = sendAutoResponseEmail(email.fromAddress)
-                            ,Team__c = team                         
+                            ,Team__c = team
+                            ,Language__c = languageId                      
                             );
                             
       system.debug('MYCASE.Description=' + myCase.Description);

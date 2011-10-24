@@ -11,11 +11,12 @@ global class EmailServicesHandler implements Messaging.InboundEmailHandler {
     
     if(caseTeam != null) {
 	  // Look at To envelope.toAddress and call appropriate case, passing correct record type
-      objCase.processEmail(email, caseTeam.Record_Type_Developer_Name__c, caseTeam.Team__c);    	
+	  system.debug('LANGUAGE IS: ' + caseTeam.Language__c);
+      objCase.processEmail(email, caseTeam.Record_Type_Developer_Name__c, caseTeam.Team__c, caseTeam.Language__c);    	
     }else {
       // email not handled so create a
       //Support Request
-      objCase.processEmail(email, 'Support_Request', null);
+      objCase.processEmail(email, 'Support_Request', null, null);
     }
 
     system.debug('***EmailServicesHandler => Before Return***');    

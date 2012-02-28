@@ -209,7 +209,7 @@ public class CaseClass {
   public void assignCaseToLinguist(Case parentCase, List<String> languages) {
     
     // create a child case for each language selected
-  	for(Language__c language : [Select Id, Name From Language__c Where Id IN : languages]) {
+    for(Language__c language : [Select Id, Name From Language__c Where Id IN : languages]) {
         // Clone case into child case
         Case clonedCase = cloneChildCase(parentCase, language);
         casesToInsert.add(clonedCase);
@@ -238,6 +238,8 @@ public class CaseClass {
       String plainTextBody = email.plainTextBody;
       String htmlBody = email.htmlBody;
       
+      //GoogleTranslate.TranslationResult myTranslationResult = new GoogleTranslate.TranslationResult(plainTextBody);      
+      
       String plainTextDescription;
       String richTextDescription;
       
@@ -250,6 +252,8 @@ public class CaseClass {
       String emailRecipients = EmailUtilities.buildEmailRecipientsField(unformattedToAddresses) + '\n' +
                                EmailUtilities.buildEmailRecipientsField(unformattedCCAddresses);
            
+      /**
+      
       if(this.supportRequestCase(recordType)) {
         //plainTextDescription =  email.plainTextBody;
         //richTextDescription =  email.htmlBody;
@@ -274,18 +278,22 @@ public class CaseClass {
           richTextDescription = htmlBodyEmailRecipientsList + htmlBody;
         }
       }
-                                       
-      Case myCase = new Case(Description = Utilities.truncateField(plainTextDescription, 32000, '\n')
+      **/
+      system.debug('SOURCE LANGUAGE');
+      //system.debug(myTranslationResult.getSourceLanguage());      
+      Case myCase = new Case(Description = plainTextBody
                             ,Subject = email.subject
                             ,SuppliedEmail = email.fromAddress
                             ,SuppliedName = email.fromName
                             ,RecordTypeId = mapRecordTypes.get(recordType).Id
                             ,Origin = this.getOrigin(email.fromAddress)
-                            ,Description_Rich_Text__c = Utilities.truncateField(richTextDescription, 32000, '<br/>')
                             ,Email_Recipients__c = Utilities.truncateField(emailRecipients, 255,'\n')
                             ,Send_auto_response__c = sendAutoResponseEmail(email.fromAddress)
                             ,Team__c = team
-                            ,Language__c = languageId                      
+                            //,Language__c = this.getLanguageIdByAbbreviation(myTranslationResult.getSourceLanguage())
+                            //,Translation_Confidence__c = myTranslationResult.getConfidence()
+                            //,Translated_Description__c = myTranslationResult.getTranslation()
+                           // ,Description_Rich_Text__c = myTranslationResult.getTranslation()                  
                             );
                             
       system.debug('MYCASE.Description=' + myCase.Description);
@@ -309,7 +317,7 @@ public class CaseClass {
 
       myCase.setOptions(dmo);
 
-      try {
+      //try {
         insert myCase;
         // Requery the DB to get the new case number.
         // STUPID that we have to do this.
@@ -359,6 +367,7 @@ public class CaseClass {
             Utilities.truncateField(autoResponseEmailText, 32000, '\n'), // test outside method 
             EmailMessageClass.enumEmailStatus.sent, false, new String[]{});
         }*/         
+      /**
       }
       catch (system.Dmlexception dmlE) {
         system.debug('*** CaseClass.CreateCase After case Insert. DML Exception ' + dmlE.getMessage() + ' ***');
@@ -366,8 +375,14 @@ public class CaseClass {
       catch (Exception e) {
         system.debug('*** CaseClass.CreateCase After case Insert. Exception ' + e.getMessage() + ' ***');
       }
+      **/
       
       return myCase;
+    }
+    
+    private Id getLanguageIdByAbbreviation(string myAbbreviation){
+        system.debug(myAbbreviation);
+        return [SELECT Id FROM Language__c WHERE Abbreviation__c = :myAbbreviation limit 1].Id;
     }
     
     private Case updateCase(Id caseId, Messaging.InboundEmail email) {
@@ -632,10 +647,10 @@ public class CaseClass {
                             ,AccountId = parentCase.AccountId
                             ,Status = 'Internal - Transfer'  
                             ,OwnerId = queueNameToId.get('Localisation')
-      						,Team__c = 'Localisation - ' + language.Name
-      						,Language__c = language.Id
+                            ,Team__c = 'Localisation - ' + language.Name
+                            ,Language__c = language.Id
                             ,Allocated__c = true
-      						,Origin = parentCase.Origin
+                            ,Origin = parentCase.Origin
                             ,RecordTypeId = parentCase.RecordTypeId);
       
       return newCase;

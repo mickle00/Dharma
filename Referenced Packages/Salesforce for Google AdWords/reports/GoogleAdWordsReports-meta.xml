@@ -4,6 +4,6 @@
     <name>Salesforce Reports for Google AdWords</name>
     <publicFolderAccess>ReadOnly</publicFolderAccess>
     <sharedTo>
-        <groups>Administrators</groups>
+        <group>Administrators</group>
     </sharedTo>
 </ReportFolder>

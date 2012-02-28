@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Connection__c$Account__c.Owner</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.ShippingStreet</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.ShippingCity</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.ShippingState</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.ShippingPostalCode</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.ShippingCountry</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Type__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Connectivity_System__c.Name</field>
+    </columns>
+    <filter>
+        <booleanFilter>(1 AND 2 AND 3 AND 4 AND (5 OR 6 OR 7 OR 8)) AND 9</booleanFilter>
+        <criteriaItems>
+            <column>Connection__c$Platform__c</column>
+            <operator>equals</operator>
+            <value>EQC</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c.Connectivity_Rollouts__r$Case__c.Status</column>
+            <operator>notEqual</operator>
+            <value>On hold – waiting for chain/vendor,On hold – waiting for Expedia MM/AM,On hold – waiting for property,On hold – waiting for RAID/Jira</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Account__c.Name</column>
+            <operator>notContain</operator>
+            <value>LA-</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Account__c.PSG_Status__c</column>
+            <operator>equals</operator>
+            <value>ESR;</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>notEqual</operator>
+            <value>SynXis CRS (SynXis Red X),Red Roof Inn only Core CRS</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>ASI Front Desk (v5.3+),Autoupdate,Availpro,Bit-Wizards for Wind Creek Casino,Booking Blastness,Bookingland,BookingOne Connect,CHMS 2000,Clarity,Columbus CRS,Demand Gateway,DHotelier,Dingus CM,DIRS21,Easy-Rez CRS,eRes,Evolution,Genares CRS,Global Connection,Hera Net Manager,HermesHotels,Hotel 3,Hotel Concepts PMS</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>HotelNet CRS,Hoteltoweb CRS,IGM Synergy Hotel CRS,IHotelier,INNfinity V2,InnLink CRS,InnPoints CRS,Iperbooking channel Manager,IQWare PMS,LeoPortals Manager,Magnuson CRS (Windsurfer),Miami 3,Micros Portal download,NightsBridge PMS,Old Town Apartments System,ONETECH PMS,Optima PMS,Palace Resorts CRS,Parity Rate,Prestige,Protel - PMS,Pueblo Bonito Proprietary PMS,Reservit,Rev Master,Rezexchange,RezView Next Generation (RVNG),Roomlynx,RoomMaster2000,Sigh Ulyses,Simple Booking Channel Manager</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>Siteminder Channel Manager,SiteminderEurope Channel Manager,smartHOTEL.nl,STAAH,Stardekk Channel Manager,SynXis CRS (SynXis Red X),UniVisit CDMS,Update247 CM,Vertical Bookings,VisualMatrix,WebRezPro-PMS,WooDoo,Xenia PMS,XN Hotel Systems</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Status__c</column>
+            <operator>equals</operator>
+            <value>Enrollment Form Sent,Mapping Information Sent</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Connection__c$Account__c.Expedia_Hotel_Id__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Weekly EVC Report 1.5</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>HSTS_Connections_Hotel_Data__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Connection__c.Connectivity_Rollouts__r$Case__c.CreatedDate</dateColumn>
+        <endDate>2011-12-31</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2011-10-01</startDate>
+    </timeFrameFilter>
+</Report>

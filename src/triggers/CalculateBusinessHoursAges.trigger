@@ -31,7 +31,7 @@ trigger CalculateBusinessHoursAges on Case (before insert, before update) {
                 if (!oldCase.IsClosed) {
                     //We only update the buckets for open cases
 
-					//On the off-chance that the business hours on the case are null, use the default ones instead
+                    //On the off-chance that the business hours on the case are null, use the default ones instead
                     Id hoursToUse = updatedCase.BusinessHoursId!=null?updatedCase.BusinessHoursId:defaultHours.Id;
 
                     //The diff method comes back in milliseconds, so we divide by 3600000 to get hours.
@@ -45,9 +45,9 @@ trigger CalculateBusinessHoursAges on Case (before insert, before update) {
                         updatedCase.Time_With_Support__c += timeSinceLastStatus;
                     }
 
-					if (closedStatusSet.contains(updatedCase.Status)) {
-                    	updatedCase.Case_Age_In_Business_Hours__c = updatedCase.Time_With_Customer__c + updatedCase.Time_With_Support__c;
-					}
+                    if (closedStatusSet.contains(updatedCase.Status)) {
+                        updatedCase.Case_Age_In_Business_Hours__c = updatedCase.Time_With_Customer__c + updatedCase.Time_With_Support__c;
+                    }
                 }
 
                 updatedCase.Last_Status_Change__c = System.now();

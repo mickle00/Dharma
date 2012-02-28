@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Connection__c$Account__c.Owner</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c.Connectivity_Rollouts__r$Case__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.EQC_Addendum_CM__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Venere_Status__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Connection__c$Platform__c</column>
+            <operator>equals</operator>
+            <value>EQC</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c.Connectivity_Rollouts__r$Case__c.Status</column>
+            <operator>equals</operator>
+            <value>On hold – waiting for Expedia MM/AM</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Connection__c.Connectivity_Rollouts__r$Case__c.Status</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Connection__c$Connectivity_System__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>EQC on hold expedia</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>HSTS_Connections_Hotel_Data__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Connection__c.Connectivity_Rollouts__r$Case__c.CreatedDate</dateColumn>
+        <endDate>2011-12-31</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2011-10-01</startDate>
+    </timeFrameFilter>
+</Report>

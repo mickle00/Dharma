@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Connection__c$Account__c.Expedia_Hotel_Id__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Type__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Connectivity_System__c.Name</field>
+    </columns>
+    <description>EQC AR/BR Integration Systems report for weekly KPI</description>
+    <filter>
+        <criteriaItems>
+            <column>Connection__c$Type__c</column>
+            <operator>equals</operator>
+            <value>AR,BR</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c</column>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>EQC Integration Systems v3</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>HSTS_Connections_Hotel_Data__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Connection__c$CreatedDate</dateColumn>
+        <endDate>2011-12-31</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2011-10-01</startDate>
+    </timeFrameFilter>
+</Report>

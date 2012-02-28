@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Connection__c$Account__c.Market_Manager_Name__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Market_Manager_Email__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Market_Manager_Phone__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c.Connectivity_Rollouts__r$Case__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Connectivity_System__c.Name</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Venere_Status__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c.Connectivity_Rollouts__r$LastModifiedDate</field>
+    </columns>
+    <description>List of properties that are on hold vendor</description>
+    <filter>
+        <criteriaItems>
+            <column>Connection__c$Platform__c</column>
+            <operator>equals</operator>
+            <value>VC</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Type__c</column>
+            <operator>equals</operator>
+            <value>AR</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c.Connectivity_Rollouts__r$Case__c.Status</column>
+            <operator>equals</operator>
+            <value>On hold – waiting for chain/vendor</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Connection__c.Connectivity_Rollouts__r$Case__c.Status</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>On hold vendor</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>HSTS_Connections_Hotel_Data__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Connection__c.Connectivity_Rollouts__r$Case__c.CreatedDate</dateColumn>
+        <endDate>2011-12-31</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2011-10-01</startDate>
+    </timeFrameFilter>
+</Report>

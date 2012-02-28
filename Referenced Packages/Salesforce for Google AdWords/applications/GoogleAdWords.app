@@ -13,4 +13,5 @@
     <tab>Brand__c</tab>
     <tab>Chain__c</tab>
     <tab>Structure_Type__c</tab>
+    <tab>Team__c</tab>
 </CustomApplication>

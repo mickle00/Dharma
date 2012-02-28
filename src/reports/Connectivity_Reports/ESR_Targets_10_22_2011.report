@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Connection__c$Account__c.Owner</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Expedia_Hotel_Id__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Region__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.BillingCity</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.BillingCountry</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Type__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Connectivity_System__c.Connectivity_System_Type__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Connectivity_System__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Go_Date__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.HIMS_Stop_Sell__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.Status__c</field>
+    </columns>
+    <columns>
+        <field>Connection__c$Account__c.PSG_Status__c</field>
+    </columns>
+    <filter>
+        <booleanFilter>(1 OR 2 OR 3 OR 4) AND 5 AND 6 AND 7</booleanFilter>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>Magnuson WRpro PMS,SMS - EQC by Noble House,Micros Portal download,ASI Front Desk (v5.3+),Mini Hotel,Rezeasy,Frontdesk,Sands Resorts PMS for EQC,Xenia PMS,Hotel Profi,ONETECH PMS,OTA PMS,Web NewHotel,Hotel Manager PMS,Opera by CNS,Starlight (Hogatex),Five Star Software,SMS - EQC by Golden Nugget,Confortel PMS,Sykon PMS,RDPWin,CHMS 2000,INNfinity V2,Lodgegate PMS,Travelguru,Chart PMS,Visual One (V1),LMS Innspire As/400,Sysdat,Fortune PMS,Optima PMS,Jazotel PMS,Hotsoft by Klopp,Nuconga,NightsBridge PMS,Bird Hotel,RoomMaster2000,VisualMatrix,RoomKey,Evolution Hotel,IQWare PMS,Hotello,Pueblo Bonito Proprietary PMS,Miami 3,Hotel 3,Entirety,Hotel Concepts PMS,Mirage PMS,Mefisto Hotel</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>WebRezPro-PMS,Hotellinx Suite,Protel - PMS,epitome PMS Tools - HIS,Hotel Time PMS,SMS - EQC by Tuscany,Charts Africa,Tropics Hotels PMS for EQC,OpenBook PMS,SSID,Booking Evolution,Red Roof Inn only Core CRS,Easy-Rez CRS,PHOBS CRS,BugHotel Reservation System,Hoteltoweb CRS,TIO - Tourvest Inbound Operations,Core CRS,Make Reservations,Odalys CRS,Aspire Networks CRS,Magnuson CRS (Windsurfer),Bookingland,Travel-io,DHotelier,ReservIT Softbooker Canada,Evolution,Finite-Systems CRS,Real Resorts CRS,BookingOne Connect,Columbus CRS,OptiRez,Pelican CRS,XN Hotel Systems,QOnline CRS,LeisureLink CRS,Sinfonet,Kerzner CRS,Casa Andina CRS,HotelPartner CRS,HotelNet CRS,Barcelo CRS,Bizcomit CRS,HermesHotels,IHotelier,Previo CRS,Sirius,IGM Synergy Hotel CRS</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>InnLink CRS,Genares CRS,TACB CRS,Autoupdate,Palace Resorts CRS,Reservit,Pierre et Vacances - CRS,InnPoints CRS,Hubs1,eRes,Sigh Ulyses,Global Connection,iRES,NBCRS,DIRS21,Virtual Hotel,TL Lincoln,Hisite,Rev Master,AccuSell,ChannelGAIN,Clarity,Nozio,COL switch,Juniper CM,Old Town Apartments System,Hera Net Manager,Rakujan - Channel Manager,ChannelManager2,Parity Rate,Planet Winner,WooDoo,Passepartout Welcome,Revparguru Channel Manager for EQC,BookingExpert,HotelnJoy,ResOnline Channel Manager,Synergy,YieldPlanet,Gastrodat,Bit-Wizards for Wind Creek Casino,e-GDS Channel Manager,Smart Hotel Online,Simple Booking Channel Manager,Misterbooking CM</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Connectivity_System__c.Name</column>
+            <operator>contains</operator>
+            <value>EzyChannel,Freeloader,UniVisit CDMS,Update247 CM,ChannelPlus,One-Step Channel Manager,Iperbooking channel Manager,Levart Channel Manager,SiteminderEurope Channel Manager,Demand Gateway,EZ Yield Channel Manager,Hotel Conecta,Temairazu Channel Manager,Allotz Channel Manager,Figaro - Channel Manager,STAAH,Rate Distributor,Booking Blastness,Cultuzz Channel Manager,Siteminder Channel Manager,Channel Direct,Vertical Booking,RoomShop,Dingus CM,Prestige,Roomlynx,Rate Tiger Allocator,Stardekk Channel Manager,FastBooking Channel Manager,smartHOTEL.nl,LeoPortals Manager,iBex Accommodation,Availpro,Rezexchange,Easyram,ChannelRUSH Channel Manager for EQC,Rez Online,Hotel-Spider</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c.Connectivity_Rollouts__r$Rollout_Step__c</column>
+            <operator>equals</operator>
+            <value>Enrollment Form Sent,Mapping Information Sent</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Account__c.PSG_Status__c</column>
+            <operator>equals</operator>
+            <value>ESR;</value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Connection__c$Account__c.HIMS_Stop_Sell__c</column>
+            <operator>equals</operator>
+            <value>0</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Connection__c$Account__c.Super_Region__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>ESR Targets 10-22-2011</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>HSTS_Connections_Hotel_Data__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Connection__c$CreatedDate</dateColumn>
+        <endDate>2011-10-23</endDate>
+        <interval>INTERVAL_CUSTOM</interval>
+        <startDate>2011-10-04</startDate>
+    </timeFrameFilter>
+</Report>

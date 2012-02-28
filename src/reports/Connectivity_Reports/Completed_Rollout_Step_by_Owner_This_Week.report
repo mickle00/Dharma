@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Rollout_Step__c$Name</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Rollout_Step__c$Completed_Date__c</column>
+            <operator>notEqual</operator>
+            <value></value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Rollout_Step__c$Owner</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Rollout_Step__c$Rollout_Step__c</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Completed Rollout Steps This Week</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Rollout_Steps_with_Connections__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Rollout_Step__c$Completed_Date__c</dateColumn>
+        <interval>INTERVAL_THISWEEK</interval>
+    </timeFrameFilter>
+</Report>

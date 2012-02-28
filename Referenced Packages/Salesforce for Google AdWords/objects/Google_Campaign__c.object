@@ -62,6 +62,7 @@
     </fields>
     <fields>
         <fullName>Lead__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <deprecated>false</deprecated>
         <externalId>false</externalId>
         <label>Lead</label>
@@ -72,6 +73,7 @@
     </fields>
     <fields>
         <fullName>Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <deprecated>false</deprecated>
         <externalId>false</externalId>
         <label>Opportunity</label>

@@ -90,5 +90,9 @@
         <members>*</members>
         <name>ReportType</name>
     </types>
+    <types>
+        <members>PSGSalesforce</members>
+        <name>StaticResource</name>
+    </types>
     <version>23.0</version>
 </Package>

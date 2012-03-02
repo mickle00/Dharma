@@ -23,6 +23,22 @@ public with sharing class Utilities {
 		}
 		return mapRecordTypes;
 	}
+	public static Map<Id,RecordType> RecordTypeMapIdToRecordType(String objectName) {
+      Map<Id,RecordType> recordTypeByIdMap = new Map<Id,RecordType>();
+      
+      List<RecordType> recordTypes = [Select DeveloperName
+                                               ,Id
+                                               ,Name 
+                                           From RecordType
+                                          Where RecordType.SobjectType = :objectName];
+                                          
+      for(RecordType recType : recordTypes) {
+        recordTypeByIdMap.put(recType.Id,recType);
+      }
+      
+      return recordTypeByIdMap;
+    }
+	
 	
 	public static Map<String, Id> getQueueNameToIdMap(String objectName){
 	  Map<String, Id> buildingMap = new Map<String, Id>();
@@ -102,5 +118,13 @@ public with sharing class Utilities {
   	  }
   	}
   	return delimitedString;
+  }
+  
+  public static String repeatString(string myString, integer count){
+  	string returnText ='';
+  	for (Integer i=0; i<count; i++){
+  		returnText = returnText + myString;
+  	}
+  	return returnText;
   }
 }

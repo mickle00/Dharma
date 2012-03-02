@@ -52,10 +52,9 @@
         <fullName>Checklist_Item_ID__c</fullName>
         <externalId>false</externalId>
         <label>Checklist Item ID</label>
-        <precision>18</precision>
+        <length>18</length>
         <required>false</required>
-        <scale>0</scale>
-        <type>Number</type>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
@@ -85,13 +84,12 @@
         <visibleLines>25</visibleLines>
     </fields>
     <fields>
-        <fullName>LocaleID__c</fullName>
+        <fullName>Locale_ID__c</fullName>
         <externalId>false</externalId>
-        <label>LocaleID</label>
-        <precision>18</precision>
+        <label>Locale ID</label>
+        <length>18</length>
         <required>false</required>
-        <scale>0</scale>
-        <type>Number</type>
+        <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>

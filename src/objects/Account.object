@@ -330,7 +330,7 @@
         <fullName>Expedia_Hotel_Id__c</fullName>
         <caseSensitive>false</caseSensitive>
         <description>Id that is unique identifier in Lodging Catalog Master database</description>
-        <externalId>false</externalId>
+        <externalId>true</externalId>
         <label>Expedia Hotel Id</label>
         <length>18</length>
         <required>false</required>

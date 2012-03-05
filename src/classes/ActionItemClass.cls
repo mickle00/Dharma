@@ -1,5 +1,5 @@
 public with sharing class ActionItemClass {
-	
+
 	public Map<String, RecordType> actionItemRecordTypeMap = Utilities.getRecordTypesMap('Action_Item__c', true);
 	
 	public void addActionItemsToCase(List<Action_Item__c> newActionItems){
@@ -82,6 +82,7 @@ public with sharing class ActionItemClass {
 		Trapholt Art Museum
 		Comment 1290:		
 		**/
+
 		string returnText = newLine + lineSeparator +
 							newLine + 'Checklist Question ' + myActionItem.Checklist_Item_ID__c + ': ' +
 							newLine + 'Submitted By: ' + myActionItem.Supplied_Email__c +

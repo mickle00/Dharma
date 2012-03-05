@@ -9,10 +9,6 @@ public with sharing class ActionItemClass {
 		for (Action_Item__c myActionItem : destinationManagementActionItems){
 			this.addActionItemToCase(myActionItem, caseMap.get(myActionItem.Case__c));
 		}
-		
-		//Truncate the Case Description without throwing an error
-		Database.DMLOptions dml = new Database.DMLOptions();
-		dml.allowFieldTruncation = true;
 		update caseMap.values();		
 	}
 	
@@ -54,6 +50,12 @@ public with sharing class ActionItemClass {
 			myCase.Description = buildCaseDescriptionHeader(myActionItem, myCase, false);
 			myCase.Description_Rich_Text__c = buildCaseDescriptionHeader(myActionItem, myCase, true);
 		}
+				
+		//Truncate the Case Description without throwing an error
+		Database.DMLOptions dml = new Database.DMLOptions();
+		dml.allowFieldTruncation = true;
+		myCase.setOptions(dml);
+		
 		myCase.Number_of_Changes__c = myCase.Number_of_Changes__c + 1;
 		myCase.Description += buildDescriptionCheckListItem(myActionItem, myCase, false);
 		myCase.Description_Rich_Text__c += buildDescriptionCheckListItem(myActionItem, myCase, true);		

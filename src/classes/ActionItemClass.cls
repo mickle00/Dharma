@@ -7,6 +7,11 @@ public with sharing class ActionItemClass {
 		Map<Id, Case> caseMap = this.getActionItemCaseMap(this.getActionItemCaseIDs(destinationManagementActionItems));
 		
 		for (Action_Item__c myActionItem : destinationManagementActionItems){
+			//Truncate the ActionItem RichTextFields without throwing an error
+			Database.DMLOptions dml = new Database.DMLOptions();
+			dml.allowFieldTruncation = true;
+			myActionItem.setOptions(dml);
+			
 			this.addActionItemToCase(myActionItem, caseMap.get(myActionItem.Case__c));
 		}
 		update caseMap.values();		

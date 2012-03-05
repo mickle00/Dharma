@@ -9,6 +9,10 @@ public with sharing class ActionItemClass {
 		for (Action_Item__c myActionItem : destinationManagementActionItems){
 			this.addActionItemToCase(myActionItem, caseMap.get(myActionItem.Case__c));
 		}
+		
+		//Truncate the Case Description without throwing an error
+		Database.DMLOptions dml = new Database.DMLOptions();
+		dml.allowFieldTruncation = true;
 		update caseMap.values();		
 	}
 	
@@ -82,11 +86,11 @@ public with sharing class ActionItemClass {
 		Trapholt Art Museum
 		Comment 1290:		
 		**/
-
+		
 		string returnText = newLine + lineSeparator +
 							newLine + 'Checklist Question ' + myActionItem.Checklist_Item_ID__c + ': ' +
 							newLine + 'Submitted By: ' + myActionItem.Supplied_Email__c +
-							newLine + NewLine + 'Locale ID: ' + myActionItem.Locale_ID__c +
+							newLine + 'Locale ID: ' + myActionItem.Locale_ID__c +
 							newLine + newLine + 'Live Content: ' + myActionItem.Live_Content__c +
 							newLine + newLine + 'MM Suggestion: ' + myActionItem.Content_Suggestion__c;
 		return returnText;

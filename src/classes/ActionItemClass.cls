@@ -8,10 +8,7 @@ public with sharing class ActionItemClass {
 		
 		for (Action_Item__c myActionItem : destinationManagementActionItems){
 			//Truncate the ActionItem RichTextFields without throwing an error
-			Database.DMLOptions dml = new Database.DMLOptions();
-			dml.allowFieldTruncation = true;
-			myActionItem.setOptions(dml);
-			
+			this.truncateFields(myActionItem);
 			this.addActionItemToCase(myActionItem, caseMap.get(myActionItem.Case__c));
 		}
 		update caseMap.values();		
@@ -73,6 +70,12 @@ public with sharing class ActionItemClass {
 						   newLine + 'Link: http://psgdashboard/hotels/contentchecklist/pages/tab4.aspx?expeid='+myCase.Account.Expedia_Hotel_Id__c +
 						   newLine;
    		return myHeader;
+	}
+	
+	private Action_Item__c truncateFields (Action_Item__c myActionItem){
+		myActionItem.Live_Content__c = Utilities.truncateField(myActionItem.Live_Content__c, 32000, '<br/>');
+		myActionItem.Content_Suggestion__c = Utilities.truncateField(myActionItem.Content_Suggestion__c, 32000, '<br/>');
+		return myActionItem;
 	}
 	
 	private string buildDescriptionCheckListItem(Action_Item__c myActionItem, Case myCase, boolean isHTML){

@@ -7,8 +7,6 @@ public with sharing class ActionItemClass {
 		Map<Id, Case> caseMap = this.getActionItemCaseMap(this.getActionItemCaseIDs(destinationManagementActionItems));
 		
 		for (Action_Item__c myActionItem : destinationManagementActionItems){
-			//Truncate the ActionItem RichTextFields without throwing an error
-			this.truncateFields(myActionItem);
 			this.addActionItemToCase(myActionItem, caseMap.get(myActionItem.Case__c));
 		}
 		update caseMap.values();		
@@ -72,12 +70,6 @@ public with sharing class ActionItemClass {
    		return myHeader;
 	}
 	
-	private Action_Item__c truncateFields (Action_Item__c myActionItem){
-		myActionItem.Live_Content__c = Utilities.truncateField(myActionItem.Live_Content__c, 32000, '<br/>');
-		myActionItem.Content_Suggestion__c = Utilities.truncateField(myActionItem.Content_Suggestion__c, 32000, '<br/>');
-		return myActionItem;
-	}
-	
 	private string buildDescriptionCheckListItem(Action_Item__c myActionItem, Case myCase, boolean isHTML){
 		string newLine = isHTML ? '<br/>' : '\n';
 		string lineSeparator = Utilities.repeatString('-', 100);
@@ -98,7 +90,7 @@ public with sharing class ActionItemClass {
 		**/
 		
 		string returnText = newLine + lineSeparator +
-							newLine + 'Checklist Question ' + myActionItem.Checklist_Item_ID__c + ': ' +
+							newLine + 'Checklist Question ' + myActionItem.Checklist_Item_ID__c + ' ' + myActionItem.Question__c + ': ' +
 							newLine + 'Submitted By: ' + myActionItem.Supplied_Email__c +
 							newLine + 'Locale ID: ' + myActionItem.Locale_ID__c +
 							newLine + newLine + 'Live Content: ' + myActionItem.Live_Content__c +

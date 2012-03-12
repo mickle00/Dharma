@@ -2018,7 +2018,7 @@ Added Egencia, Venere and All choices to accommodate UGC.</description>
     <fields>
         <fullName>DM_Priority__c</fullName>
         <externalId>false</externalId>
-        <formula>Account.Destination_Management_Priority__c</formula>
+        <formula>IF( DM_Case__c == TRUE, Account.Destination_Management_Priority__c, null)</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>DM Priority</label>
         <precision>18</precision>

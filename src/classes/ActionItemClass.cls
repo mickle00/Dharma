@@ -18,7 +18,7 @@ public with sharing class ActionItemClass {
 		
 		for (Action_Item__c myActionItem : myActionItems){
 			if (myActionItem.RecordTypeId == destinationManagementRT.Id){
-				destinationManagementActionItems.add(myActionItem);
+				destinationManagementActionItems.add(myActionItem);				
 			}
 		}
 		return destinationManagementActionItems;

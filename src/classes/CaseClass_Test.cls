@@ -159,10 +159,10 @@ private class CaseClass_Test {
     
     CaseClass objCase = new CaseClass();
     
-    Case testCaseGeo1 = objCase.processEmail(email,'Geography',null);
+    //Case testCaseGeo1 = objCase.processEmail(email,'Geography',null);
      
-    email.subject = email.subject + ' ' + Utilities.getCaseThreadId(testCaseGeo1.Id);
-    email.plainTextBody = email.plainTextBody + '\n\n\n' + Utilities.getCaseThreadId(testCaseGeo1.Id);
+    //email.subject = email.subject + ' ' + Utilities.getCaseThreadId(testCaseGeo1.Id);
+    //email.plainTextBody = email.plainTextBody + '\n\n\n' + Utilities.getCaseThreadId(testCaseGeo1.Id);
     //Case testCaseGeo2 = objCase.processEmail(email,'Geography',null);
     
   }

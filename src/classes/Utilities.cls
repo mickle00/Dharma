@@ -103,4 +103,11 @@ public with sharing class Utilities {
   	}
   	return delimitedString;
   }
+	public static String repeatString(string myString, integer count){
+	    string returnText ='';
+	    for (Integer i=0; i<count; i++){
+	      returnText = returnText + myString;
+	    }
+	    return returnText;
+	}
 }

@@ -16,7 +16,7 @@ public with sharing class TimeLogClass {
             }
         }
         insert newCaseLogs;
-	}	
+	}
 	
 	// Called from Before Insert on Time Log
 	public static void beforeNewTimeLogs(List<Time_Log__c> newTimeLogs){
@@ -33,6 +33,7 @@ public with sharing class TimeLogClass {
 	public static Time_Log__c createNewTimeLog(Case_Time__c myCaseTime, Case myCase){
 		Time_Log__c myTimeLog = new Time_Log__c();
 		//TODO: CREATE TIME LOG
+		//TODO: MAKE SURE DEACTIVATED OLDUSERS DOESNT BREAK LOGGING
 		
 		return myTimeLog;
 	}

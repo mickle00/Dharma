@@ -6,7 +6,7 @@ public with sharing class TimeLogClass {
         
         for (Case myCase : newCases){
             Case myOldCase = oldCaseMap.get(myCase.Id);
-            if (myCase.Status != myOldCase.Status || myCase.OwnerId != myOldCase.OwnerId){
+            if (caseNeedsToLogTime(myCase, myOldCase)){
                 Time_Log__c myTimeLog = new Time_Log__c(Case_Owner__c = myOldCase.OwnerId
                                                        ,Case_Status__c = myOldCase.Status
                                                        ,New_Case_Status__c = myCase.Status
@@ -34,6 +34,7 @@ public with sharing class TimeLogClass {
 		Time_Log__c myTimeLog = new Time_Log__c();
 		//TODO: CREATE TIME LOG
 		//TODO: MAKE SURE DEACTIVATED OLDUSERS DOESNT BREAK LOGGING
+		//TODO: UPDATE METHODS TO USE THIS
 		
 		return myTimeLog;
 	}

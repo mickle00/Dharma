@@ -1,5 +1,12 @@
 public with sharing class CaseTimeClass {
 		
+	public static Case_Time__c findByCaseId (Id myCaseId){
+		return [SELECT Id
+					  ,First_Handle_Time__c 
+				 FROM Case_Time__c 
+			 	WHERE Case__c = :myCaseId];
+	}
+	
 	// Called from Before Insert on Case
 	public void createCaseTimesForNewCases(List<Case> newCases){
         List<Case_Time__c> newCaseTimes = new List<Case_Time__c>();
@@ -57,6 +64,10 @@ public with sharing class CaseTimeClass {
 			//recalculate myCaseTime.Logged_Business_Hours_Until_First_Handle__c
 			if (myCaseTime.First_Handle_Time__c != null && myCaseTime.Logged_Business_Hours_Until_First_Handle__c == null){
 				myCaseTime.Logged_Business_Hours_Until_First_Handle__c = BusinessHours.diff(myCaseTime.Case_Business_Hours_ID__c, myCaseTime.Case_Created_Date__c, myCaseTime.First_Handle_Time__c)/3600000.0;				
+			}
+			//set the Unique_Key__c
+			if (myCaseTime.Case__c != null && myCaseTime.Unique_Key__c == null){
+				myCaseTime.Unique_Key__c = myCaseTime.Case__c;
 			}
 		}
 	}

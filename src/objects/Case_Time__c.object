@@ -441,6 +441,16 @@ Hours_Included_in_SLA__c  - SLA_in_Hours__c
         <type>AutoNumber</type>
     </nameField>
     <pluralLabel>Case Times</pluralLabel>
+    <recordTypes>
+        <fullName>Delivering</fullName>
+        <active>true</active>
+        <label>Delivering</label>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Roadmap</fullName>
+        <active>true</active>
+        <label>Roadmap</label>
+    </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

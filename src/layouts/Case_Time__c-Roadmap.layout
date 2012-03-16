@@ -202,10 +202,6 @@
         <sortField>In_Effect_Until__c</sortField>
         <sortOrder>Desc</sortOrder>
     </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Agent_Handle_Time__c.Case_Time__c</relatedList>
-    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
     <showHighlightsPanel>true</showHighlightsPanel>
     <showInteractionLogPanel>true</showInteractionLogPanel>

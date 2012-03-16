@@ -48,6 +48,11 @@
         <name>CustomObject</name>
     </types>
     <types>
+        <members>Case_Time__c-Case Time Layout</members>
+        <members>Time_Log__c-Time Log Layout</members>
+        <name>Layout</name>
+    </types>
+    <types>
         <members>Connectivity_Reports</members>
         <members>Connectivity_Reports/AR_mapping_reverted_to_MM</members>
         <members>Connectivity_Reports/Chaser_Addendum_Return_for_AM_s_Final</members>

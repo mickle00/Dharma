@@ -61,6 +61,10 @@ private class TimeLogClass_Test {
 			system.assertEquals(myUser.Id, myTimeLog.Case_Owner__c);
     	}
     }
+    static testMethod void queueOwnedShouldWork() {
+    	//TODO: UPDATE TO MAKE QUEUE OWNED WORK
+    	system.assertEquals(true, false);
+    }
     
     // Taken from apex-lang which is set to be GA in Summer 12
     // Want to create a truly unique Username, to Create an Inactive User

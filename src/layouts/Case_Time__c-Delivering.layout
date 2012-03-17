@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
     <excludeButtons>Clone</excludeButtons>
+    <excludeButtons>Delete</excludeButtons>
+    <excludeButtons>Edit</excludeButtons>
     <excludeButtons>Share</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
@@ -114,6 +116,7 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Case_Owner__c</fields>
         <fields>Case_Status__c</fields>
@@ -122,7 +125,6 @@
         <fields>Time_Bucket__c</fields>
         <fields>Included_in_SLA_Time__c</fields>
         <fields>Time_in_Hours__c</fields>
-        <fields>Business_Time_in_Hours__c</fields>
         <relatedList>Time_Log__c.Case_Time__c</relatedList>
         <sortField>In_Effect_Until__c</sortField>
         <sortOrder>Desc</sortOrder>

@@ -59,13 +59,6 @@
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Case_Closed__c</fullName>
-        <defaultValue>false</defaultValue>
-        <externalId>false</externalId>
-        <label>Case Closed?</label>
-        <type>Checkbox</type>
-    </fields>
-    <fields>
         <fullName>Case_Owner_Type__c</fullName>
         <externalId>false</externalId>
         <label>Case Owner Type</label>
@@ -171,6 +164,22 @@
         <scale>4</scale>
         <type>Number</type>
         <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>While_Case_Closed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If this time log took place while the Case was closed</description>
+        <externalId>false</externalId>
+        <label>While Case Closed?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>While_Closing_Case__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If this time log took place immediately before a Case was closed.</description>
+        <externalId>false</externalId>
+        <label>While Closing Case?</label>
+        <type>Checkbox</type>
     </fields>
     <label>Time Log</label>
     <nameField>

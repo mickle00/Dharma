@@ -87,7 +87,8 @@ public with sharing class CaseTimeClass {
 		return 'Included in SLA';
 	}
 	
-	public boolean isStatusIncludedInSLATime (string caseStatus, boolean caseClosed){
+	public boolean isStatusIncludedInSLATime (string caseStatus, boolean caseClosed, boolean closingCase){
+		if (closedReplyIncludedInSLA (caseStatus, closingCase)) return true;
 		if (caseClosed) return false;
 		if (getStatusToTimeMap().containsKey(caseStatus)){
 			return getStatusToTimeMap().get(caseStatus).Included_in_SLA_Time__c;
@@ -98,7 +99,14 @@ public with sharing class CaseTimeClass {
 	public boolean isStatusIncludedInSLATime (string caseStatus, string caseClosed){
 		//formula fields cant return boolean. trying to save uneccessary soql here
 		if (caseClosed == 'TRUE') return false;
-		return this.isStatusIncludedInSLATime(caseStatus, false);
+		return this.isStatusIncludedInSLATime(caseStatus, false, false);
+	}
+	
+	private boolean closedReplyIncludedInSLA(string oldCaseStatus, boolean caseStillClosed){
+		if (oldCaseStatus == 'Closed - Reply'){
+			if (!caseStillClosed) return true;			
+		}
+		return false; 
 	}
 	
 	private Map<String, Status_Time_Bucket__c> statusToTimeMap;

@@ -121,6 +121,7 @@
 
 if logged time changes, run is stop status method</description>
         <externalId>false</externalId>
+        <inlineHelpText>Will default to false for  &quot;Closed - Reply&quot;  as that is only included in SLA if the Case is reopened</inlineHelpText>
         <label>Current Time Included in SLA Time?</label>
         <type>Checkbox</type>
     </fields>
@@ -213,7 +214,7 @@ if logged time changes, run is stop status method</description>
             <value>False</value>
         </summaryFilterItems>
         <summaryFilterItems>
-            <field>Time_Log__c.Case_Closed__c</field>
+            <field>Time_Log__c.While_Case_Closed__c</field>
             <operation>equals</operation>
             <value>False</value>
         </summaryFilterItems>
@@ -232,7 +233,7 @@ if logged time changes, run is stop status method</description>
             <value>TRUE</value>
         </summaryFilterItems>
         <summaryFilterItems>
-            <field>Time_Log__c.Case_Closed__c</field>
+            <field>Time_Log__c.While_Case_Closed__c</field>
             <operation>equals</operation>
             <value>FALSE</value>
         </summaryFilterItems>
@@ -261,7 +262,7 @@ if logged time changes, run is stop status method</description>
             <value>FALSE</value>
         </summaryFilterItems>
         <summaryFilterItems>
-            <field>Time_Log__c.Case_Closed__c</field>
+            <field>Time_Log__c.While_Case_Closed__c</field>
             <operation>equals</operation>
             <value>FALSE</value>
         </summaryFilterItems>
@@ -280,7 +281,7 @@ if logged time changes, run is stop status method</description>
             <value>TRUE</value>
         </summaryFilterItems>
         <summaryFilterItems>
-            <field>Time_Log__c.Case_Closed__c</field>
+            <field>Time_Log__c.While_Case_Closed__c</field>
             <operation>equals</operation>
             <value>FALSE</value>
         </summaryFilterItems>

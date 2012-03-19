@@ -63,7 +63,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Case_Closed__c</field>
+                <field>While_Case_Closed__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>While_Closing_Case__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>

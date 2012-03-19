@@ -211,7 +211,7 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Case_Closed__c</field>
+            <field>While_Case_Closed__c</field>
             <table>Case_Time__c.Case_Status_Times__r</table>
         </columns>
         <columns>

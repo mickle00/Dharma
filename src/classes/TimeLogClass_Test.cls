@@ -63,7 +63,17 @@ private class TimeLogClass_Test {
     }
     static testMethod void queueOwnedShouldWork() {
     	//TODO: UPDATE TO MAKE QUEUE OWNED WORK
-    	system.assertEquals(true, false);
+		Group testQueue;  	
+    	system.runAs(new User(Id=UserInfo.getUserId())){
+    		testQueue = new Group(Type = 'Queue', Name= 'TestTestQueue');
+    		insert testQueue;
+    		
+	    	QueueSobject myQS = new QueueSobject(QueueId = testQueue.Id, sObjectType = 'Case');
+    		insert myQS;    		
+    	}
+    	Case myCase = new Case (OwnerId = testQueue.Id, Subject = 'Test Case');
+    	insert myCase;
+    	//system.assertEquals(true, false);
     }
     
     // Taken from apex-lang which is set to be GA in Summer 12

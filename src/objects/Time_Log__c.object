@@ -66,15 +66,31 @@
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>Case_Owner_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Case Owner Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>User</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>Case_Owner__c</fullName>
-        <deleteConstraint>SetNull</deleteConstraint>
-        <description>The Case Owner at the time of the Time Log</description>
+        <description>Can&apos;t use a lookup to User, as there will be Time Logs for Cases that are/were owned by a Queue.</description>
         <externalId>false</externalId>
         <label>Case Owner</label>
-        <referenceTo>User</referenceTo>
-        <relationshipName>Time_Logs</relationshipName>
+        <length>255</length>
         <required>false</required>
-        <type>Lookup</type>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Case_Status__c</fullName>

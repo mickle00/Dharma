@@ -1,18 +1,19 @@
 public with sharing class TimeLogClass {
 
+	public TimeLogClass() {
+		this.getOwnerIdToOwnerNameMap();
+	}
+		
 	// Called from After Update Case Trigger
 	public void logCaseTime(List<Case> newCases, Map<Id, Case> oldCaseMap){
         List<Time_Log__c> newCaseLogs = new List<Time_Log__c>();
+        this.getOwnerIdToOwnerNameMap();
         
         for (Case myCase : newCases){
             Case myOldCase = oldCaseMap.get(myCase.Id);
             if (caseNeedsToLogTime(myCase, myOldCase)){
-                Time_Log__c myTimeLog = new Time_Log__c(Case_Owner__c = myOldCase.OwnerId
-                                                       ,Case_Status__c = myOldCase.Status
-                                                       ,New_Case_Status__c = myCase.Status
-                                                       ,In_Effect_Until__c = myCase.LastModifiedDate
-                                                       ,Case_Time__c = myCase.Case_Time__c);
-               newCaseLogs.add(myTimeLog);
+				Time_Log__c myTimeLog = this.createNewTimeLog(myCase, myOldCase);
+				newCaseLogs.add(myTimeLog);
             }
         }
         insert newCaseLogs;
@@ -30,20 +31,39 @@ public with sharing class TimeLogClass {
         }
 	}
 	
-	public static Time_Log__c createNewTimeLog(Case_Time__c myCaseTime, Case myCase){
+	public Time_Log__c createNewTimeLog(Case myCase, Case myOldCase){
 		Time_Log__c myTimeLog = new Time_Log__c();
-		//TODO: CREATE TIME LOG
-		//TODO: MAKE SURE DEACTIVATED OLDUSERS DOESNT BREAK LOGGING
-		//TODO: UPDATE METHODS TO USE THIS
+
+		if (myOldCase == null){
+			myTimeLog.Case_Owner__c = this.getOwnerIdToOwnerNameMap().get(myCase.OwnerId);
+			myTimeLog.Case_Status__c = myCase.Status;
+			myTimeLog.Case_Owner_Type__c = Utilities.getOwnerType(myCase.OwnerId);
+		} else {
+			myTimeLog.Case_Owner__c = this.getOwnerIdToOwnerNameMap().get(myOldCase.OwnerId);
+			myTimeLog.Case_Status__c = myOldCase.Status;
+			myTimeLog.Case_Owner_Type__c = Utilities.getOwnerType(myOldCase.OwnerId);
+		}		
+		myTimeLog.New_Case_Status__c = myCase.Status;
+		myTimeLog.In_Effect_Until__c = myCase.LastModifiedDate;
+		myTimeLog.Case_Time__c = myCase.Case_Time__c;
 		
 		return myTimeLog;
 	}
 	
-	//TODO: UPDATE METHODS TO USE THIS
+	public Map<Id, String> getOwnerIdToOwnerNameMap(){
+		if (this.OwnerIdToOwnerNameMap == null){
+			this.OwnerIdToOwnerNameMap = new Map<Id, String>();
+			this.OwnerIdToOwnerNameMap = Utilities.getOwnerIdToOwnerNameMap('Case');
+		}
+		return this.OwnerIdToOwnerNameMap;
+	}
+			
 	private boolean caseNeedsToLogTime(Case myCase, Case myOldCase){
 		if (myCase.Status != myOldCase.Status || myCase.OwnerId != myOldCase.OwnerId){
 			return true;
 		}
 		return false;
 	}
+	
+	private Map<Id, String> OwnerIdToOwnerNameMap;	
 }

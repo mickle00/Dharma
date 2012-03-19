@@ -1,5 +1,5 @@
 public with sharing class CaseTimeClass {
-		
+
 	public static Case_Time__c findByCaseId (Id myCaseId){
 		return [SELECT Id
 					  ,First_Handle_Time__c 
@@ -28,6 +28,7 @@ public with sharing class CaseTimeClass {
 	public void updateCaseTimeAfterInsert(List<Case> newCases){
         List<Case_Time__c> newCaseTimes = new List<Case_Time__c>();
         List<Time_Log__c> newCaseLogs = new List<Time_Log__c>();
+        TimeLogClass TimeLogObj = new TimeLogClass();
         for (Case myCase : newCases){
             if (myCase.Case_Time__c != null){
                 Case_Time__c myCaseTime = new Case_Time__c(Id=myCase.Case_Time__c);
@@ -35,12 +36,8 @@ public with sharing class CaseTimeClass {
                 newCaseTimes.add(myCaseTime);
                 
                 //immediately log, incase the case is created in progress or whatever
-                Time_Log__c myTimeLog = new Time_Log__c(Case_Owner__c = myCase.OwnerId
-                                                       ,Case_Status__c = myCase.Status
-                                                       ,New_Case_Status__c = myCase.Status
-                                                       ,In_Effect_Until__c = myCase.LastModifiedDate
-                                                       ,Case_Time__c = myCase.Case_Time__c);
-               newCaseLogs.add(myTimeLog);
+				Time_Log__c myTimeLog = TimeLogObj.createNewTimeLog(myCase, null);
+				newCaseLogs.add(myTimeLog);
             }
         }
         update newCaseTimes;

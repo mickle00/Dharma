@@ -110,4 +110,20 @@ public with sharing class Utilities {
 	    }
 	    return returnText;
 	}
+	
+	public static string getOwnerType(string ownerId){
+		if (ownerId.startsWith('00G')) return 'Queue';
+		return 'User';
+	}
+	
+	public static Map<Id, String> getOwnerIdToOwnerNameMap(String sObjectType){
+			Map<Id, String> OwnerIdToOwnerNameMap = new Map<Id, String>();
+			for (User myUser : [SELECT Id, Name FROM User]){
+				OwnerIdToOwnerNameMap.put(myUser.Id, myUser.Name);
+			}
+			for (QueueSobject caseQueue : [SELECT QueueId, Queue.Name FROM QueueSobject WHERE sObjectType =  :sObjectType]){
+				OwnerIdToOwnerNameMap.put(caseQueue.QueueId, caseQueue.Queue.Name);
+			}
+		return OwnerIdToOwnerNameMap;
+	}	
 }

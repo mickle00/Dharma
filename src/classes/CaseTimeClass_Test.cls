@@ -26,11 +26,15 @@ private class CaseTimeClass_Test {
 	static testMethod void shouldHaveFirstHandleTime() {
 		Case myCase = new Case (Subject = 'TestCase', Status = 'New');
 		insert myCase;
+		
+		Case_Time__c myCaseTime;
+		myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
+		system.assertEquals(myCaseTime.First_Handle_Time__c, null);
         
 		myCase.Status = 'In Progress';
 		update myCase;
         
-		Case_Time__c myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
+		myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
 		system.assertNotEquals(myCaseTime.First_Handle_Time__c, null);
     }
     

@@ -107,11 +107,6 @@
         </columns>
         <columns>
             <checkedByDefault>false</checkedByDefault>
-            <field>Case_Owner__c</field>
-            <table>Case_Time__c.Case_Status_Times__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
             <field>Logged_Age_in_Business_Hours__c</field>
             <table>Case_Time__c</table>
         </columns>
@@ -287,12 +282,6 @@
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Name</field>
-            <table>Case_Time__c.Case_Status_Times__r</table>
-        </columns>
-        <columns>
-            <checkedByDefault>false</checkedByDefault>
-            <displayNameOverride>Case Owner</displayNameOverride>
-            <field>Case_Owner__c.Name</field>
             <table>Case_Time__c.Case_Status_Times__r</table>
         </columns>
         <masterLabel>Time Logs</masterLabel>

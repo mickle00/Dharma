@@ -16,6 +16,7 @@ public with sharing class TimeLogClass {
 	}
 	
 	// Called from Before Insert on Time Log
+	// Needs to be in a Trigger to get the fields calculated via formula fields
 	public static void beforeNewTimeLogs(List<Time_Log__c> newTimeLogs){
 	    CaseTimeClass caseTimeObj = new CaseTimeClass();
         

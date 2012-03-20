@@ -43,6 +43,10 @@
                 <behavior>Edit</behavior>
                 <field>Case_Owner_Type__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>New_Case_Owner__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

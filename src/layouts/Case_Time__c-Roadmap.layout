@@ -72,11 +72,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Logged_Age_in_Business_Hours__c</field>
+                <field>Case_Business_Hours_ID__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Case_Business_Hours_ID__c</field>
+                <field>Logged_Age_in_Business_Hours__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -113,7 +113,7 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>SLA_Hours_Difference__c</field>
+                <field>Logged_Hours_Until_First_Handle__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -126,11 +126,11 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Hours_Included_in_SLA__c</field>
+                <field>SLA_Hours_Difference__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
-                <field>Hours_Included_in_SLA_After_Handle__c</field>
+                <field>Hours_Included_in_SLA__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -144,15 +144,15 @@
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
+                <field>Hours_Included_in_SLA_After_Handle__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
                 <field>Logged_Hours_Included_in_SLA__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>Logged_Hours_Excluded_From_SLA__c</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Readonly</behavior>
-                <field>Logged_Hours_Until_First_Handle__c</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsLeftToRight</style>
@@ -183,7 +183,6 @@
         <fields>Case_Status__c</fields>
         <fields>In_Effect_From__c</fields>
         <fields>In_Effect_Until__c</fields>
-        <fields>Time_Bucket__c</fields>
         <fields>Included_in_SLA_Time__c</fields>
         <fields>Time_in_Hours__c</fields>
         <fields>Business_Time_in_Hours__c</fields>

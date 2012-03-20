@@ -35,7 +35,7 @@ public with sharing class CaseTimeClass {
                 myCaseTime.Case__c = myCase.Id;
                 newCaseTimes.add(myCaseTime);
                 
-                //immediately log, incase the case is created in progress or whatever
+                //immediately log, needed for roll up summary to work
 				Time_Log__c myTimeLog = TimeLogObj.createNewTimeLog(myCase, null);
 				newCaseLogs.add(myTimeLog);
             }
@@ -59,7 +59,7 @@ public with sharing class CaseTimeClass {
 				myCaseTime.Business_Hours_Earliest_SLA_Due_Date__c = BusinessHours.add(myCaseTime.Case_Business_Hours_ID__c,statusChangeTime, businessTimeRemainingInSLA); 
 			}
 			//recalculate myCaseTime.Logged_Business_Hours_Until_First_Handle__c
-			if (myCaseTime.First_Handle_Time__c != null && myCaseTime.Logged_Business_Hours_Until_First_Handle__c == null){
+			if (myCaseTime.First_Handle_Time__c != null){ //&& myCaseTime.Logged_Business_Hours_Until_First_Handle__c == null){
 				myCaseTime.Logged_Business_Hours_Until_First_Handle__c = BusinessHours.diff(myCaseTime.Case_Business_Hours_ID__c, myCaseTime.Case_Created_Date__c, myCaseTime.First_Handle_Time__c)/3600000.0;				
 			}
 			//set the Unique_Key__c

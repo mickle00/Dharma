@@ -122,7 +122,6 @@
         <fields>Case_Status__c</fields>
         <fields>In_Effect_From__c</fields>
         <fields>In_Effect_Until__c</fields>
-        <fields>Time_Bucket__c</fields>
         <fields>Included_in_SLA_Time__c</fields>
         <fields>Time_in_Hours__c</fields>
         <relatedList>Time_Log__c.Case_Time__c</relatedList>

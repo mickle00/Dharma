@@ -196,6 +196,11 @@
             <field>Case__c.of_Cases__c</field>
             <table>Case_Time__c</table>
         </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Case__c.RecordType</field>
+            <table>Case_Time__c</table>
+        </columns>
         <masterLabel>Case Times</masterLabel>
     </sections>
     <sections>
@@ -282,6 +287,26 @@
         <columns>
             <checkedByDefault>true</checkedByDefault>
             <field>Name</field>
+            <table>Case_Time__c.Case_Status_Times__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Case_Owner__c</field>
+            <table>Case_Time__c.Case_Status_Times__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>New_Case_Owner__c</field>
+            <table>Case_Time__c.Case_Status_Times__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Case_Owner_Type__c</field>
+            <table>Case_Time__c.Case_Status_Times__r</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>While_Closing_Case__c</field>
             <table>Case_Time__c.Case_Status_Times__r</table>
         </columns>
         <masterLabel>Time Logs</masterLabel>

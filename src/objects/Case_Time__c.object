@@ -41,10 +41,7 @@
     <fields>
         <fullName>Age_in_Hours__c</fullName>
         <externalId>false</externalId>
-        <formula>IF(Case__r.IsClosed,
-    Case__r.ClosedDate-Case__r.CreatedDate
-    ,NOW()-Case__r.CreatedDate) 
-* 24</formula>
+        <formula>Hours_Included_in_SLA__c +  Hours_Excluded_From_SLA__c</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>Age in Hours</label>
         <precision>18</precision>
@@ -213,11 +210,6 @@ if logged time changes, run is stop status method</description>
             <operation>equals</operation>
             <value>False</value>
         </summaryFilterItems>
-        <summaryFilterItems>
-            <field>Time_Log__c.While_Case_Closed__c</field>
-            <operation>equals</operation>
-            <value>False</value>
-        </summaryFilterItems>
         <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
         <type>Summary</type>
@@ -231,11 +223,6 @@ if logged time changes, run is stop status method</description>
             <field>Time_Log__c.Included_in_SLA_Time__c</field>
             <operation>equals</operation>
             <value>TRUE</value>
-        </summaryFilterItems>
-        <summaryFilterItems>
-            <field>Time_Log__c.While_Case_Closed__c</field>
-            <operation>equals</operation>
-            <value>FALSE</value>
         </summaryFilterItems>
         <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
@@ -261,11 +248,6 @@ if logged time changes, run is stop status method</description>
             <operation>equals</operation>
             <value>FALSE</value>
         </summaryFilterItems>
-        <summaryFilterItems>
-            <field>Time_Log__c.While_Case_Closed__c</field>
-            <operation>equals</operation>
-            <value>FALSE</value>
-        </summaryFilterItems>
         <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
         <type>Summary</type>
@@ -279,11 +261,6 @@ if logged time changes, run is stop status method</description>
             <field>Time_Log__c.Included_in_SLA_Time__c</field>
             <operation>equals</operation>
             <value>TRUE</value>
-        </summaryFilterItems>
-        <summaryFilterItems>
-            <field>Time_Log__c.While_Case_Closed__c</field>
-            <operation>equals</operation>
-            <value>FALSE</value>
         </summaryFilterItems>
         <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
@@ -421,9 +398,13 @@ Hours_Included_in_SLA__c  - SLA_in_Hours__c
         <fullName>X24x7_SLA_Due_Date__c</fullName>
         <externalId>false</externalId>
         <formula>IF(
-     AND(Current_Time_Included_in_SLA_Time__c,  NOT(Case__r.IsClosed)),
-     Business_Hours_Earliest_SLA_Due_Date__c ,
-     Business_Hours_Earliest_SLA_Due_Date__c + ((NOW() - Most_Recent_Change__c ))
+     Case__r.IsClosed,
+     Business_Hours_Earliest_SLA_Due_Date__c,
+     IF(
+          Current_Time_Included_in_SLA_Time__c,
+          Business_Hours_Earliest_SLA_Due_Date__c + (NOW() - Most_Recent_Change__c ) ,
+          Business_Hours_Earliest_SLA_Due_Date__c 
+      )
 )</formula>
         <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
         <label>24x7 SLA Due Date</label>

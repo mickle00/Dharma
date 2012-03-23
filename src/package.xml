@@ -48,9 +48,7 @@
         <name>CustomObject</name>
     </types>
     <types>
-        <members>Case_Time__c-Case Time Layout</members>
-        <members>Case_Time__c-Delivering</members>
-        <members>Case_Time__c-Roadmap</members>
+        <members>Case_Time__c-Case Time</members>
         <members>Time_Log__c-Time Log Layout</members>
         <name>Layout</name>
     </types>

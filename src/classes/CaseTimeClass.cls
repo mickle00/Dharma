@@ -64,6 +64,10 @@ public with sharing class CaseTimeClass {
 			if (myCaseTime.Case_Status__c != null && myCaseTime.Case_Closed__c != null){
 				myCaseTime.Current_Time_Included_in_SLA_Time__c = this.isStatusIncludedInSLATime(myCaseTime.Case_Status__c, myCaseTime.Case_Closed__c);
 			}
+			//recalculate myCaseTime.Current_Time_Included_in_AHT__c
+			if (myCaseTime.Case_Status__c != null && myCaseTime.Case_Closed__c != null){
+				myCaseTime.Current_Time_Included_In_AHT__c = this.isStatusIncludedInAHT(myCaseTime.Case_Status__c, myCaseTime.Case_Closed__c);
+			}
 			//recalculate myCaseTime.Business_Hours_Earliest_SLA_Due_Date__c
 			if (myCaseTime.SLA_in_Hours__c != null){
 				Long businessTimeRemainingInSLA = (myCaseTime.SLA_in_Hours__c - myCaseTime.Logged_Business_Hours_Included_in_SLA__c).longValue() * 3600000L;
@@ -120,6 +124,19 @@ public with sharing class CaseTimeClass {
 			if (!caseStillClosed) return true;			
 		}
 		return false; 
+	}
+	
+	public boolean isStatusIncludedInAHT(string caseStatus, boolean caseClosed){
+		if (caseClosed) return false;
+		if (getStatusToTimeMap().containsKey(caseStatus)){
+			return getStatusToTimeMap().get(caseStatus).Included_in_AHT__c;
+		}
+		return true;
+	}
+	public boolean isStatusIncludedInAHT(string caseStatus, string caseClosed){
+		//formula fields cant return boolean. trying to save uneccessary soql here
+		if (caseClosed == 'TRUE') return false;
+		return this.isStatusIncludedInAHT(caseStatus, false);
 	}
 	
 	private Map<String, Status_Time_Bucket__c> statusToTimeMap;

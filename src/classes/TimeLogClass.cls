@@ -26,7 +26,8 @@ public with sharing class TimeLogClass {
         
         for (Time_Log__c myTimeLog : newTimeLogs){
         	myTimeLog.Time_Bucket__c = caseTimeObj.getStatusTimeBucket(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c);
-        	myTimeLog.Included_In_SLA_Time__c = caseTimeObj.isStatusIncludedInSLATime(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c, myTimeLog.While_Closing_Case__c);            
+        	myTimeLog.Included_In_SLA_Time__c = caseTimeObj.isStatusIncludedInSLATime(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c, myTimeLog.While_Closing_Case__c);
+        	myTimeLog.Included_In_AHT__c = caseTimeObj.isStatusIncludedInAHT(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c);            
             if (myTimeLog.In_Effect_From__c == null) myTimeLog.In_Effect_From__c = myTimeLog.Most_Recent_Change__c == null ? myTimeLog.In_Effect_Until__c : myTimeLog.Most_Recent_Change__c;            
             myTimeLog.Business_Time_in_Hours__c = BusinessHours.diff(myTimeLog.Case_Business_Hours_ID__c, myTimeLog.In_Effect_From__c, myTimeLog.In_Effect_Until__c)/3600000.0;
         }

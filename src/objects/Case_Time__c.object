@@ -111,6 +111,13 @@
         <type>Lookup</type>
     </fields>
     <fields>
+        <fullName>Current_Time_Included_in_AHT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Current Time Included in AHT?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Current_Time_Included_in_SLA_Time__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Whether or not the current Case Status is a Stop Status as defined by the Custom Setting. This affects whether the time is considered &quot;Time with Support&quot; or &quot;Time with Customer&quot;
@@ -215,6 +222,20 @@ if logged time changes, run is stop status method</description>
         <type>Summary</type>
     </fields>
     <fields>
+        <fullName>Logged_Business_Hours_Included_in_AHT__c</fullName>
+        <externalId>false</externalId>
+        <label>Logged Business Hours Included in AHT</label>
+        <summarizedField>Time_Log__c.Business_Time_in_Hours__c</summarizedField>
+        <summaryFilterItems>
+            <field>Time_Log__c.Included_in_AHT__c</field>
+            <operation>equals</operation>
+            <value>TRUE</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
         <fullName>Logged_Business_Hours_Included_in_SLA__c</fullName>
         <externalId>false</externalId>
         <label>Logged Business Hours Included in SLA</label>
@@ -247,6 +268,20 @@ if logged time changes, run is stop status method</description>
             <field>Time_Log__c.Included_in_SLA_Time__c</field>
             <operation>equals</operation>
             <value>FALSE</value>
+        </summaryFilterItems>
+        <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
+        <summaryOperation>sum</summaryOperation>
+        <type>Summary</type>
+    </fields>
+    <fields>
+        <fullName>Logged_Hours_Included_in_AHT__c</fullName>
+        <externalId>false</externalId>
+        <label>Logged Hours Included in AHT</label>
+        <summarizedField>Time_Log__c.Time_in_Hours__c</summarizedField>
+        <summaryFilterItems>
+            <field>Time_Log__c.Included_in_AHT__c</field>
+            <operation>equals</operation>
+            <value>TRUE</value>
         </summaryFilterItems>
         <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
         <summaryOperation>sum</summaryOperation>
@@ -424,14 +459,9 @@ Hours_Included_in_SLA__c  - SLA_in_Hours__c
     </nameField>
     <pluralLabel>Case Times</pluralLabel>
     <recordTypes>
-        <fullName>Delivering</fullName>
+        <fullName>Case_Time</fullName>
         <active>true</active>
-        <label>Delivering</label>
-    </recordTypes>
-    <recordTypes>
-        <fullName>Roadmap</fullName>
-        <active>true</active>
-        <label>Roadmap</label>
+        <label>Case Time</label>
     </recordTypes>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>

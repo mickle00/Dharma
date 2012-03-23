@@ -5,6 +5,13 @@
     <description>The list of Statuses that are considered as &quot;Internal Status&quot;. Related to the Case Age in Business Hours app, moving away from a Custom Object and using Custom Setting to leverage caching, and not worry about SOQL queries.</description>
     <enableFeeds>false</enableFeeds>
     <fields>
+        <fullName>Included_in_AHT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Included in AHT</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Included_in_SLA_Time__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>

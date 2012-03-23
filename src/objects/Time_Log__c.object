@@ -120,6 +120,13 @@
         <type>DateTime</type>
     </fields>
     <fields>
+        <fullName>Included_in_AHT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Included in AHT?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Included_in_SLA_Time__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Trigger looks up Custom Setting to determine if this is a Stop Status or not.</description>

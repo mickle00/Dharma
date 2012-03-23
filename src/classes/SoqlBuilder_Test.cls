@@ -26,7 +26,7 @@ private class SoqlBuilder_Test {
 
     static testMethod void myUnitTest() {
     	List<Account> accounts = new List<Account>();
-    	String accountIds;
+    	List<Id> accountIds = new List<Id>();
     	
     	// generate accounts
     	for(Integer i = 0; i < NUMBER_ACCOUNTS; i++) {
@@ -36,27 +36,27 @@ private class SoqlBuilder_Test {
     	}
         insert accounts;
         
-        // build a comma separated list of account ids
         for(Account myAccount : accounts) {
-        	if(accountIds == NULL) {
-        		accountIds = '\'' + myAccount.Id + '\'';
-        	}else {
-        		accountIds += ',\'' + myAccount.Id + '\'';
-        	}
+        	accountIds.add(myAccount.Id);
         }
         
+        String strAccountIds = Utilities.convertListToString(accountIds);
+        
 		test.startTest();
+		List<SoqlBuilder.Condition> conditions = new List<SoqlBuilder.Condition>();
+		SoqlBuilder.Condition condition1 = new SoqlBuilder.Condition('Id', strAccountIds, 'In');
+		conditions.add(condition1);
 		
 		// build select query returning all fields
-		List<SObject> results1 = SoqlBuilder.ExecuteSelectQuery('Account', 'Id IN (' + accountIds + ')');
+		List<SObject> results1 = SoqlBuilder.ExecuteSelectQuery('Account', conditions);
 		system.assertEquals(results1.size(), NUMBER_ACCOUNTS);
 		
 		// build select query returning the Id and Name ordered by Name
-		List<SObject> results2 = SoqlBuilder.ExecuteSelectQuery('Id, Name', 'Account', 'Id IN (' + accountIds + ')', 'Name');
+		List<SObject> results2 = SoqlBuilder.ExecuteSelectQuery('Id, Name', 'Account', conditions, null, 'Name');
 		system.assertEquals(results2.size(), NUMBER_ACCOUNTS);
 		
 		// build select query with invalid object name
-		List<SObject> results3 = SoqlBuilder.ExecuteSelectQuery('TestObject', '1=1');
+		List<SObject> results3 = SoqlBuilder.ExecuteSelectQuery('TestObject', conditions);
 		system.assertEquals(results3, NULL);
 
 		test.stopTest();

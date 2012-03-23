@@ -12,7 +12,11 @@ public with sharing class TimeLogClass {
 				newCaseLogs.add(myTimeLog);
             }
         }
-        insert newCaseLogs;
+        try{
+        	insert newCaseLogs;
+        } catch (Exception exc){
+        	ExceptionClass.InsertException(exc);
+        }
 	}
 	
 	// Called from Before Insert on Time Log
@@ -61,6 +65,10 @@ public with sharing class TimeLogClass {
 		if (myCase.isClosed) myTimeLog.While_Case_Closed__c = true;
 	}		
 	private boolean caseNeedsToLogTime(Case myCase, Case myOldCase){
+		//trap for legacy cases that don't have a CaseTime associated
+		if (myCase.Case_Time__c == null) return false;
+		
+		// only log if the Status or Owner changes		
 		if (myCase.Status != myOldCase.Status || myCase.OwnerId != myOldCase.OwnerId){
 			return true;
 		}

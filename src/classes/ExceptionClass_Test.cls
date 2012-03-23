@@ -20,18 +20,17 @@
  * See the Apex Language Reference for more information about Testing and Code Coverage.
  */
 @isTest
-private class AttachmentClass_Test {
+private class ExceptionClass_Test {
 
     static testMethod void myUnitTest() {
-        // TO DO: implement unit test
+        test.startTest();
         
-        Case testCase = new Case(Subject = 'Test Subject'
-                                ,Description = 'Test Description');
-                                
-        insert testCase;
+        try{
+        	Integer myInt = 15/0;
+        }catch(Exception ex) {
+       		ExceptionClass.InsertException(ex);
+        }
         
-        AttachmentClass objAttach = new AttachmentClass();
-        
-        insert objAttach.createAttachment(testCase.Id, 'test.doc', Blob.valueOf('Some Text'), 'Test descriptions');
+        test.stopTest();
     }
 }

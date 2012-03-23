@@ -14,10 +14,19 @@ public with sharing class CaseTimeClass {
             Case_Time__c myCaseTime = new Case_Time__c();
             newCaseTimes.add(myCaseTime);
         }
-        insert newCaseTimes;
+        
+        try{
+        	insert newCaseTimes;	
+        } catch (Exception exc){
+        	ExceptionClass.InsertException(exc);
+        }
         
         for (Case myCase : newCases){
-            myCase.Case_Time__c = newCaseTimes.remove(0).Id;        
+        	try{
+            	myCase.Case_Time__c = newCaseTimes.remove(0).Id;
+        	}catch (Exception exc){
+        		ExceptionClass.InsertException(exc);
+        	}        
         }
         // clean up incase there were any failures inserting Cases
         if (!newCaseTimes.isEmpty()) delete newCaseTimes;
@@ -40,8 +49,12 @@ public with sharing class CaseTimeClass {
 				newCaseLogs.add(myTimeLog);
             }
         }
-        update newCaseTimes;
-        insert newCaseLogs;
+        try {
+	        update newCaseTimes;
+	        insert newCaseLogs;
+        } catch (Exception exc){
+        	ExceptionClass.InsertException(exc);
+        }
 	}
 	
 	// Before Insert & Before Update on CaseTime

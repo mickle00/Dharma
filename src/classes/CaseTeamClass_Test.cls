@@ -23,12 +23,13 @@
 private class CaseTeamClass_Test {
 
     static testMethod void myUnitTest() {
+    	// create case team
+    	Case_Team__c myCaseTeam = new Case_Team__c(Email_Service_Address__c= 'gsotest@expedia.com', Active__c= true, Record_Type_Developer_Name__c= 'Support_Request');
+    	insert myCaseTeam;
     	
     	test.startTest();
-    	for(Case_Team__c caseTeam : [Select Team__c, Record_Type_Developer_Name__c, Name, Id, Email_Service_Address__c From Case_Team__c]) {
-	        Case_Team__c myCaseTeam = CaseTeamClass.FindBy('Email_Service_Address__c = \'' + caseTeam.Email_Service_Address__c + '\'');
-	        System.assertEquals(myCaseTeam.Record_Type_Developer_Name__c, caseTeam.Record_Type_Developer_Name__c);
-    	}
+        Case_Team__c result = CaseTeamClass.FindByEmail('gsotest@expedia.com');
+        System.assertEquals(myCaseTeam.Id, result.Id);
         test.stopTest();
     }
 }

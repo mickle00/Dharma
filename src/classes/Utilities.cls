@@ -125,5 +125,77 @@ public with sharing class Utilities {
 				OwnerIdToOwnerNameMap.put(caseQueue.QueueId, caseQueue.Queue.Name);
 			}
 		return OwnerIdToOwnerNameMap;
-	}	
+	}
+    public static Set<String> SetFromMultiSelectPicklist(String value) {
+    	
+	    if(value == null || value == '') return null;
+	    
+	    if(value.contains(';')) {
+	    	List<String> values = value.split(';');
+	    	Set<String> newSet = new Set<String>();
+	    	for(String newValue : values) {
+	    		newSet.Add(newValue);
+	    	}
+	      return newSet;
+	    }
+	    else {
+	      return new Set<String>{value};
+	    }
+  }
+  
+  public static String AddToMultiSelectPicklist(String oldValue, String addValue) {
+    if(oldValue == null || oldValue == '') {
+     return addValue; 
+    } 
+    else {
+      return oldValue + ';' + addValue;
+    }
+  }
+
+	public static Boolean isDate(String stringValue) {
+		try {
+			Date.valueOf(stringValue);
+		}catch(Exception ex) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static Boolean isDateTime(String stringValue) {
+		try {
+			DateTime.valueOf(stringValue);
+		}catch(Exception ex) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+	public static Boolean isBoolean(String stringValue) {
+		if(stringValue == 'true' || stringValue == 'false'){
+			return true;
+		}else {
+			return false;
+		}
+	}
+
+	public static Boolean isDouble(String stringValue) {
+		try {
+			Double.valueOf(stringValue);
+		}catch(Exception ex) {
+			return false;
+		}
+		
+		return true;
+	}
+	
+    public static String convertListToString(List<Id> myList) {
+    	String result = system.Json.serialize(myList);
+    	result = result.replace('"', '\'');
+    	result = result.replace('[', '');
+    	result = result.replace(']', '');
+
+		return result;
+	}
 }

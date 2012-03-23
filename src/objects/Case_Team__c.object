@@ -40,6 +40,14 @@
     <enableHistory>false</enableHistory>
     <enableReports>false</enableReports>
     <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Active</description>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Email_Address__c</fullName>
         <externalId>false</externalId>
         <label>Email Address</label>
@@ -59,11 +67,21 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Email__c</fullName>
+        <externalId>false</externalId>
+        <inlineHelpText>The public facing email address that is forwarding to the Salesforce email service address.</inlineHelpText>
+        <label>Email</label>
+        <required>false</required>
+        <type>Email</type>
+        <unique>true</unique>
+    </fields>
+    <fields>
         <fullName>Language__c</fullName>
         <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Language</label>
         <referenceTo>Language__c</referenceTo>
+        <relationshipLabel>CaseTeams</relationshipLabel>
         <relationshipName>CaseTeams</relationshipName>
         <required>false</required>
         <type>Lookup</type>
@@ -85,7 +103,6 @@
         <externalId>false</externalId>
         <label>Team Name</label>
         <referenceTo>Team__c</referenceTo>
-        <relationshipLabel>Team Emails</relationshipLabel>
         <relationshipName>Team_Emails</relationshipName>
         <required>false</required>
         <type>Lookup</type>
@@ -101,13 +118,18 @@
         <type>Text</type>
         <unique>false</unique>
     </fields>
-    <label>Team Email</label>
+    <label>CaseTeam</label>
     <listViews>
         <fullName>All</fullName>
         <columns>NAME</columns>
+        <columns>Active__c</columns>
         <columns>Email_Service_Address__c</columns>
+        <columns>Email__c</columns>
         <columns>Record_Type_Developer_Name__c</columns>
         <columns>Team__c</columns>
+        <columns>Language__c</columns>
+        <columns>LAST_UPDATE</columns>
+        <columns>CREATED_DATE</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -120,7 +142,7 @@
         <label>Case Team Name</label>
         <type>Text</type>
     </nameField>
-    <pluralLabel>Team Emails</pluralLabel>
+    <pluralLabel>CaseTeams</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

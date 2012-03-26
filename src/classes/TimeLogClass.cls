@@ -1,4 +1,4 @@
-public with sharing class TimeLogClass {
+public class TimeLogClass {
 
 	// Called from After Update Case Trigger
 	public void logCaseTime(List<Case> newCases, Map<Id, Case> oldCaseMap){

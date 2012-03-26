@@ -1,4 +1,4 @@
-public with sharing class CaseTimeClass {
+public class CaseTimeClass {
 
 	public static Case_Time__c findByCaseId (Id myCaseId){
 		return [SELECT Id

@@ -3,8 +3,7 @@ public class TimeLogClass {
 	// Called from After Update Case Trigger
 	public void logCaseTime(List<Case> newCases, Map<Id, Case> oldCaseMap){
         List<Time_Log__c> newCaseLogs = new List<Time_Log__c>();
-        this.getOwnerIdToOwnerNameMap();
-        
+                
         for (Case myCase : newCases){
             Case myOldCase = oldCaseMap.get(myCase.Id);
             if (caseNeedsToLogTime(myCase, myOldCase)){
@@ -29,7 +28,7 @@ public class TimeLogClass {
         	myTimeLog.Included_In_SLA_Time__c = caseTimeObj.isStatusIncludedInSLATime(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c, myTimeLog.While_Closing_Case__c);
         	myTimeLog.Included_In_AHT__c = caseTimeObj.isStatusIncludedInAHT(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c);            
             if (myTimeLog.In_Effect_From__c == null) myTimeLog.In_Effect_From__c = myTimeLog.Most_Recent_Change__c == null ? myTimeLog.In_Effect_Until__c : myTimeLog.Most_Recent_Change__c;            
-            myTimeLog.Business_Time_in_Hours__c = BusinessHours.diff(myTimeLog.Case_Business_Hours_ID__c, myTimeLog.In_Effect_From__c, myTimeLog.In_Effect_Until__c)/3600000.0;
+            //myTimeLog.Business_Time_in_Hours__c = BusinessHours.diff(myTimeLog.Case_Business_Hours_ID__c, myTimeLog.In_Effect_From__c, myTimeLog.In_Effect_Until__c)/3600000.0;
         }
 	}
 	

@@ -7,6 +7,19 @@ private class CaseTimeClass_Test {
 		
 		Case_Time__c myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
 		system.assertNotEquals(myCaseTime, null);
+
+	}
+	
+	static testMethod void shouldNotHaveCaseTime(){
+		Case myCase = new Case (Subject = 'TestCase', Status = 'New', PSG_Case_Id__c = '99999');
+		insert myCase;
+				
+		try{
+			Case_Time__c myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
+		} catch (QueryException exc){
+			system.assert(exc.getMessage().contains('List has no rows for assignment to SObject'));
+		}
+		
 	}
 	static testMethod void shouldNotHaveMultipleCaseTimes(){
 		Case myCase = new Case (Subject = 'TestCase', Status = 'New');

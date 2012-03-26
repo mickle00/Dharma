@@ -10,7 +10,9 @@ public with sharing class CaseTimeClass {
 	// Called from Before Insert on Case
 	public void createCaseTimesForNewCases(List<Case> newCases){
         List<Case_Time__c> newCaseTimes = new List<Case_Time__c>();
-        for (Integer i=0; i < newCases.size(); i++){
+        List<Case> casesToLogTime = this.casesIncludedInCaseTime(newCases);
+        
+        for (Integer i=0; i < casesToLogTime.size(); i++){
             Case_Time__c myCaseTime = new Case_Time__c();
             newCaseTimes.add(myCaseTime);
         }
@@ -21,7 +23,7 @@ public with sharing class CaseTimeClass {
         	ExceptionClass.InsertException(exc);
         }
         
-        for (Case myCase : newCases){
+        for (Case myCase : casesToLogTime){
         	try{
             	myCase.Case_Time__c = newCaseTimes.remove(0).Id;
         	}catch (Exception exc){
@@ -137,6 +139,16 @@ public with sharing class CaseTimeClass {
 		//formula fields cant return boolean. trying to save uneccessary soql here
 		if (caseClosed == 'TRUE') return false;
 		return this.isStatusIncludedInAHT(caseStatus, false);
+	}
+	
+	private List<Case> casesIncludedInCaseTime (List<Case> allCases){
+		List<Case> myCases = new List<Case>();
+		for (Case myCase : allCases){
+			if (myCase.PSG_Case_Id__c == null){
+				myCases.add(myCase);
+			}
+		}
+		return myCases;
 	}
 	
 	private Map<String, Status_Time_Bucket__c> statusToTimeMap;

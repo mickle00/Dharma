@@ -24,7 +24,7 @@ public class TimeLogClass {
 	    CaseTimeClass caseTimeObj = new CaseTimeClass();
         
         for (Time_Log__c myTimeLog : newTimeLogs){
-        	myTimeLog.Time_Bucket__c = caseTimeObj.getStatusTimeBucket(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c);
+        	//myTimeLog.Time_Bucket__c = caseTimeObj.getStatusTimeBucket(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c);
         	myTimeLog.Included_In_SLA_Time__c = caseTimeObj.isStatusIncludedInSLATime(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c, myTimeLog.While_Closing_Case__c);
         	myTimeLog.Included_In_AHT__c = caseTimeObj.isStatusIncludedInAHT(myTimeLog.Case_Status__c, myTimeLog.While_Case_Closed__c);            
             if (myTimeLog.In_Effect_From__c == null) myTimeLog.In_Effect_From__c = myTimeLog.Most_Recent_Change__c == null ? myTimeLog.In_Effect_Until__c : myTimeLog.Most_Recent_Change__c;            

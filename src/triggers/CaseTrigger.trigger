@@ -1,7 +1,9 @@
 trigger CaseTrigger on Case (before insert, before update, after insert, after update) {
     
-  CasePointOfSaleClass objPOS = new CasePointOfSaleClass();
-  troubleshootingCaseClassExtension CaseEx = new  troubleshootingCaseClassExtension();
+    CasePointOfSaleClass objPOS = new CasePointOfSaleClass();
+    troubleshootingCaseClassExtension CaseEx = new  troubleshootingCaseClassExtension();
+    CaseTimeClass CaseTimeObj = new CaseTimeClass();
+    TimeLogClass TimeLogObj = new TimeLogClass();
     List<Case> casesToMatchContactAndAccount = new List<Case>();
     Map<String,RecordType> recordTypeDevleoperNametoRecordType = Utilities.getRecordTypesMap('Case', true);
     
@@ -18,6 +20,7 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
         CaseClass objCaseClass = new CaseClass();
         objCaseClass.linkAccountAndContactToCase(casesToMatchContactAndAccount);
         CaseEx.beforeNewTroubleshootingCase(trigger.new);
+        CaseTimeObj.createCaseTimesForNewCases(trigger.New);
     }
     
     if (trigger.isBefore && trigger.isUpdate){
@@ -27,6 +30,7 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
     if (trigger.isAfter && trigger.isInsert){
         objPOS.insertCasePointsOfSaleForNewCases(trigger.new);
         CaseEx.afterNewTroubleshootingCase(trigger.new);
+        CaseTimeObj.updateCaseTimeAfterInsert(trigger.New);
     }   
     
     if(trigger.isAfter && trigger.isUpdate){
@@ -37,6 +41,7 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
       Utilities.setAlreadyFiredTrigger();
       CaseClass objCaseClass = new CaseClass();
       objCaseClass.afterUpdateCloneAndTransferCase(trigger.newMap, trigger.oldMap);
-    }     
+      TimeLogObj.logCaseTime(trigger.New, trigger.oldMap);
+    }
     }
 }

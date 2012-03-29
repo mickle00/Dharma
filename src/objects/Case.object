@@ -2280,6 +2280,15 @@ Extra Large &gt; 20 hours</inlineHelpText>
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>MM_Can_Do__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>MM Can Do</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Met_SLA__c</fullName>
         <description>Was SLA met?</description>
         <externalId>false</externalId>

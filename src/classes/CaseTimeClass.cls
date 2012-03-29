@@ -100,6 +100,7 @@ public class CaseTimeClass {
 		return statusToTimeMap;
 	}
 	
+	/**
 	public string getStatusTimeBucket(string caseStatus, boolean caseClosed){
 		if (caseClosed) return 'Closed';
 		if (getStatusToTimeMap().containsKey(caseStatus)){
@@ -107,6 +108,7 @@ public class CaseTimeClass {
 		}
 		return 'Included in SLA';
 	}
+	**/
 	
 	public boolean isStatusIncludedInSLATime (string caseStatus, boolean caseClosed, boolean closingCase){
 		if (closedReplyIncludedInSLA (caseStatus, closingCase)) return true;

@@ -36,7 +36,7 @@ private class CaseTimeClass_Test {
 		system.assertEquals(myCaseTimes.size(), 1);
 	}
 	
-	static testMethod void shouldHaveFirstHandleTime() {
+	static testMethod void shouldRespectFirstHandleTime() {
 		Case myCase = new Case (Subject = 'TestCase', Status = 'New');
 		insert myCase;
 		
@@ -44,11 +44,20 @@ private class CaseTimeClass_Test {
 		myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
 		system.assertEquals(myCaseTime.First_Handle_Time__c, null);
         
-		myCase.Status = 'In Progress';
+		string ahtStatus = 'In Progress';
+		
+		myCase.Status = ahtStatus;
 		update myCase;
         
+		
 		myCaseTime = CaseTimeClass.findByCaseId(myCase.Id);
-		system.assertNotEquals(myCaseTime.First_Handle_Time__c, null);
+		
+		CaseTimeClass caseTimeObj = new CaseTimeClass();
+		if (caseTimeObj.isStatusIncludedInAHT(ahtStatus, false)){
+			system.assertNotEquals(myCaseTime.First_Handle_Time__c, null);
+		} else {
+			system.assertEquals(myCaseTime.First_Handle_Time__c, null);
+		}
     }
     
     static testMethod void shouldFailGracefully(){

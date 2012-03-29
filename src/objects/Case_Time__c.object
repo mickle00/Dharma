@@ -131,7 +131,7 @@ if logged time changes, run is stop status method</description>
     </fields>
     <fields>
         <fullName>First_Handle_Time__c</fullName>
-        <description>The first time the Case moves out of the New status (also excludes Reply: Customer Email)</description>
+        <description>The first time the Case is in an AHT Status</description>
         <externalId>false</externalId>
         <label>First Handle Time</label>
         <summarizedField>Time_Log__c.In_Effect_Until__c</summarizedField>

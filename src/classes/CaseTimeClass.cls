@@ -137,7 +137,7 @@ public class CaseTimeClass {
 		if (getStatusToTimeMap().containsKey(caseStatus)){
 			return getStatusToTimeMap().get(caseStatus).Included_in_AHT__c;
 		}
-		return true;
+		return false;
 	}
 	public boolean isStatusIncludedInAHT(string caseStatus, string caseClosed){
 		//formula fields cant return boolean. trying to save uneccessary soql here

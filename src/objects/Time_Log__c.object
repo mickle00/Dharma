@@ -153,6 +153,13 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>New_Case_Status_Included_in_AHT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>New Case Status Included in AHT?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>New_Case_Status__c</fullName>
         <externalId>false</externalId>
         <label>New Case Status</label>

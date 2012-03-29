@@ -136,9 +136,9 @@ if logged time changes, run is stop status method</description>
         <label>First Handle Time</label>
         <summarizedField>Time_Log__c.In_Effect_Until__c</summarizedField>
         <summaryFilterItems>
-            <field>Time_Log__c.New_Case_Status__c</field>
-            <operation>notEqual</operation>
-            <value>New, Reply: Customer Email</value>
+            <field>Time_Log__c.New_Case_Status_Included_in_AHT__c</field>
+            <operation>equals</operation>
+            <value>TRUE</value>
         </summaryFilterItems>
         <summaryForeignKey>Time_Log__c.Case_Time__c</summaryForeignKey>
         <summaryOperation>min</summaryOperation>

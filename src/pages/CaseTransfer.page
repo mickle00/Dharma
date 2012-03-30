@@ -1,0 +1,73 @@
+<apex:page standardController="Case" extensions="CaseTransferController">
+ <style> 
+.wide {
+width:75%;
+margin-left:auto;
+margin-right:auto;
+padding-top:5px;
+padding-bottom:5px;
+}
+.tablePadding {
+margin-left:auto;
+margin-right:auto;
+padding-top:5px;
+padding-bottom:5px;
+}
+</style>
+
+<apex:pageBlock title="Transfer Case">
+    <apex:pageBlockSection title="Original Case" collapsible="false">
+        <apex:outputField value="{!Case.CaseNumber}"/>
+        <apex:outputField value="{!Case.Subject}"/>
+        <apex:outputField value="{!Case.Account.Name}"/>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Owner" />
+            <apex:outputField value="{!Case.Owner.Name}"/>
+        </apex:pageBlockSectionItem>
+        <apex:pageBlockSectionItem >
+            <apex:outputLabel value="Record Type Name" />
+            <apex:outputField value="{!Case.RecordType.Name}"/>
+        </apex:pageBlockSectionItem>
+        <apex:outputField value="{!Case.Team__c}"/>
+    </apex:pageBlockSection>
+    <apex:pageBlockSection title="Transfer Details" collapsible="false" columns="1">
+        <apex:form styleClass="detailList">
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="New Case Team" styleClass="labelCol"/>
+                <apex:selectList id="CaseTeam" value="{!transferringToCaseTeam}" size="1" title="Team">
+                    <apex:selectOptions value="{!CaseTeams}"></apex:selectOptions>
+                </apex:selectList>
+            </apex:pageBlockSectionItem>
+            <br/>
+            <apex:pageBlockSectionItem >
+                <apex:outputLabel value="Reason for Transfer" styleClass="labelCol"/>
+                <apex:inputField value="{!newCaseComment.CommentBody}" styleClass="wide"/>
+            </apex:pageBlockSectionItem>
+            <br/>            
+            <apex:commandButton value="Transfer Case" action="{!transferCase}"/>
+            <!--  SHOULD REDIRECT TO STANDARD CASE CLOSE PAGE -->
+            <apex:commandButton value="Close & Transfer Case" action="{!transferCase}"/>
+            <apex:commandButton value="Cancel" action="{!Cancel}"/>            
+        </apex:form>
+    </apex:pageBlockSection>
+    
+    <apex:pageBlockSection columns="2" >
+    <apex:form >
+    <table styleClass = "detailList">
+        <tr> 
+            <td styleClass="labelCol first ">New Case Team</td>
+            <td styleClass= "dataCol  first ">
+                <apex:selectList id="CaseTeam" value="{!transferringToCaseTeam}" size="1" title="Team">
+                    <apex:selectOptions value="{!CaseTeams}"></apex:selectOptions>
+                </apex:selectList>
+            </td>
+        </tr>
+        <tr>
+            <td styleClass="labelCol first "> Reason for Transfer </td>
+            <td> <apex:inputField value="{!newCaseComment.CommentBody}" styleClass="wide"/> </td>
+        </tr>
+    </table>
+    </apex:form>
+    </apex:pageBlockSection>
+</apex:pageBlock>
+</apex:page>

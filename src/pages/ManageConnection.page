@@ -31,6 +31,11 @@ function setFocusOnLoad(){}
 function toggleHide(){
     j$('[id$=existingConnections]').toggle('slow');
     return false;
+}
+    
+function toggleHideETP(){
+    j$('[id$=etp_rollout_steps]').hide();
+    return false;
 }  
 </script>
     <div class="center" style="width:100%">
@@ -89,14 +94,19 @@ function toggleHide(){
                     </apex:pageBlockButtons>           
                     <apex:pageBlockSection columns="2" title="{!Title}">
                         <apex:outputField value="{!myConnection.Account__c}" />
-                        <apex:inputField value="{!myConnection.Status__c}" required="true" />
-                        <apex:inputField value="{!myConnection.ETP_Status__c}" >                        
-                        <apex:actionSupport event="onchange" rerender="etp_rollout_steps" status="status" />
-                        </apex:inputField>
+                        <apex:inputField value="{!myConnection.Status__c}"  />
                         <apex:inputField value="{!myConnection.Connectivity_System__c}" />
-                        <apex:inputField value="{!myConnection.Platform__c}" required="true"/>   
+                         <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!$ObjectType.Connection__c.Fields.ETP_Status__c.Label}" />
+                            <apex:actionRegion >
+                                <apex:inputField value="{!myConnection.ETP_Status__c}"  id="etpValue">
+                                    <apex:actionSupport event="onchange" rerender="etp_rollout_steps"/>
+                                </apex:inputField>
+                            </apex:actionRegion>          
+                        </apex:pageBlockSectionItem>  
+                        <apex:inputField value="{!myConnection.Platform__c}" required="true" />   
                         <apex:outputField value="{!myConnection.Connectivity_System__r.Connectivity_System_Type__c}" />                                     
-                        <apex:inputField value="{!myConnection.Type__c}" required="true"/>
+                        <apex:inputField value="{!myConnection.Type__c}" />
                         <apex:outputText rendered="{!AccountRepcoSize == 0}"/>
                         
                         <apex:pageBlockSectionItem rendered="{!AccountRepcoSize > 0}">
@@ -144,7 +154,7 @@ function toggleHide(){
                                             <apex:outputField value="{!myConnectivityRollout.Case__c}"/>
                                         </td>
                                         <td style="height:10px; width:314px">
-                                            <apex:inputField value="{!myConnectivityRollout.Rollout_Step__c}" required="true" rendered="{!myConnectivityRollout.Id == null}" styleClass="requiredInput"/>
+                                            <apex:inputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id == null}" styleClass="requiredInput"/>
                                             <apex:outputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id != null}" /> &nbsp; &nbsp;
                                         </td>
                                         <td style="height:10px; width:314px">
@@ -174,10 +184,61 @@ function toggleHide(){
                                             styleClass="button" 
                                             immediate="true" 
                                             rendered="{!numberAdditionalRolloutSteps > 0}" />
+                    <br/>
                     </apex:outputPanel><br/>
                     <apex:outputPanel id="etp_rollout_steps">
 	  				<apex:pageBlockSection title="ETP Rollout Steps" columns="1" rendered="{!myConnection.ETP_Status__c != null}">
-	  					ihi                    
+	  					<apex:outputPanel id="rolloutStages">
+                            <table width="100%">
+                                <tr>
+                                    <th> Action:</th>
+                                    <th>Case Number:</th>
+                                    <th>Rollout Step:</th>
+                                    <th>Time Completed:</th>
+                                    <th>Owner Name:</th>
+                                </tr>                          
+                                <apex:repeat value="{!myConnectivityRollouts}" var="myConnectivityRollout" >
+                                    <tr>
+                                        <td style="height:10px; width:70px">
+                                            <apex:outputLink value="/{!myConnectivityRollout.Id}/e?retURL=/apex/ManageConnection?Id={!myConnection.Id}%26{!CaseQueryString}"
+                                                             rendered="{!myConnectivityRollout.Id != null}"
+                                                             title="Edit Rollout Step"> <!--  %26 to URL Encode '&' -->
+                                        
+                                            Edit
+                                            </apex:outputLink>
+        
+                                            <apex:outputText rendered="{!myConnectivityRollout.Id != null}"> 
+                                                &nbsp;|&nbsp; 
+                                            </apex:outputText>
+                                            <apex:commandLink action="{!deleteRolloutStep}" 
+                                                              value="Del" 
+                                                              rendered="{!myConnectivityRollout.Id != null}" 
+                                                              reRender="rolloutStages">
+                                                <apex:param name="rolloutStepToDelete" 
+                                                            value="{!myConnectivityRollout.Id}" 
+                                                            assignTo="{!rolloutStepToDelete}"/>
+                                            </apex:commandLink>
+                                            
+                                        </td> 
+                                        <td>
+                                            <apex:outputField value="{!myConnectivityRollout.Case__c}"/>
+                                        </td>
+                                        <td style="height:10px; width:314px">
+                                            <apex:inputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id == null}" styleClass="requiredInput"/>
+                                            <apex:outputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id != null}" /> &nbsp; &nbsp;
+                                        </td>
+                                        <td style="height:10px; width:314px">
+                                            <apex:outputField value="{!myConnectivityRollout.Completed_Date__c}" rendered="{!myConnectivityRollout.Id != null}" />
+                                            <apex:inputField value="{!myConnectivityRollout.Completed_Date__c}" required="false" rendered="{!myConnectivityRollout.Id == null}"/>
+                                        </td>
+                                        <td>                                                       
+                                            <apex:outputField value="{!myConnectivityRollout.Owner.Name}" rendered="{!myConnectivityRollout.Id != null}"/>
+                                            <apex:outputText value="{! $User.FirstName} {! $User.LastName}" rendered="{!myConnectivityRollout.Owner.Name == null}"/>
+                                        </td>
+                                    </tr> 
+                                </apex:repeat>
+                            </table>
+                        </apex:outputPanel>                   
 	 				</apex:pageBlockSection>
 					</apex:outputPanel>
                     <apex:pageBlockSection columns="1" title="Existing Notes" id="allNotes" rendered="{!myConnection.Id != null}">           

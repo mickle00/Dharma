@@ -16,9 +16,13 @@ public class ConnectionController{
     public Id rolloutStepToDelete{get;set;}
     public Id connectionIdToEdit {get; set;}
     public EmailWidgetWrapper myEmailWidget{get; set;}
-    public string accountName {get; set;}        
+    public string accountName {get; set;} 
+    
+    public boolean getEtpStatus(){
+    	return myConnection.ETP_Status__c != null ;
+    }   
         
-    public ConnectionController(ApexPages.StandardController stdController){
+    public ConnectionController(ApexPages.StandardController stdController){    	
         this.myConnection = (Connection__c)stdController.getRecord();
         renderConnectionDetails = false;
         numberAdditionalRolloutSteps = 0;       

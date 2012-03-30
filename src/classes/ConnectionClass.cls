@@ -33,6 +33,7 @@ public with sharing class ConnectionClass {
                                             ,Connectivity_System__r.Connectivity_Vendor__c
                                             ,Connectivity_System__r.Connectivity_Vendor__r.Market_Manager_Email__c // Added Steve 10/6
                                             ,Connectivity_System__r.Connectivity_Vendor__r.Market_Manager_Name__c //Added Steve 10/6
+                                            ,ETP_Status__c
                                        FROM Connection__c
                                       WHERE Id = :connectionId];
         return myConnection;

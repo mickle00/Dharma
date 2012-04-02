@@ -11,47 +11,65 @@ public class CaseTransferController{
         this.myCase = (Case)stdController.getRecord();
     }
     
-    public PageReference returnToCase(){    	
-    	PageReference originalCasePage = new ApexPages.StandardController(myCase).View();
-        return originalCasePage;
+    public PageReference returnToCase(){
+        return new ApexPages.StandardController(myCase).View();
     }
     
     public PageReference transferCase(){
         this.createTransferredCase(myCase);
     	return this.returnToCase();
     }
-    
+
     public PageReference closeAndTransferCase(){
         this.createTransferredCase(myCase);
-        //Why doesn't the standard controller have ClosingView() as a method?
+        //Why doesn't the standard controller have ClosingView() as a method, similar to View()?
     	PageReference originalCaseClosePage = new PageReference('/' + myCase.Id + '/s?retURL=' + myCase.Id);
     	return originalCaseClosePage;
     }
     
     public List<selectOption> getCaseTeamPicklistOptions() {
         List<selectOption> options = new List<selectOption>();
-        
-        for (Case_Team__c myCaseTeam : getAllCaseTeams()) { 
-            options.add(new selectOption(myCaseTeam.Name, myCaseTeam.Name));
+        String appendText;
+        for (Case_Team__c myCaseTeam : getAllCaseTeams()) {
+        	appendText = myCaseTeam.Email__c == null ? '' : ' (' + myCaseTeam.Email__c + ')';
+            options.add(new selectOption(myCaseTeam.Name, myCaseTeam.Name + appendText));
         }
         return options;
     }
+    
+    /**
+    Move to CaseTeamClass???
+    **/
     
     public Map<String, Id> getCaseTeamToRecordTypeIdMap(){
     	if (this.caseTeamToRecordTypeIdMap == null){
     		this.caseTeamToRecordTypeIdMap = new Map<String, Id>();
     		Map<String, RecordType> caseRecordTypeMap = Utilities.getRecordTypesMap('Case', true);
     		for (Case_Team__c myCaseTeam : getAllCaseTeams()){
-    			this.caseTeamToRecordTypeIdMap.put(myCaseTeam.Name, caseRecordTypeMap.get(myCaseTeam.Record_Type_Developer_Name__c).Id);
+    		  try{
+    		      this.caseTeamToRecordTypeIdMap.put(myCaseTeam.Name, caseRecordTypeMap.get(myCaseTeam.Record_Type_Developer_Name__c).Id);
+    		  } catch (Exception e){
+    		      ExceptionClass.InsertException(e);
+    			}
     		}
     	}
     	return this.caseTeamToRecordTypeIdMap;
     }
     
+    public Map<String, Case_Team__c> getCaseTeamMap(){
+    	if (this.caseTeamMap == null){
+    		this.caseTeamMap = new Map<String, Case_Team__c>();
+    		for (Case_Team__c myCaseTeam : this.getAllCaseTeams()){
+    			this.caseTeamMap.put(myCaseTeam.Name, myCaseTeam);
+    		}
+    	}
+    	return this.caseTeamMap;
+    }
+    
     private List<Case_Team__c> getAllCaseTeams(){
     	if (this.allCaseTeams == null){
     		this.allCaseTeams = new List<Case_Team__c>();
-    		this.allCaseTeams = [SELECT Id, Name, Record_Type_Developer_Name__c FROM Case_Team__c WHERE Active__c = true];
+    		this.allCaseTeams = [SELECT Id, Name, Record_Type_Developer_Name__c, Email__c, Team__c FROM Case_Team__c WHERE Active__c = true order by Name ASC];
     	}
     	return this.allCaseTeams;
     }
@@ -73,7 +91,7 @@ public class CaseTransferController{
                             ,AccountId = parentCase.AccountId
                             //,Prevent_Contact_Lookup__c = true
                             ,Status = 'New - Transferred'
-                            ,Team__c = transferringToCaseTeam
+                            ,Team__c = this.getCaseTeamMap().get(transferringToCaseTeam).Team__c
                             ,RecordTypeId = this.getCaseTeamToRecordTypeIdMap().get(transferringToCaseTeam));
     
       Database.DMLOptions dml = new Database.DMLOptions();
@@ -81,16 +99,29 @@ public class CaseTransferController{
       dml.assignmentRuleHeader.useDefaultRule= true;
       newCase.setOptions(dml);
       insert newCase;
-      
-      if (this.transferReason != null && this.transferReason != ''){
-	      CaseComment newCaseComment = new CaseComment();
-	      newCaseComment.CommentBody = this.transferReason;
-	      newCaseComment.ParentId = newCase.Id;
-	      insert newCaseComment;
-      }
+      this.createTransferredCaseComment(newCase.Id);
   }
+
+    private void createTransferredCaseComment(Id newCaseId){
+        if (this.transferReason != null && this.transferReason != ''){
+            CaseComment newCaseComment = new CaseComment();
+            newCaseComment.CommentBody = this.transferReason;
+            newCaseComment.ParentId = newCaseId;
+            insert newCaseComment;
+      }
+    }
   
     private Map<String, Id> caseTeamToRecordTypeIdMap;
+    private Map<String, Case_Team__c> caseTeamMap;
     private List<Case_Team__c> allCaseTeams;
-    private List<String> FIELDNAMES = new List<String>{'Description', 'Description_Rich_Text__c', 'suppliedEmail', 'suppliedName','ContactId','AccountId', 'Status','Team__c', 'RecordTypeId', 'Id'};
+    private List<String> FIELDNAMES = new List<String>{'Description'
+    	                                              ,'Description_Rich_Text__c'
+    	                                              ,'SuppliedEmail'
+    	                                              ,'SuppliedName'
+    	                                              ,'ContactId'
+    	                                              ,'AccountId'
+    	                                              ,'Status'
+    	                                              ,'Team__c'
+    	                                              ,'RecordTypeId'
+    	                                              ,'Id'};
 }

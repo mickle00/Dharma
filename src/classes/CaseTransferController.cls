@@ -6,7 +6,7 @@ public class CaseTransferController{
 	
 	public CaseTransferController(ApexPages.StandardController stdController){
         //Get fields without needing to query for them
-        stdController.addFields(this.FIELDNAMES);
+        if (!Test.isRunningTest()) stdController.addFields(this.FIELDNAMES);
         this.myCase = (Case)stdController.getRecord();
     }
     
@@ -23,7 +23,7 @@ public class CaseTransferController{
     
     public PageReference closeAndTransferCase(){
         this.createTransferredCase(myCase);
-        //Why doesn't the standard controller have this as a method?
+        //Why doesn't the standard controller have ClosingView() as a method?
     	PageReference originalCaseClosePage = new PageReference('/' + myCase.Id + '/s?retURL=' + myCase.Id);
     	return originalCaseClosePage;
     }

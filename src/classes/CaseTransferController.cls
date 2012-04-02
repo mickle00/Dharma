@@ -5,14 +5,14 @@ public class CaseTransferController{
 	public String transferringToCaseTeam {get;set;}
 	
 	public CaseTransferController(ApexPages.StandardController stdController){
-        //Get fields without needing to query for them
+        // Get fields without needing to query for them
+        // Hack to allow tests to run 
         if (!Test.isRunningTest()) stdController.addFields(this.FIELDNAMES);
         this.myCase = (Case)stdController.getRecord();
     }
     
     public PageReference returnToCase(){    	
     	PageReference originalCasePage = new ApexPages.StandardController(myCase).View();
-        originalCasePage.setRedirect(true);
         return originalCasePage;
     }
     

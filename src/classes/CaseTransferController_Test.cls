@@ -23,21 +23,23 @@ private class CaseTransferController_Test {
 	}
 
     static testMethod void shouldHaveCaseComment() {
-        CaseTransferController myController = getTestController();        
+        CaseTransferController myController = getTestController();
         Case_Team__c newCaseTeam = getNewCaseTeam();
         myController.getCaseTeamPicklistOptions();
         List<Case> previousChildCases = [SELECT Id, RecordType.DeveloperName FROM Case WHERE ParentId = :testCase.Id];
                 
         myController.transferringToCaseTeam = newCaseTeam.Name;
         myController.transferReason = 'Because this is what I\'m testing';
-        myController.transferCase();
+        string nextPage = myController.transferCase().getUrl();
+        
+        system.assertEquals(new ApexPages.StandardController(testCase).View().getUrl(), nextPage);
         
         List<Case> newChildCases = [SELECT Id, RecordType.DeveloperName FROM Case WHERE ParentID = :testCase.Id];
         system.assertEquals(previousChildCases.size() + 1, newChildCases.size());
         system.assertEquals(newChildCases[0].RecordType.DeveloperName, newCaseTeam.Record_Type_Developer_Name__c);
         
         List<CaseComment> childCaseComments = [SELECT Id FROM CaseComment WHERE ParentID = :newChildCases[0].Id];
-        system.assertEquals(1, childCaseComments.size());        
+        system.assertEquals(1, childCaseComments.size());
     }
     static testMethod void shouldNotHaveCaseComment() {
         CaseTransferController myController = getTestController();

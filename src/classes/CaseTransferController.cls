@@ -1,10 +1,10 @@
 public class CaseTransferController{
-	
-	public Case myCase {get;set;}
-	public string transferReason {get;set;}
-	public String transferringToCaseTeam {get;set;}
-	
-	public CaseTransferController(ApexPages.StandardController stdController){
+    
+    public Case myCase {get;set;}
+    public string transferReason {get;set;}
+    public String transferringToCaseTeam {get;set;}
+    
+    public CaseTransferController(ApexPages.StandardController stdController){
         // Get fields without needing to query for them
         // Hack to allow tests to run 
         if (!Test.isRunningTest()) stdController.addFields(this.FIELDNAMES);
@@ -17,21 +17,21 @@ public class CaseTransferController{
     
     public PageReference transferCase(){
         this.createTransferredCase(myCase);
-    	return this.returnToCase();
+        return this.returnToCase();
     }
 
     public PageReference closeAndTransferCase(){
         this.createTransferredCase(myCase);
         //Why doesn't the standard controller have ClosingView() as a method, similar to View()?
-    	PageReference originalCaseClosePage = new PageReference('/' + myCase.Id + '/s?retURL=' + myCase.Id);
-    	return originalCaseClosePage;
+        PageReference originalCaseClosePage = new PageReference('/' + myCase.Id + '/s?retURL=' + myCase.Id);
+        return originalCaseClosePage;
     }
     
     public List<selectOption> getCaseTeamPicklistOptions() {
         List<selectOption> options = new List<selectOption>();
         String appendText;
         for (Case_Team__c myCaseTeam : getAllCaseTeams()) {
-        	appendText = myCaseTeam.Email__c == null ? '' : ' (' + myCaseTeam.Email__c + ')';
+            appendText = myCaseTeam.Email__c == null ? '' : ' (' + myCaseTeam.Email__c + ')';
             options.add(new selectOption(myCaseTeam.Name, myCaseTeam.Name + appendText));
         }
         return options;
@@ -42,34 +42,34 @@ public class CaseTransferController{
     **/
     
     public Map<String, Id> getCaseTeamToRecordTypeIdMap(){
-    	if (this.caseTeamToRecordTypeIdMap == null){
-    		this.caseTeamToRecordTypeIdMap = new Map<String, Id>();
-    		Map<String, RecordType> caseRecordTypeMap = Utilities.getRecordTypesMap('Case', true);
-    		for (Case_Team__c myCaseTeam : getAllCaseTeams()){
-    			if (caseRecordTypeMap.containsKey(myCaseTeam.Record_Type_Developer_Name__c)){
+        if (this.caseTeamToRecordTypeIdMap == null){
+            this.caseTeamToRecordTypeIdMap = new Map<String, Id>();
+            Map<String, RecordType> caseRecordTypeMap = Utilities.getRecordTypesMap('Case', true);
+            for (Case_Team__c myCaseTeam : getAllCaseTeams()){
+                if (caseRecordTypeMap.containsKey(myCaseTeam.Record_Type_Developer_Name__c)){
                     this.caseTeamToRecordTypeIdMap.put(myCaseTeam.Name, caseRecordTypeMap.get(myCaseTeam.Record_Type_Developer_Name__c).Id);
-    			}
-    		}
-    	}
-    	return this.caseTeamToRecordTypeIdMap;
+                }
+            }
+        }
+        return this.caseTeamToRecordTypeIdMap;
     }
     
     public Map<String, Case_Team__c> getCaseTeamMap(){
-    	if (this.caseTeamMap == null){
-    		this.caseTeamMap = new Map<String, Case_Team__c>();
-    		for (Case_Team__c myCaseTeam : this.getAllCaseTeams()){
-    			this.caseTeamMap.put(myCaseTeam.Name, myCaseTeam);
-    		}
-    	}
-    	return this.caseTeamMap;
+        if (this.caseTeamMap == null){
+            this.caseTeamMap = new Map<String, Case_Team__c>();
+            for (Case_Team__c myCaseTeam : this.getAllCaseTeams()){
+                this.caseTeamMap.put(myCaseTeam.Name, myCaseTeam);
+            }
+        }
+        return this.caseTeamMap;
     }
     
     private List<Case_Team__c> getAllCaseTeams(){
-    	if (this.allCaseTeams == null){
-    		this.allCaseTeams = new List<Case_Team__c>();
-    		this.allCaseTeams = [SELECT Id, Name, Record_Type_Developer_Name__c, Email__c, Team__c FROM Case_Team__c WHERE Active__c = true order by Name ASC];
-    	}
-    	return this.allCaseTeams;
+        if (this.allCaseTeams == null){
+            this.allCaseTeams = new List<Case_Team__c>();
+            this.allCaseTeams = [SELECT Id, Name, Record_Type_Developer_Name__c, Email__c, Team__c FROM Case_Team__c WHERE Active__c = true order by Name ASC];
+        }
+        return this.allCaseTeams;
     }
     
     private void createTransferredCase(Case parentCase){
@@ -100,7 +100,7 @@ public class CaseTransferController{
         insert newCase;
         this.createTransferredCaseComment(newCase.Id);
       } catch (Exception exc){
-      	ExceptionClass.InsertException(exc);
+        ExceptionClass.InsertException(exc);
       }
   }
 
@@ -116,11 +116,11 @@ public class CaseTransferController{
     }
     
     private Integer getParentCaseCommentsSize(){
-    	if (this.parentCaseComments == null){
-    		this.parentCaseComments = new List<CaseComment>();
-    		this.parentCaseComments = [SELECT Id FROM CaseComment WHERE ParentId = :this.myCase.Id];
-    	}
-    	return this.parentCaseComments.size();
+        if (this.parentCaseComments == null){
+            this.parentCaseComments = new List<CaseComment>();
+            this.parentCaseComments = [SELECT Id FROM CaseComment WHERE ParentId = :this.myCase.Id];
+        }
+        return this.parentCaseComments.size();
     }
     
     private Integer getParentAttachmentsSize(){
@@ -137,13 +137,13 @@ public class CaseTransferController{
     private Map<String, Case_Team__c> caseTeamMap;
     private List<Case_Team__c> allCaseTeams;
     private List<String> FIELDNAMES = new List<String>{'Description'
-    	                                              ,'Description_Rich_Text__c'
-    	                                              ,'SuppliedEmail'
-    	                                              ,'SuppliedName'
-    	                                              ,'ContactId'
-    	                                              ,'AccountId'
-    	                                              ,'Status'
-    	                                              ,'Team__c'
-    	                                              ,'RecordTypeId'
-    	                                              ,'Id'};
+                                                      ,'Description_Rich_Text__c'
+                                                      ,'SuppliedEmail'
+                                                      ,'SuppliedName'
+                                                      ,'ContactId'
+                                                      ,'AccountId'
+                                                      ,'Status'
+                                                      ,'Team__c'
+                                                      ,'RecordTypeId'
+                                                      ,'Id'};
 }

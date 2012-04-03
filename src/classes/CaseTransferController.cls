@@ -13,7 +13,7 @@ public class CaseTransferController{
     
     public PageReference returnToCase(){
         return new ApexPages.StandardController(myCase).View();
-    }
+    }                                                           
     
     public PageReference transferCase(){
         this.createTransferredCase(myCase);

@@ -46,6 +46,9 @@ public class CaseTransferController{
     		this.caseTeamToRecordTypeIdMap = new Map<String, Id>();
     		Map<String, RecordType> caseRecordTypeMap = Utilities.getRecordTypesMap('Case', true);
     		for (Case_Team__c myCaseTeam : getAllCaseTeams()){
+    	       // Catch incase there is a CaseTeam with a RecordTypeDeveloperName that isn't in the RecordType table. 
+    	       // Perhaps because of Pre-launch configuration or because of Sandbox data, etc. 
+    	       // Don't want entire Transfer functionality to break because of this
     		  try{
     		      this.caseTeamToRecordTypeIdMap.put(myCaseTeam.Name, caseRecordTypeMap.get(myCaseTeam.Record_Type_Developer_Name__c).Id);
     		  } catch (Exception e){
@@ -103,14 +106,34 @@ public class CaseTransferController{
   }
 
     private void createTransferredCaseComment(Id newCaseId){
-        if (this.transferReason != null && this.transferReason != ''){
+        if (this.transferReason == null) this.transferReason = '';
             CaseComment newCaseComment = new CaseComment();
-            newCaseComment.CommentBody = this.transferReason;
+            String commentHeader = 'Parent Case Details at Time of Transfer:'
+                                    + '\n--- Number of Attachments = ' + this.getParentAttachmentsSize()
+                                    +'\n--- Number of Comments = ' + this.getParentCaseCommentsSize() + '\n\n';
+            newCaseComment.CommentBody = commentHeader + this.transferReason;
             newCaseComment.ParentId = newCaseId;
-            insert newCaseComment;
-      }
+            insert newCaseComment;      
     }
-  
+    
+    private Integer getParentCaseCommentsSize(){
+    	if (this.parentCaseComments == null){
+    		this.parentCaseComments = new List<CaseComment>();
+    		this.parentCaseComments = [SELECT Id FROM CaseComment WHERE ParentId = :this.myCase.Id];
+    	}
+    	return this.parentCaseComments.size();
+    }
+    
+    private Integer getParentAttachmentsSize(){
+        if (this.parentAttachments == null){
+            this.parentAttachments = new List<Attachment>();
+            this.parentAttachments = [SELECT Id FROM Attachment WHERE ParentId = :this.myCase.Id];
+        }
+        return this.parentAttachments.size();
+    }
+    
+    private List<CaseComment> parentCaseComments;
+    private List<Attachment> parentAttachments;
     private Map<String, Id> caseTeamToRecordTypeIdMap;
     private Map<String, Case_Team__c> caseTeamMap;
     private List<Case_Team__c> allCaseTeams;

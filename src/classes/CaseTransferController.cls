@@ -46,13 +46,8 @@ public class CaseTransferController{
     		this.caseTeamToRecordTypeIdMap = new Map<String, Id>();
     		Map<String, RecordType> caseRecordTypeMap = Utilities.getRecordTypesMap('Case', true);
     		for (Case_Team__c myCaseTeam : getAllCaseTeams()){
-    	       // Catch incase there is a CaseTeam with a RecordTypeDeveloperName that isn't in the RecordType table. 
-    	       // Perhaps because of Pre-launch configuration or because of Sandbox data, etc. 
-    	       // Don't want entire Transfer functionality to break because of this
-    		  try{
-    		      this.caseTeamToRecordTypeIdMap.put(myCaseTeam.Name, caseRecordTypeMap.get(myCaseTeam.Record_Type_Developer_Name__c).Id);
-    		  } catch (Exception e){
-    		      ExceptionClass.InsertException(e);
+    			if (caseRecordTypeMap.containsKey(myCaseTeam.Record_Type_Developer_Name__c)){
+                    this.caseTeamToRecordTypeIdMap.put(myCaseTeam.Name, caseRecordTypeMap.get(myCaseTeam.Record_Type_Developer_Name__c).Id);
     			}
     		}
     	}
@@ -101,8 +96,12 @@ public class CaseTransferController{
       dml.allowFieldTruncation = true;
       dml.assignmentRuleHeader.useDefaultRule= true;
       newCase.setOptions(dml);
-      insert newCase;
-      this.createTransferredCaseComment(newCase.Id);
+      try{
+        insert newCase;
+        this.createTransferredCaseComment(newCase.Id);
+      } catch (Exception exc){
+      	ExceptionClass.InsertException(exc);
+      }
   }
 
     private void createTransferredCaseComment(Id newCaseId){

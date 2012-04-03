@@ -41,19 +41,6 @@ private class CaseTransferController_Test {
         List<CaseComment> childCaseComments = [SELECT Id FROM CaseComment WHERE ParentID = :newChildCases[0].Id];
         system.assertEquals(1, childCaseComments.size());
     }
-    static testMethod void shouldNotHaveCaseComment() {
-        CaseTransferController myController = getTestController();
-        Case_Team__c newCaseTeam = getNewCaseTeam();
-        List<Case> previousChildCases = [SELECT Id, RecordType.DeveloperName FROM Case WHERE ParentId = :testCase.Id];
-        myController.transferringToCaseTeam = newCaseTeam.Name;
-        myController.transferCase();
-        List<Case> newChildCases = [SELECT Id, RecordType.DeveloperName FROM Case WHERE ParentID = :testCase.Id];
-        system.assertEquals(previousChildCases.size() + 1, newChildCases.size());
-        system.assertEquals(newChildCases[0].RecordType.DeveloperName, newCaseTeam.Record_Type_Developer_Name__c);
-        
-        List<CaseComment> childCaseComments = [SELECT Id FROM CaseComment WHERE ParentID = :newChildCases[0].Id];
-        system.assertEquals(0, childCaseComments.size());   
-    }
     static testMethod void shouldRedirectToStandardClosePage() {
         CaseTransferController myController = getTestController();
         Case_Team__c newCaseTeam = getNewCaseTeam();
@@ -67,6 +54,6 @@ private class CaseTransferController_Test {
         system.assertEquals(newChildCases[0].RecordType.DeveloperName, newCaseTeam.Record_Type_Developer_Name__c);
         
         List<CaseComment> childCaseComments = [SELECT Id FROM CaseComment WHERE ParentID = :newChildCases[0].Id];
-        system.assertEquals(0, childCaseComments.size());   
+        system.assertEquals(1, childCaseComments.size());   
     }
 }

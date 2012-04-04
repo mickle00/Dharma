@@ -67,7 +67,7 @@ public class CaseTransferController{
     private List<Case_Team__c> getAllCaseTeams(){
         if (this.allCaseTeams == null){
             this.allCaseTeams = new List<Case_Team__c>();
-            this.allCaseTeams = [SELECT Id, Name, Record_Type_Developer_Name__c, Email__c, Team__c FROM Case_Team__c WHERE Active__c = true order by Name ASC];
+            this.allCaseTeams = [SELECT Id, Name, Record_Type_Developer_Name__c, Email__c, Team__c, Language__c FROM Case_Team__c WHERE Active__c = true order by Name ASC];
         }
         return this.allCaseTeams;
     }
@@ -89,6 +89,7 @@ public class CaseTransferController{
                             ,AccountId = parentCase.AccountId
                             //,Prevent_Contact_Lookup__c = true
                             ,Status = 'New - Transferred'
+                            ,Language__c = this.getCaseTeamMap().get(transferringToCaseTeam).Language__c
                             ,Team__c = this.getCaseTeamMap().get(transferringToCaseTeam).Team__c
                             ,RecordTypeId = this.getCaseTeamToRecordTypeIdMap().get(transferringToCaseTeam));
     

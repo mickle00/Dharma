@@ -107,13 +107,13 @@ public class CaseTransferController{
 
     private void createTransferredCaseComment(Id newCaseId){
         if (this.transferReason == null) this.transferReason = '';
-            CaseComment newCaseComment = new CaseComment();
-            String commentHeader = 'Parent Case Details at Time of Transfer:'
-                                    + '\n--- Number of Attachments = ' + this.getParentAttachmentsSize()
-                                    +'\n--- Number of Comments = ' + this.getParentCaseCommentsSize() + '\n\n';
-            newCaseComment.CommentBody = commentHeader + this.transferReason;
-            newCaseComment.ParentId = newCaseId;
-            insert newCaseComment;      
+        CaseComment newCaseComment = new CaseComment();
+        String commentHeader = 'Parent Case Details at Time of Transfer:'
+                                +'\n--- Number of Attachments = ' + this.getParentAttachmentsSize()
+                                +'\n--- Number of Comments = ' + this.getParentCaseCommentsSize() + '\n\n';
+        newCaseComment.CommentBody = commentHeader + this.transferReason;
+        newCaseComment.ParentId = newCaseId;
+        insert newCaseComment;
     }
     
     private Integer getParentCaseCommentsSize(){

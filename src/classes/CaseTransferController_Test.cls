@@ -75,4 +75,20 @@ private class CaseTransferController_Test {
         List<CaseComment> childCaseComments = [SELECT Id FROM CaseComment WHERE ParentID = :newChildCases[0].Id];
         system.assertEquals(1, childCaseComments.size());   
     }
+    static testMethod void shouldNotHaveLanguageAssociated() {
+        CaseTransferController myController = getTestController();
+        Case_Team__c newCaseTeam = getNewCaseTeam();
+        newCaseTeam.Language__c = null;
+        update newCaseTeam;
+        List<Case> previousChildCases = [SELECT Id, RecordType.DeveloperName FROM Case WHERE ParentId = :testCase.Id];
+        myController.transferringToCaseTeam = newCaseTeam.Name;
+        String nextPage = myController.transferCase().getUrl();
+        
+        List<Case> newChildCases = [SELECT Id, RecordType.DeveloperName, Language__c FROM Case WHERE ParentID = :testCase.Id];
+        system.assertEquals(previousChildCases.size() + 1, newChildCases.size());
+        system.assertEquals(null, newChildCases[0].Language__c);
+        
+        List<CaseComment> childCaseComments = [SELECT Id FROM CaseComment WHERE ParentID = :newChildCases[0].Id];
+        system.assertEquals(1, childCaseComments.size());   
+    }
 }

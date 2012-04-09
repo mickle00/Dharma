@@ -1,4 +1,4 @@
-public with sharing class troubleshootingCaseControllerExtension {
+public class troubleshootingCaseControllerExtension {
 
     // Built out in the constructor
     public List <Case_Process_Team__c> caseProcessTeams;

@@ -70,6 +70,7 @@
     </fields>
     <fields>
         <fullName>Region__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <description>Maps the region the market belongs to</description>
         <externalId>false</externalId>
         <label>Region</label>

@@ -65,12 +65,20 @@
     </relatedLists>
     <relatedLists>
         <fields>CASES.CASE_NUMBER</fields>
+        <fields>NAME</fields>
         <fields>CASES.SUBJECT</fields>
-        <fields>CASES.CREATED_DATE</fields>
+        <fields>CASES.TYPE</fields>
         <fields>CASES.PRIORITY</fields>
-        <relatedList>Case.Super_Region__c</relatedList>
+        <fields>OWNER_NAME</fields>
+        <fields>CASES.CREATED_DATE</fields>
+        <fields>CASES.STATUS</fields>
+        <fields>CASES.ESCALATION_STATE</fields>
+        <fields>CASES.CLOSED</fields>
+        <relatedList>Case.Super_Region_Lookup__c</relatedList>
     </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
+    <showHighlightsPanel>false</showHighlightsPanel>
+    <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>

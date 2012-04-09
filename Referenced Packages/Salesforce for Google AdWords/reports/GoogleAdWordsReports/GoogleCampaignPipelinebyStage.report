@@ -7,9 +7,6 @@
         <field>Google_Campaign__c.Google_Campaign_Description__c</field>
     </columns>
     <columns>
-        <field>FK_OPP_STAGE_NAME</field>
-    </columns>
-    <columns>
         <field>FK_NAME</field>
     </columns>
     <columns>

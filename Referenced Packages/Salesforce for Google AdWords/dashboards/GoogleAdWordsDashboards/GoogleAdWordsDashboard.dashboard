@@ -75,6 +75,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>5</maxValuesDisplayed>
             <report>GoogleAdWordsReports/KeywordLeadReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowValueDescending</sortBy>
             <title>Top 10 Keywords - Lead Gen</title>
         </components>
@@ -88,6 +89,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>10</maxValuesDisplayed>
             <report>GoogleAdWordsReports/TextAdLeadReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowValueDescending</sortBy>
             <title>Top 10 Ad Headlines - Lead Gen</title>
         </components>
@@ -101,6 +103,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>10</maxValuesDisplayed>
             <report>GoogleAdWordsReports/GoogleCampaignLeadReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowValueDescending</sortBy>
             <title>Top 10 Google Campaigns - Lead Gen</title>
         </components>
@@ -114,6 +117,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>10</maxValuesDisplayed>
             <report>GoogleAdWordsReports/SearchPhraseLeadReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowValueDescending</sortBy>
             <title>Top 10 Search Phrases - Lead Gen</title>
         </components>
@@ -252,6 +256,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>5</maxValuesDisplayed>
             <report>GoogleAdWordsReports/KeywordRevenueReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowValueDescending</sortBy>
             <title>Top 5 Keywords - Revenue</title>
         </components>
@@ -265,6 +270,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>5</maxValuesDisplayed>
             <report>GoogleAdWordsReports/TextAdRevenueReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowValueDescending</sortBy>
             <title>Top 5 Ad Headlines - Revenue</title>
         </components>
@@ -278,6 +284,7 @@ Drill into any of the components below to find detailed reports</description>
             <indicatorMiddleColor>#C28B54</indicatorMiddleColor>
             <maxValuesDisplayed>5</maxValuesDisplayed>
             <report>GoogleAdWordsReports/GoogleCampaignRevenueReport</report>
+            <showPicturesOnTables>true</showPicturesOnTables>
             <sortBy>RowLabelAscending</sortBy>
             <title>Top 5 Google Campaigns - Revenue</title>
         </components>

@@ -1,33 +1,57 @@
-trigger CaseTrigger on Case (before insert, after insert, before update, after update) {
- 	
-  CasePointOfSaleClass objPOS = new CasePointOfSaleClass();
-  // Class holding the logic for Transport Troubleshooting Cases
-  troubleshootingCaseClassExtension CaseEx = new troubleshootingCaseClassExtension();
-  
-	List<Case> casesToMatchContactAndAccount = new List<Case>();
-	
-	if (trigger.isBefore && trigger.isInsert){
-		for(Case thisCase : trigger.new) {
-			if(thisCase.SuppliedEmail != null && thisCase.SuppliedEmail != '') {
-				casesToMatchContactAndAccount.add(thisCase);
-			}
-		}
-		CaseClass objCaseClass = new CaseClass();
-		objCaseClass.linkAccountAndContactToCase(casesToMatchContactAndAccount);
-		CaseEx.beforeNewTroubleshootingCase(trigger.new);
-	}
-	
-	if (trigger.isAfter && trigger.isInsert){
-		objPOS.insertCasePointsOfSaleForNewCases(trigger.new);
-		CaseEx.afterNewTroubleshootingCase(trigger.new);
-	}
-	
-	if (trigger.isBefore && trigger.isUpdate){
-    CaseEx.beforeUpdateTroubleshootingCase(trigger.newMap, trigger.oldMap);
+trigger CaseTrigger on Case (before insert, before update, after insert, after update, before delete) {
+    
+    CaseClass objCaseClass = new CaseClass();
+    CasePointOfSaleClass objPOS = new CasePointOfSaleClass();
+    troubleshootingCaseClassExtension CaseEx = new  troubleshootingCaseClassExtension();
+    CaseTimeClass CaseTimeObj = new CaseTimeClass();
+    TimeLogClass TimeLogObj = new TimeLogClass();
+    List<Case> casesToMatchContactAndAccount = new List<Case>();
+    Map<String,RecordType> recordTypeDevleoperNametoRecordType = Utilities.getRecordTypesMap('Case', true);
+    
+    if (trigger.isBefore && trigger.isInsert){
+        for(Case thisCase : trigger.new) {
+            if(thisCase.SuppliedEmail != null && 
+               thisCase.SuppliedEmail != '' && 
+               !thisCase.SuppliedEmail.contains('@choicehotels.com') &&
+               !thisCase.SuppliedEmail.contains('janine.skwarczynski@marriott.com') &&
+               thisCase.RecordTypeId != recordTypeDevleoperNametoRecordType.get('Support_Request').Id &&
+               !thisCase.Prevent_Contact_Lookup__c &&
+               ((thisCase.AccountId == null) ||
+               (thisCase.ContactId == null))) {
+                
+                casesToMatchContactAndAccount.add(thisCase);
+            }
+        }
+        
+        objCaseClass.linkAccountAndContactToCase(casesToMatchContactAndAccount);
+        CaseEx.beforeNewTroubleshootingCase(trigger.new);
+        CaseTimeObj.createCaseTimesForNewCases(trigger.New);
+    }
+    
+    if (trigger.isBefore && trigger.isUpdate){
+    CaseEx.beforeUpdateTroubleshootingCase(trigger.newMap, trigger.oldMap); 
   }
-	
-	if(trigger.isAfter && trigger.isUpdate){
+    
+    if (trigger.isAfter && trigger.isInsert){
+        objPOS.insertCasePointsOfSaleForNewCases(trigger.new);
+        CaseEx.afterNewTroubleshootingCase(trigger.new);
+        CaseTimeObj.updateCaseTimeAfterInsert(trigger.New);
+    }   
+    
+    if(trigger.isAfter && trigger.isUpdate){
     objPOS.syncCasePointsOfSale(trigger.oldMap, trigger.newMap);
     CaseEx.afterUpdateTroubleshootingCase (trigger.newMap, trigger.oldMap);
-	}
+    objCaseClass.ReportRecontractingCaseClosed(trigger.new, trigger.oldMap);
+    
+    if (!Utilities.hasAlreadyFiredTrigger()){
+      Utilities.setAlreadyFiredTrigger();
+      objCaseClass.afterUpdateCloneAndTransferCase(trigger.newMap, trigger.oldMap);
+      TimeLogObj.logCaseTime(trigger.New, trigger.oldMap);
+    }     
+    }
+
+    // prevent case deletion
+    if(trigger.isDelete) {
+        objCaseClass.preventCaseDeletion(trigger.old);
+    }
 }

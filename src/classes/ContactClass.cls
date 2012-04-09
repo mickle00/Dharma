@@ -2,7 +2,7 @@ public with sharing class ContactClass {
 	
 	public ContactClass(){}
 	
-	private Map<String,RecordType> contactRecordTypesMap = new Map<String,RecordType>(Utilities.getRecordTypesMap('Contact'));
+	private Map<String,RecordType> contactRecordTypesMap = new Map<String,RecordType>(Utilities.getRecordTypesMap('Contact',true));
 	
 	public Map<String,List<Contact>> getExistingContacts(Set<String> suppliedEmails){
 		
@@ -14,6 +14,7 @@ public with sharing class ContactClass {
 		                                   ,FirstName
 		                                   ,LastName
 		                                   ,Case_Priority__c
+		                                   ,Prevent_Case_Auto_Association__c
 		                               From Contact
 		                              Where Contact.email IN :suppliedEmails];
 		
@@ -99,7 +100,27 @@ public with sharing class ContactClass {
 			}//end of for loop	        
     }//end of updateAccount method
 	
+    public static void buildIntegrationKeys(List<Contact> myContacts){    
+      for(Contact thisContact : myContacts) {
+      	if(thisContact.Integration_Contact_Key__c == null) {
+          thisContact.Integration_Contact_Key__c = Utilities.generateIntegrationContactKey(thisContact.Email,thisContact.firstName,thisContact.lastName);
+		}
+      }
+	}
 	
+	public static Contact findById(Id contactId) {
+		// build where clause
+    	List<SoqlBuilder.Condition> conditions = new List<SoqlBuilder.Condition>();
+    	conditions.add(new SoqlBuilder.Condition('Id', contactId));
+    	
+		List<Contact> contacts = findBy(conditions);
+		if(contacts.isEmpty() == false) {
+			return contacts.get(0);
+		}
+
+		return null;
+	}
+
 	private Boolean hasExistingAccount(Id accountId) {
 		
 		return accountId != Null;
@@ -131,4 +152,8 @@ public with sharing class ContactClass {
 		       email.contains('@egencia.com') || 
 		       email.contains('@tripadvisor.com');
 	}
+
+    private static List<Contact> findBy(List<SoqlBuilder.Condition> conditions) {
+		return SoqlBuilder.ExecuteSelectQuery('Contact', conditions);
+    }
 }

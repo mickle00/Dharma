@@ -1,10 +1,13 @@
 public class CaseClass {
-  public Map<String,Contact> createdContactsByEmail = new Map<String,Contact>(); 
+  public Map<String,Contact> createdContactsByEmail = new Map<String,Contact>();
   public Map<String,Contact> existingContacts = new Map<String,Contact>();
   public Map<String,String> casePriority = new Map<String,String>();
   public Map<String,Id> emailContactId = new Map<String,Id>();
   public Map<String,Id> emailAccountId = new Map<String,Id>();
   public Map<String,Id> nameToQueueId = new Map<String,Id>(); 
+  
+  public Map<String,RecordType> recordTypeMap = Utilities.getRecordTypesMap('Case', true);
+  public Map<Id,RecordType> recordTypeMapById = Utilities.RecordTypeMapIdToRecordType('Case');
 
   //____________________________________________________
   public Map<String,List<Account_Contact__c>> emailToListOfAccountContacts = new Map<String,List<Account_Contact__c>>();
@@ -14,11 +17,11 @@ public class CaseClass {
   public String sfdcURL = 'https://na8.salesforce.com/'; // CHANGE Per environment
   public CaseClass(){}
     
-  public Case processEmail(Messaging.Inboundemail email, String recordType) {
+  public Case processEmail(Messaging.Inboundemail email, String recordType, String team, id languageId) {
         
     Case myCase = new Case();
     EmailMessage newEmail = new EmailMessage();
-    Map<String,RecordType> mapRecordTypes = Utilities.getRecordTypesMap('Case');
+    //Map<String,RecordType> mapRecordTypes = Utilities.getRecordTypesMap('Case',true);
       
     EmailMessageClass objEmail = new EmailMessageClass();
     TaskClass objTask = new TaskClass();  
@@ -28,15 +31,58 @@ public class CaseClass {
       myCase = this.updateCase(replyEmailCaseParentId, email);  
     }
     else{ // New Case  
-        myCase = this.insertCase(email,recordType, mapRecordTypes);  
+      myCase = this.insertCase(email,recordType, recordTypeMap, team, languageId);  
     }
     
     if(myCase != null){ //handle any attachments
       EmailUtilities objEmailUtilities = new EmailUtilities();
-      objEmailUtilities.saveAttachmentsToCaseFromInboundEmail(email, myCase.Id);            
+      objEmailUtilities.saveAttachmentsToParentFromInboundEmail(email, myCase.Id, true);        
     }
     return myCase;
   }
+  
+  public void ReportRecontractingCaseClosed(List<Case> cases, Map<Id,Case> oldMap) {
+  	
+  	List<Case> casesToProcess = new List<Case>();
+  	List<Case> trainingCases = new List<Case>();
+  	List<Case> contractLoadingCases = new List<Case>();
+  	List<Case> connectivityCases = new List<Case>();
+  	List<GSOContract__c> gsoContracts = new List<GSOContract__c>();
+  	List<GSOContract__c> gsoContractsToUpdate = new List<GSOContract__c>();
+  	Map<Id,GSOContract__c> gsoContractsMap = new Map<Id,GSOContract__c>();
+  	Set<Id> gsoContractIds =  new Set<Id>();
+  	List<Id> trainingCaseIds = new List<Id>();
+  	List<Id> contractLoadingCaseIds = new List<Id>();
+  	List<Id> connectivityCaseIds = new List<Id>();
+  	
+  	for(Case thisCase : cases) {
+  		System.debug('CASECLASS=>' + thisCase);
+  		System.debug('RTMAP=>' + recordTypeMapById);
+  		if(thisCase.GSO_Contract__c != null && this.PostORTCase(recordTypeMapById.get(thisCase.RecordTypeId).DeveloperName) == true) {
+  			if(thisCase.Status == 'Closed' && oldMap.get(thisCase.Id).Status != 'Closed') {
+  			  gsoContractIds.add(thisCase.GSO_Contract__c);
+  			}
+  		}
+  	}
+  	
+  	if(gsoContractIds.size() > 0) {
+  	
+  	  GSOContractClass objContract = new GSOContractClass();
+  	  gsoContracts = objContract.FindAllById(gsoContractIds);
+  	
+  	  for(GSOContract__c thisContract : gsoContracts) {
+  		  gsoContractsMap.put(thisContract.Id,thisContract);
+  	  }
+  	
+  	  for(Case thisCase : cases) {
+  		  GSOContract__c thisContract = gsoContractsMap.get(thisCase.GSO_Contract__c);
+  		  thisContract.Cases_Closed__c = Utilities.AddToMultiSelectPicklist(thisContract.Cases_Closed__c, recordTypeMapById.get(thisCase.RecordTypeId).DeveloperName);
+  		  gsoContractsToUpdate.add(thisContract);
+  	  }
+      update gsoContractsToUpdate;
+  	}
+  }
+  
        
   public void linkAccountAndContactToCase(Case[] cases){
         
@@ -147,8 +193,14 @@ public class CaseClass {
           }
             
           if(contactListSize == 1) {
-            thisCase.ContactId = emailToListOfContacts.get(thisCase.suppliedEmail)[0].Id;               
-            
+          	//If the Contact that the Case is going to be associated with is part of an email integration, do not automatically associate
+          	// as there are performance issues related to a Parent with too many child records (10k+)
+          	if(emailToListOfContacts.get(thisCase.suppliedEmail)[0].Prevent_Case_Auto_Association__c == false){
+            	thisCase.ContactId = emailToListOfContacts.get(thisCase.suppliedEmail)[0].Id;
+          	} else{
+          		//Don't keep processing logic, skip to next item.
+          		continue;
+          	}
             if(accountContactListSize == 0) {
               thisCase.Contact_Account_Lookup_Results__c = 'No Account Contacts';   
             }
@@ -159,47 +211,154 @@ public class CaseClass {
             else { // List of account contacts 
                 
                 // Build out web lookup status field to display possible accounts per contact
-                thisCase.Contact_Account_Lookup_Results__c = this.buildAccountContactPossiblesText(emailToListOfAccountContacts.get(thisCase.suppliedEmail));
+                thisCase.Contact_Account_Lookup_Results__c = Utilities.truncateField(this.buildAccountContactPossiblesText(emailToListOfAccountContacts.get(thisCase.suppliedEmail)),25000,'<br/>');
             }
           }
-          
-          /** MPS ADDED  **/          
+                 
           if(contactListSize > 1) {
-            if(accountContactListSize > 0){                     
-                thisCase.Contact_Account_Lookup_Results__c = this.buildAllPossiblesText(emailToListOfAccountContacts.get(thisCase.suppliedEmail), emailToListofContacts.get(thisCase.suppliedEmail));
+            if(accountContactListSize > 0){                 
+              thisCase.Contact_Account_Lookup_Results__c = Utilities.truncateField(this.buildAllPossiblesText(emailToListOfAccountContacts.get(thisCase.suppliedEmail), emailToListofContacts.get(thisCase.suppliedEmail)), 25000, '<br/>');
             }else{
-                List<Account_Contact__c> noAC = new List<Account_Contact__c>(); 
-                thisCase.Contact_Account_Lookup_Results__c = this.buildAllPossiblesText(noAC, emailToListofContacts.get(thisCase.suppliedEmail));                           
+              List<Account_Contact__c> noAC = new List<Account_Contact__c>(); 
+              thisCase.Contact_Account_Lookup_Results__c = Utilities.truncateField(this.buildAllPossiblesText(noAC, emailToListofContacts.get(thisCase.suppliedEmail)), 25000, '<br/>');                         
             }
-          }
-          /** MPS ADDED  **/          
+          }       
         }
       } // END Case Loop
       system.debug('End of time size of loop is' + existingContacts.values().size());
     } // END linkAccountAndContactToCase
     
-    /////// Private Methods  
     
-    private Case insertCase(Messaging.InboundEmail email, String recordType, Map<String,RecordType> mapRecordTypes) {
+  public void afterUpdateCloneAndTransferCase(Map<Id, Case> caseIdtoNewCaseMap, Map<Id, Case> caseIdtoOldCaseMap){
+ 
+    queueNameToId = Utilities.getQueueNameToIdMap('Case');   
+    Map<String, RecordType> caseRecordTypes = Utilities.getRecordTypesMap('Case', false);
+    
+    for (RecordType myRecordType : caseRecordTypes.values()){
+      queueNameToRecordTypeId.put(myRecordType.Name, myRecordType.Id);
+      RecordTypeIdToName.put(myRecordType.Id, myRecordType.Name);
+    }    
+    
+    for (Case myCase : caseIdtoNewCaseMap.values()){
+      // if Case was changed to either Closed - Transferred or Transferred from any other Status AND the Additional Status returns a Record Type & Queue Name
+      // 1. see if Case Status just got changed to Closed - Transferred
+      // OR 
+      // 2. see if Case Status just got changed to Transferred
+      // AND 
+      // 3. trap to make sure that Record Type AND Queue Maps return values. Don't want a DML Insert Error for a NULL value
+      if (((myCase.Status == 'Closed - Transferred' && caseIdtoOldCaseMap.get(myCase.Id).Status != 'Closed - Transferred') ||
+         (myCase.Status == 'Transferred' && caseIdtoOldCaseMap.get(myCase.Id).Status != 'Transferred')) && 
+         (queueNameToRecordTypeId.get(myCase.Additional_Status__c) != NULL && queueNameToId.get(myCase.Additional_Status__c) != NULL)) {
+          // Clone case into child case
+          Case clonedCase = cloneChildCase(myCase);
+          casesToInsert.add(clonedCase);        
+      }    
+    }// end for loop      
+    insert casesToInsert;
+  }    
+    
+  public void assignCaseToLinguist(Case parentCase, List<String> languages) {
+    
+    // create a child case for each language selected
+    for(Language__c language : [Select Id, Name From Language__c Where Id IN : languages]) {
+        // Clone case into child case
+        Case clonedCase = cloneChildCase(parentCase, language);
+        casesToInsert.add(clonedCase);
+    }// end for loop
+    
+    insert casesToInsert;
+  }
+  
+  public static Case findById(Id myCaseId){
+        CaseClass caseObj = new CaseClass();
+        return caseObj.getCase(myCaseId);
+    }
+
+  public void preventCaseDeletion(List<Case> cases) {
+  	// get current user profile
+  	Id currentUserProfileId = Userinfo.getProfileId();
+  	// get system admin and api only profile id
+  	List<Profile> profiles = [Select Id From Profile Where Name IN ('System Administrator', 'API Only')];
+  	// only grant delete permission to system admins and api only profile
+  	Boolean allowDeletion = (currentUserProfileId == profiles.get(0).Id || currentUserProfileId == profiles.get(1).Id);
+  	
+  	// add error message to cases if the user does not have permission to delete cases
+  	for(Case myCase : cases) {
+  		if(allowDeletion == false) {
+  			myCase.addError('Insufficient Privileges. You are not authorized to delete cases.');
+  		}
+  	}
+  }
+
+    /////// Private Methods
         
-        String plainTextEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '\n');
-        String htmlBodyEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '<br/>');
-        
-        String plainTextDescription = plainTextEmailRecipientsList + email.plainTextBody;
-        if (plainTextDescription.length() > 32000) plainTextDescription = Utilities.truncateField(plainTextDescription, 32000, '\n');
-        String richTextDescription = htmlBodyEmailRecipientsList + email.htmlBody;
-        if (richTextDescription.length() > 32000) richTextDescription = Utilities.truncateField(richTextDescription, 32000, '<br/>');
-                
-        Case myCase = new Case(Description = plainTextDescription
-                              ,Subject = email.subject
-                              ,SuppliedEmail = email.fromAddress
-                              ,SuppliedName = email.fromName
-                              ,RecordTypeId = mapRecordTypes.get(recordType).Id
-                              ,Origin = 'Email'
-                              ,Description_Rich_Text__c = richTextDescription
-                              //MPS ADDED
-                              ,Email_Recipients__c = EmailUtilities.buildEmailRecipientsField(email.toAddresses, email.ccAddresses));
-        
+    private Map<String, Id> queueNameToId = new Map<String, Id>();
+    private Map<String, Id> queueNameToRecordTypeId = new Map<String, Id>();
+    private Map<Id, String> RecordTypeIdToName = new Map<Id, String>();
+    private List<Case> casesToInsert = new List<Case>();  
+    
+    private Case insertCase(Messaging.InboundEmail email, String recordType, Map<String,RecordType> mapRecordTypes, String team, id languageId) {
+      
+      String plainTextEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '\n');
+      String htmlBodyEmailRecipientsList = EmailUtilities.buildEmailRecipientsText(email.toAddresses, email.ccAddresses, '<br/>');
+      
+      String plainTextBody = email.plainTextBody;
+      String htmlBody = email.htmlBody;
+      
+      String plainTextDescription;
+      String richTextDescription;
+      
+      String[] unformattedToAddresses = new String[]{}; 
+      String[] unformattedCCAddresses = new String[]{};
+      
+      unformattedToAddresses = EmailUtilities.unformattedEmailAddresses(email.toAddresses);
+      unformattedCCAddresses = EmailUtilities.unformattedEmailAddresses(email.ccAddresses);
+      
+      String emailRecipients = EmailUtilities.buildEmailRecipientsField(unformattedToAddresses) + '\n' +
+                               EmailUtilities.buildEmailRecipientsField(unformattedCCAddresses);
+           
+      if(this.supportRequestCase(recordType)) {
+        plainTextDescription =  email.plainTextBody;
+        richTextDescription =  email.htmlBody;
+        //htmlBody = '';
+      }  
+      else {
+        if(starRatingsCase(recordType) && 
+          fromExpediaPartnerCentral(email.fromAddress)) {
+            
+          plainTextDescription = plainTextEmailRecipientsList + parseStarRatingsEmailFromEPC(plainTextBody, '\n');  
+          richTextDescription = plainTextEmailRecipientsList + '<br/><br/>' + parseStarRatingsEmailFromEPC(htmlBody, '<br/>');
+        }
+        else {
+            system.debug('plainTextBody=' + plainTextBody);
+            if(plainTextBody == null && htmlbody != null) {
+                plainTextBody = htmlbody;
+                plainTextBody = plainTextBody.replace('<br>', '\n');
+                plainTextBody = plainTextBody.replace('<br/>', '\n');
+                system.debug('IN PLAIN TEXT=' + plainTextBody);
+            }
+          plainTextDescription = plainTextEmailRecipientsList + plainTextBody;     
+          richTextDescription = htmlBodyEmailRecipientsList + htmlBody;
+        }
+      }
+                                       
+      Case myCase = new Case(Description = Utilities.truncateField(plainTextDescription, 32000, '\n')
+                            ,Subject = email.subject
+                            ,SuppliedEmail = email.fromAddress
+                            ,SuppliedName = email.fromName
+                            ,RecordTypeId = mapRecordTypes.get(recordType).Id
+                            ,Origin = this.getOrigin(email.fromAddress)
+                            ,Description_Rich_Text__c = Utilities.truncateField(richTextDescription, 32000, '<br/>')
+                            ,Email_Recipients__c = Utilities.truncateField(emailRecipients, 255,'\n')
+                            ,Send_auto_response__c = sendAutoResponseEmail(email.fromAddress)
+                            ,Team__c = team
+                            ,Language__c = languageId                         
+                            );
+                            
+      system.debug('MYCASE.Description=' + myCase.Description);
+      // Get requestor (User) if case is for a support request
+      if(this.supportRequestCase(recordType)) myCase.Requestor__c = this.getRequestorId(email.fromAddress);
+                             
       database.DMLOptions dmo = new database.DMLOptions();
         
       AssignmentRule[] ar = [SELECT Id 
@@ -212,85 +371,78 @@ public class CaseClass {
       
       dmo.AssignmentRuleHeader.useDefaultRule = false;
       dmo.EmailHeader.triggerUserEmail = false;
-      dmo.EmailHeader.triggerAutoResponseEmail = true;
+      dmo.EmailHeader.triggerAutoResponseEmail = myCase.Send_auto_response__c;
+      dmo.allowFieldTruncation = true;
 
       myCase.setOptions(dmo);
 
-      try {
-        insert myCase;
+      try{
+      	insert myCase;
+      } catch (system.DMLException e){
+      	//Catch UNABLE_TO_LOCK_ROW Exceptions that are related to a Contact having too many associated Cases
+      	myCase.Prevent_Contact_Lookup__c = true;
+      	insert myCase; // will rethrow any exceptions that aren't related to UNABLE_TO_LOCK_ROW
+      }
+      
         // Requery the DB to get the new case number.
         // STUPID that we have to do this.
         // How can we return the new case number when record is inserted
-        myCase = this.getCase(myCase.Id);
+      myCase = this.getCase(myCase.Id);
                    
-        system.debug('*** CaseClass.CreateCase => RecordType = ' + myCase.RecordType.DeveloperName + ' ***');
+      system.debug('*** CaseClass.CreateCase => RecordType = ' + myCase.RecordType.DeveloperName + ' ***');
                 
-        String subject = 'Thank you for contacting Expedia Support.  Case Number: ' + myCase.CaseNumber + ' ' + Utilities.getCaseThreadId(myCase.Id);
-        //String plainTextBody = this.getCaseAutoResponseEmailBodyText(myCase.CaseNumber,myCase.RecordType.DeveloperName);
+      String subject = 'Thank you for contacting Expedia Support.  Case Number: ' + myCase.CaseNumber + ' ' + Utilities.getCaseThreadId(myCase.Id);
         
-        String plainTextBody = this.getNewCaseAutoResponseEmailText(myCase.caseNumber, myCase.Id, recordType, 
-          email.toAddresses, email.ccAddresses, email.plainTextBody, email.subject);
+      String autoResponseEmailText = this.getNewCaseAutoResponseEmailText(myCase.caseNumber, myCase.Id, recordType, 
+        email.toAddresses, email.ccAddresses, plainTextBody, email.subject);
+        
+      system.debug('*** CaseClass.CreateCase => Before Create EmailMessage ***');
           
-        
-        if(!EmailUtilities.suppressSpamEmails(email.fromAddress) && !EmailUtilities.suppressEmailAutoResponse(email.fromAddress)) { // Do not reply to Closed-Spam known email addresses
-          system.debug('*** CaseClass.CreatCase sending auto response for RecordType => ' + recordType + ' ***');
-            system.debug('*** CaseClass.CreatCase sending auto response for ReplyToAlias => ' + EmailUtilities.getExpediaReplyToAlias(recordType) + ' ***');
-            system.debug('*** CaseClass.CreatCase sending auto response for ReplyToAliasName => ' + EmailUtilities.getExpediaReplyToAliasName(recordType) + ' ***');
-            
-          EmailUtilities.sendSingleEmailMessage(new String[] {email.fromAddress}, new String[]{}, 
-            EmailUtilities.getExpediaReplyToAlias(recordType), 
-            EmailUtilities.getExpediaReplyToAliasName(recordType), plainTextBody, subject, null);
-            
-            // MPS MOVED TO WITHIN THE IF LOOP 5/3/11. DON'T WANT TO BE LOGGING EMAIL/TASKS FOR AUTO-RESPONSES 
-            // WHICH WE DON'T SEND
-            
-            system.debug('*** CaseClass.CreateCase => Before Create Task ***');
-            // create a task for auto response
-            TaskClass objTask = new TaskClass();
-            objTask.createTask(myCase.Id, myCase.ContactId, myCase.CreatedById, plainTextBody, subject,
-                'Completed', system.today());
-        
-            system.debug('*** CaseClass.CreateCase => Before Create EmailMessage ***');
-            // log the auto repsonse message as an email message on the case
-            EmailMessageClass objEmail = new EmailMessageClass();
-            objEmail.createEmailMessage(myCase.Id, subject, 'donotreply.gso@expedia.com', 
-                'Expedia GSO', email.fromAddress, plainTextBody, EmailMessageClass.enumEmailStatus.sent, false);
-        }
-      }
-      catch (system.Dmlexception dmlE) {
-        system.debug('*** CaseClass.CreateCase After case Insert. DML Exception ' + dmlE.getMessage() + ' ***');
-      }
-      catch (Exception e) {
-        system.debug('*** CaseClass.CreateCase After case Insert. Exception ' + e.getMessage() + ' ***');
-      }
-      
+      EmailMessageClass objEmail = new EmailMessageClass();
+        // log original inbound email
+      Id inboundEmailId = objEmail.createEmailMessage(myCase.Id, email.subject, email.fromAddress, 
+        email.fromName, email.toAddresses, Utilities.truncateField(plainTextBody, 32000, '\n'), 
+        EmailMessageClass.enumEmailStatus.read, true, email.ccAddresses);
+              
+      // save attachments to email message
+      EmailUtilities objEmailUtil = new EmailUtilities();
+        objEmailUtil.saveAttachmentsToParentFromInboundEmail(email, inboundEmailId, true);
+         
       return myCase;
     }
     
     private Case updateCase(Id caseId, Messaging.InboundEmail email) {
-        
-        // get parent case      
+      
+      // get parent case      
       Case myCase = this.getCase(caseId);
         
-      //update status to reflect reply email                        
-      myCase.Status = 'Reply: Customer Email';
+      //update status to reflect reply email
+      if (myCase.isClosed == true){
+        myCase.Status = 'Closed - Reply';
+      }
+      else{
+        myCase.Status = 'Reply: Customer Email';
+      }
+      
+      String taskDescription = email.plainTextBody != null ? email.plainTextBody : email.subject;
         
       // create a task
       TaskClass objTask = new TaskClass();
-      objTask.createTask(myCase.Id, myCase.ContactId, myCase.CreatedById, email.plainTextBody, 
-        email.subject,'Completed',system.today());
-        
+      objTask.createTask(myCase.Id, myCase.ContactId, myCase.CreatedById, 
+        taskDescription, email.subject,'Completed',system.today());
+      
+      String emailBody = email.plainTextBody != null ? email.plainTextBody : email.htmlBody;
       // log the email message
       EmailMessageClass objEmail = new EmailMessageClass();
-      objEmail.createEmailMessage(myCase.Id, email.subject, email.fromAddress, email.fromName, '',
-        email.plainTextBody, EmailMessageClass.enumEmailStatus.replied, true);
+      objEmail.createEmailMessage(myCase.Id, email.subject, email.fromAddress, email.fromName, email.toAddresses,
+        Utilities.truncateField(emailBody, 32000, '\n'), 
+        EmailMessageClass.enumEmailStatus.replied, true, email.ccAddresses);
         
       update myCase;
       
       return myCase;
-        
-    }   
-
+      
+    }  
     private void editMaps(Account_Contact__c accountContact) {
        // add the contacts id to the map emailcid with email address as the key
          this.emailContactId.put(accountContact.contact__r.email, accountContact.contact__c);
@@ -365,7 +517,6 @@ public class CaseClass {
         
     }
     
-    /** MPS ADDED  **/
     private String buildAllPossiblesText(List<Account_Contact__c> myAccountContacts, List<Contact> myContacts) {        
         String returnText;
         Id cid;
@@ -384,7 +535,6 @@ public class CaseClass {
         }       
         return returnText; 
     }   
-    /** MPS ADDED  **/
     
     private String buildAccountContactPossiblesText(List<Account_Contact__c> myAccountContacts) {
         
@@ -400,13 +550,13 @@ public class CaseClass {
     }
     
     private String getEmailHtmlBodyText(String emailHtmlBody, String plainTextBody) {
-        
+      
       String htmlBody = '';
       if(emailHtmlBody == null) {
-          htmlBody = plainTextBody;
+        htmlBody = plainTextBody;
       }
       else {
-          htmlBody = emailHtmlBody;
+        htmlBody = emailHtmlBody;
       }
       return htmlBody;
       
@@ -430,10 +580,10 @@ public class CaseClass {
         String contactURL = sfdcURL + contact.Id;
         String fullname;
         if (contact.FirstName == NULL){
-            fullname = contact.LastName;
+          fullname = contact.LastName;
         }
         else{
-            fullname = contact.FirstName + ' ' + contact.LastName;
+          fullname = contact.FirstName + ' ' + contact.LastName;
         }
            
         return '<li><a href="' + contactURL + '">' + fullname + '</li>';       
@@ -441,56 +591,214 @@ public class CaseClass {
         
     private String getNewCaseAutoResponseEmailText(String caseNumber, Id caseId, String recordType, String[] toAddresses,
       String[] ccAddresses, String plainTextBody, String subject) {
-        
-        String teamSignature = 'Expedia Support';
-        
-        if (recordType == 'Geography') teamSignature = 'Expedia Geography Team';
-        if (recordType == 'Destination_Services') teamSignature = 'Destination Services Content Team';
-        if (recordType == 'Ticketing') teamSignature = 'GTP Support Team';
+      
+      String teamSignature = 'Expedia Support';
+      
+      if (recordType == 'Geography') teamSignature = 'Expedia Geography Team';
+      if (recordType == 'Destination_Services') teamSignature = 'Destination Services Content Team';
+      if (recordType == 'Ticketing') teamSignature = 'GTP Support Team';
       if (recordType == 'Schedule_Change') teamSignature = 'ASC Support Team';
-        
-        return 'Thank you for contacting Expedia Support. A case has been created to help track your issue through its resolution.' +
-               '\n\n' +
-               'Your Case Number is: ' + caseNumber +'.' +
-               '\n\n' +
-               'Thank you,' +
-               '\n\n' +
+      if (recordType == 'Air_Fulfillment_Process_Support') teamSignature = 'Air Fulfillment - Workflow Management';
+      if (recordType == 'Air_CPR') teamSignature = 'Air CPR Workflow Management';
+      if (recordType == 'ADM') teamSignature = 'ADM Workflow Management';
+      if (recordType == 'CarOps') teamSignature = 'Car Operations Workflow Management';
+      if (recordType == 'Localisation') teamSignature = 'Localisation';
+      if (recordType == 'User_Generated_Content') teamSignature = 'User Generated Content';
+      
+      
+      return 'Thank you for contacting Expedia Support. A case has been created to help track your issue through its resolution.' +
+             '\n\n' +
+             'Your Case Number is: ' + caseNumber +'.' +
+             '\n\n' +
+             'Thank you,' +
+             '\n\n' +
              teamSignature + '\n\n' +
              '* When sending us a reply, please ensure that the "Subject" of your email is unchanged ' + 
              'and includes the case reference number.\n\n' +
              '------------------Your Request----------------------\n\n' +
-             'To: ' + this.getAutoResponseEmailAddresses(toAddresses) + '\n' +
-             'CC: ' + this.getAutoResponseEmailAddresses(ccAddresses) + '\n' +
+             'To: ' + Utilities.listToDelimitedString(EmailUtilities.unformattedEmailAddresses(toAddresses), ';') + '\n' +
+             'CC: ' + Utilities.listToDelimitedString(EmailUtilities.unformattedEmailAddresses(ccAddresses), ';') + '\n' +
              'Subject: ' + subject + '\n' +  
              '\n' + plainTextBody +
              '\n\n\n\n' + Utilities.getCaseThreadId(caseId);
     }
-    
-    private String getAutoResponseEmailAddresses(String[] emailAddresses) {
-      if(emailAddresses == null) return '';
-      
-      String finalEmailAddresses = '';
-      
-      for(String emailAddress : emailAddresses) {
-        if(finalEmailAddresses == '') {
-            finalEmailAddresses = emailAddress;
-        }
-        else {
-            finalEmailAddresses = finalEmailAddresses + '; ' + emailAddress;
-        }       
-      }
-      return finalEmailAddresses;
-    }
-    
+        
     private Case getCase(Id caseId) {
       return [Select Id
+                    ,AccountId
                     ,Status
+                    ,isClosed
                     ,OwnerId
                     ,CreatedById
                     ,ContactId
                     ,Case.RecordType.DeveloperName
                     ,CaseNumber
+                    ,GSO_Contract__c
                 From Case
                Where Case.Id = :caseId]; 
     }
+
+    
+    // Clone the Case Subject & Description. Link it as a child to the original case. Build out some additional text in the Description box for additional clarifiction
+    private Case cloneChildCase(Case parentCase){
+      String caseDescription = ''; 
+      if (parentCase.Description != null) caseDescription = parentCase.Description; 
+      Case newCase = new Case (Subject = parentCase.Subject
+                            ,ParentId = parentCase.Id
+                            ,Description = 'Transferred from Case Number: '+ parentCase.CaseNumber +'\n Old Case Id: ' + parentCase.Id + '\n Transferred from: ' + RecordTypeIdToName.get(parentCase.RecordTypeId) + '\n-----------------------------------------------------------\n\n' + caseDescription
+                            ,Description_Rich_Text__c = parentCase.Description_Rich_Text__c
+                            ,suppliedEmail = parentCase.suppliedEmail
+                            ,suppliedName = parentCase.suppliedName
+                            ,ContactId = parentCase.ContactId
+                            ,AccountId = parentCase.AccountId
+                            ,Status = 'New - Transferred'  
+                            ,OwnerId = queueNameToId.get(parentCase.Additional_Status__c)
+                            ,RecordTypeId = queueNameToRecordTypeId.get(parentCase.Additional_Status__c));
+    
+      return newCase;
+  }
+  
+    // Clone the Case Subject & Description. Link it as a child to the original case. Build out some additional text in the Description box for additional clarifiction
+    private Case cloneChildCase(Case parentCase, Language__c language){
+      String caseDescription = ''; 
+      if (parentCase.Description != null) caseDescription = parentCase.Description; 
+      queueNameToId = Utilities.getQueueNameToIdMap('Case');   
+      
+      Case newCase = new Case (Subject = parentCase.Subject
+                            ,ParentId = parentCase.Id
+                            ,Description = 'Transferred from Case Number: '+ parentCase.CaseNumber +'\n Old Case Id: ' + parentCase.Id + '\n Transferred from: ' + RecordTypeIdToName.get(parentCase.RecordTypeId) + '\n-----------------------------------------------------------\n\n' + caseDescription
+                            ,Description_Rich_Text__c = parentCase.Description_Rich_Text__c
+                            ,suppliedEmail = parentCase.suppliedEmail
+                            ,suppliedName = parentCase.suppliedName
+                            ,ContactId = parentCase.ContactId
+                            ,AccountId = parentCase.AccountId
+                            ,Status = 'Internal - Transfer'  
+                            ,OwnerId = queueNameToId.get('Localisation')
+                            ,Team__c = 'Localisation - ' + language.Name
+                            ,Language__c = language.Id
+                            ,Allocated__c = true
+                            ,Origin = parentCase.Origin
+                            ,RecordTypeId = parentCase.RecordTypeId);
+      
+      return newCase;
+  }
+
+  private Boolean supportRequestCase(String recordType) {
+    return recordType == 'Support_Request';
+  }
+  
+  private Boolean starRatingsCase(String recordType) {
+    return recordType == 'Star_Ratings';
+  }
+  
+  private Id getRequestorId(String email) {
+    // Get the user based on Email
+    UserClass objUser = new UserClass();
+    User thisUser = objUser.getUserByEmail(email);
+    // Return the is if one is found otherwise return null
+    return thisUser == null ? null : thisUser.Id;
+  }
+  
+   private String getOrigin(String emailAddress) {
+    // Get the value to put in the origin field of a case
+    // default to Email and then set to EPC or AskExpedia of source is on
+    String origin = 'Email (alias)';
+    if(fromExpediaPartnerCentral(emailAddress)) origin = 'EPC';
+    if(fromAskExpedia(emailAddress)) origin = 'AskExpedia';
+    return origin;
+  }
+  
+  private Boolean fromExpediaPartnerCentral(String emailAddress) {
+    return emailAddress.contains('@expediapartnercentral.com') &&
+           !emailAddress.contains('askexpedia');
+  }
+  
+  private Boolean fromAskExpedia(String emailAddress) {
+    return emailAddress.equals('askexpedia@expedia.com') ||
+           emailAddress.equals('askexpedia@expediapartnercentral.com');
+  }
+  
+  private String parseStarRatingsEmailFromEPC(String description, String newLine) {
+    String parsedString;
+    
+    parsedString = description.substring(0, description.indexOf(':EndEmail:'));  
+    // Split out email body lines of text
+    String[] splitText = parsedString.split('::\n+');
+    system.debug('StarRatings[0]= ' + splitText[0].toLowerCase());
+    
+    if(String.valueOf(splitText[0].replaceFirst('[\\w\\d]+:','').trim()) == '1'){
+      parsedString = parseExpediaRatings(splitText, newLine);
+    }
+    else {
+      parsedString = parseNationalRatings(splitText, newLine);
+    }
+    return parsedString;
+  }
+  
+  private String parseExpediaRatings(List<String> description, String newLine) {
+    String parsedString = 'Hotel Id = ' + description[1].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Hotel Name = ' + description[2].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'First Name = ' + description[3].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Last Name = ' + description[4].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Email = ' + description[5].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Phone = ' + description[6].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'PSG Account Id = ' + description[7].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Vendor Id = ' + description[8].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Structure type = ' + description[9].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Reasons for star review = ' + description[10].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Bathroom features = ' + description[11].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Mattress/bedding = ' + description[12].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Furnishings in standard room = ' + description[13].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Feature kitchenettes = ' + description[14].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Complimentary evening reception = ' + description[21].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Join star rating = ' + description[22].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'How condo is decorated = ' + description[24].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Bathroom facilities = ' + description[25].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Hotel managed restaurant = ' + description[17].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'No restaurant offer breakfast = ' + description[19].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Explain amenities services = ' + description[15].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Washer/dryer = ' + description[26].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Guest Reception hours = ' + description[27].replaceFirst('[\\w\\d]+:','') + newLine
+                        + 'Frequency of housekeeping = ' + description[28].replaceFirst('[\\w\\d]+:','') + newLine;
+                        
+    return parsedString;
+  }
+  
+  private String parseNationalRatings(List<String> description, String newLine) {
+    String parsedString;
+    String StarRatingAwarded = description[9].replaceFirst('[\\w\\d]+:',''); 
+    String StarRatingAwardedBy = description[10].replaceFirst('[\\w\\d]+:',''); 
+    String[] dateAwarded = description[11].replaceFirst('[\\w\\d]+:','').split('/'); 
+
+    // split out date into Month Day Year to assemble in is SF friendly way 
+    String dateAwardedMonth = dateAwarded[0]; 
+    String dateAwardedDay = dateAwarded[1]; 
+    String dateAwardedYear = dateAwarded[2]; 
+    date fullDateAwarded = Date.valueOf(dateAwardedYear + '-' + dateAwardedMonth + '-' + dateAwardedDay); 
+
+    parsedString = 'Update National Rating' + newLine 
+                 + 'Hotel Id = ' + description[1].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Hotel Name = ' + description[2].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'First Name = ' + description[3].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Last Name = ' + description[4].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Email = ' + description[5].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Phone = ' + description[6].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'PSG Account Id = ' + description[7].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Vendor Id = ' + description[8].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Star rating awarded = ' + description[9].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'National rating awarded by = ' + description[10].replaceFirst('[\\w\\d]+:','') + newLine
+                 + 'Date awarded = ' + fullDateAwarded;
+    
+    return parsedString;  
+  }
+
+  private Boolean sendAutoResponseEmail(String emailAddress) {
+    return !EmailUtilities.suppressSpamEmails(emailAddress) && !EmailUtilities.suppressEmailAutoResponse(emailAddress);
+  }
+  
+  private Boolean PostORTCase(String developerName) {
+  	return developerName == 'Contract_Loading' || 
+  	       developerName == 'Training' ||
+  	       developerName == 'Hotel_Systems_Technical_Support';
+  }
 }

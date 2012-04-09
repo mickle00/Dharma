@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <enableActivities>false</enableActivities>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>false</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Case_Business_Hours_ID__c</fullName>
+        <description>Used by Apex Class to determine the difference in business hours. Using the formula fields removes the need for a SOQL query.</description>
+        <externalId>false</externalId>
+        <formula>Case_Time__r.Case__r.BusinessHoursId</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Case Business Hours ID</label>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Case_Owner_Type__c</fullName>
+        <externalId>false</externalId>
+        <label>Case Owner Type</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Queue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>User</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Case_Owner__c</fullName>
+        <description>Can&apos;t use a lookup to User, as there will be Time Logs for Cases that are/were owned by a Queue.</description>
+        <externalId>false</externalId>
+        <label>Case Owner</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Case_Status__c</fullName>
+        <description>The Status of the Case at the time of the Snapshot</description>
+        <externalId>false</externalId>
+        <label>Case Status</label>
+        <length>100</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Case_Time__c</fullName>
+        <externalId>false</externalId>
+        <label>Case Time</label>
+        <referenceTo>Case_Time__c</referenceTo>
+        <relationshipName>Case_Status_Times</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>In_Effect_From__c</fullName>
+        <externalId>false</externalId>
+        <label>In Effect From</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>In_Effect_Until__c</fullName>
+        <externalId>false</externalId>
+        <label>In Effect Until</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Included_in_AHT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Included in AHT?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Included_in_SLA_Time__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Trigger looks up Custom Setting to determine if this is a Stop Status or not.</description>
+        <externalId>false</externalId>
+        <label>Included in SLA Time?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Most_Recent_Change__c</fullName>
+        <externalId>false</externalId>
+        <formula>Case_Time__r.Most_Recent_Change__c</formula>
+        <label>Most Recent Change</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>New_Case_Owner__c</fullName>
+        <description>The Case owner immediately after the time is logged</description>
+        <externalId>false</externalId>
+        <label>New Case Owner</label>
+        <length>255</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>New_Case_Status_Included_in_AHT__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>New Case Status Included in AHT?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>New_Case_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>New Case Status</label>
+        <length>50</length>
+        <required>false</required>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Time_in_Hours__c</fullName>
+        <externalId>false</externalId>
+        <formula>( In_Effect_Until__c - In_Effect_From__c) * 24</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Time in Hours</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>4</scale>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>While_Case_Closed__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If this time log took place while the Case was closed</description>
+        <externalId>false</externalId>
+        <label>While Case Closed?</label>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>While_Closing_Case__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>If this time log took place immediately before a Case was closed.</description>
+        <externalId>false</externalId>
+        <label>While Closing Case?</label>
+        <type>Checkbox</type>
+    </fields>
+    <label>Time Log</label>
+    <nameField>
+        <displayFormat>{0000000000}</displayFormat>
+        <label>Time Log Number</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Time Logs</pluralLabel>
+    <searchLayouts/>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

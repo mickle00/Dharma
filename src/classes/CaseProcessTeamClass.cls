@@ -1,4 +1,4 @@
-public with sharing class CaseProcessTeamClass {
+public class CaseProcessTeamClass {
   
   // for Before Insert. 
   //Simply Make sure that all junctions state that it's not ready to close

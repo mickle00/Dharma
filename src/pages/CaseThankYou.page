@@ -41,8 +41,7 @@
 	</apex:repeat>
     
     <center> 
-		<apex:commandButton action="{!sendConfirmationEmail}" value="On second thought, send me an email confirmation" styleClass="btn"  rendered="{!sendConfirmationEmail == false}"/> <!--  this is always going to be false as its set after save -->			
-		</center>
+		<!--  <apex:commandButton action="{!pdf}" value="View Case as PDF" styleClass="btn" />--> </center>
 	<br></br>    
     <font color="red">
 			<apex:outputText value="Attachments Not Uploaded" style="font-weight:bold; text-decoration:underline" rendered="{!ShouldIRender}"/><br/>          

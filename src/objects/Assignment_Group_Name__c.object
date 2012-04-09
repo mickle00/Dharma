@@ -35,7 +35,7 @@
     <deploymentStatus>Deployed</deploymentStatus>
     <enableActivities>false</enableActivities>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>true</enableHistory>
+    <enableHistory>false</enableHistory>
     <enableReports>true</enableReports>
     <fields>
         <fullName>Count_of_Users__c</fullName>
@@ -44,7 +44,6 @@
         <label>Count of Users</label>
         <summaryForeignKey>Assignment_Groups__c.Group_Name__c</summaryForeignKey>
         <summaryOperation>count</summaryOperation>
-        <trackHistory>false</trackHistory>
         <type>Summary</type>
     </fields>
     <fields>
@@ -52,7 +51,6 @@
         <externalId>false</externalId>
         <label>Description</label>
         <length>10000</length>
-        <trackHistory>false</trackHistory>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
     </fields>
@@ -67,7 +65,6 @@
             </picklistValues>
             <sorted>false</sorted>
         </picklist>
-        <trackHistory>false</trackHistory>
         <type>Picklist</type>
     </fields>
     <label>Assignment Group</label>
@@ -78,13 +75,11 @@
     </listViews>
     <nameField>
         <label>Group Name</label>
-        <trackHistory>false</trackHistory>
         <type>Text</type>
     </nameField>
     <pluralLabel>Assignment Groups</pluralLabel>
     <searchLayouts/>
     <sharingModel>ReadWrite</sharingModel>
-    <startsWith>Vowel</startsWith>
     <validationRules>
         <fullName>Assignment_Group_Recods_less_than_1000</fullName>
         <active>true</active>

@@ -1,0 +1,31 @@
+<apex:page showheader="false" sidebar="false" Controller="sitesReContractingSubmissions" action="{!VerifyAuthentication}" cache="false">
+  <apex:composition template="GSOSubmissionTemplate">
+    <apex:define name="body">  
+        <br/>
+        <apex:form id="theForm">
+        <apex:pageMessages />
+        <apex:pageblock title="Re-Contracting Submissions" id="pb">
+            <div><strong>Market Manager: {!PSGUser.Name}</strong></div><br/>
+
+            <apex:pageBlockTable value="{!contracts}" var="con" rendered="{!contracts.size > 0}">
+                <apex:column >
+                    <apex:outputLink value="/apex/rcSubmissionsStep2" rendered="{!ISNULL(con.Date_EPC_Completed__c)}">cancel
+                        <apex:param name="contractId" value="{!con.Id}"/>
+                        <apex:param name="MM" value="{!PSGUser.Email__c}"/>
+                    </apex:outputLink>
+                </apex:column>
+                <apex:column value="{!con.Account__r.Expedia_Hotel_Id__c}"/>
+                <apex:column value="{!con.Account__r.Name}" headerValue="Hotel Name"/>
+                <apex:column value="{!con.Status__c}"/>
+                <apex:column value="{!con.Date_Contract_Started__c}"/>
+                <apex:column value="{!con.Contract_Term_months__c}"/>
+                <apex:column value="{!con.Offline_Contract__c}"/>
+                <apex:column value="{!con.Date_EPC_Completed__c}"/>
+            </apex:pageBlockTable>
+        
+        <apex:outputLabel value="There are no submissions." rendered="{!contracts.size == 0}"></apex:outputLabel>
+        </apex:pageblock>
+        </apex:form>
+    </apex:define>
+  </apex:composition>
+</apex:page>

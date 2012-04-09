@@ -1,0 +1,97 @@
+<apex:page controller="sitesVFReContracting" showheader="false" sidebar="false" action="{!VerifyAuthentication}" cache="false">
+  <apex:composition template="MMIntakeTemplate">
+    <apex:define name="body">
+    <br/>
+    <apex:form id="myForm">
+    <apex:pageMessages />
+    <apex:pageBlock title="Re-Contracting Preview">
+        <apex:pageBlockButtons >
+            <apex:commandButton value="Previous" action="{!goToStep2}"/>
+            <apex:actionRegion >
+            <apex:actionStatus id="myStatus">
+                <apex:facet name="start">
+                    <apex:commandButton value="Submitting..." disabled="true"/>
+                </apex:facet>
+                <apex:facet name="stop">
+                    <apex:commandButton value="Submit" action="{!Submit}" status="myStatus" reRender="myStatus"/>
+                </apex:facet>
+            </apex:actionStatus>
+            </apex:actionRegion>
+        </apex:pageBlockButtons>
+        
+        <apex:pageBlockSection columns="1" title="Attachments" collapsible="false"  rendered="{!displayAttachmentsButton}">
+            <apex:inputFile value="{!fileBody}" filename="{!fileName}" id="file" />
+            <apex:commandButton value="Upload file" action="{!uploadFile}"/>
+        </apex:pageBlockSection>
+        
+        <apex:pageBlockSection columns="1" title="Commercial Terms">
+            <apex:outputPanel >
+            <table cellpadding="5">
+                <apex:repeat value="{!AvailableTerms}" var="parent">
+                    <tr style="display:{!IF(parent.SelectedValue = '', 'none', '')};">
+                        <td><apex:outputLabel value="{!parent.Term.Description__c}"/></td>
+                        <td>{!parent.SelectedValue}</td>
+                    </tr>
+                    <apex:repeat value="{!parent.childTerms}" var="child">
+                        <tr style="display:{!IF(child.SelectedValue = '', 'none', '')};">
+                            <td><apex:outputLabel value="{!child.Term.Description__c}"/></td>
+                            <td>{!child.SelectedValue}</td>
+                        </tr>
+                    </apex:repeat>
+                </apex:repeat>
+            </table>
+            </apex:outputPanel>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection title="Additional Information" columns="1">
+            <apex:outputPanel >
+                <apex:outputLabel value="{!$ObjectType.GSOContract__c.Fields.Supplier_Training_by_Market_Manager__c.Label}"></apex:outputLabel>
+                <apex:inputCheckbox value="{!SupplierTrainingByMM}" disabled="true"/>
+            </apex:outputPanel>
+            <apex:outputPanel rendered="{!AllowOfflineContract}">
+                <apex:outputLabel value="{!$ObjectType.GSOContract__c.Fields.Offline_Contract__c.Label}"></apex:outputLabel>
+                <apex:inputCheckbox value="{!OfflineContract}" disabled="true"/>
+            </apex:outputPanel>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="1" title="Selected Hotels">
+            <apex:outputPanel >
+            <table class="list">
+                <tr class="headerRow">
+                    <th class="headerRow">Expedia Hotel ID</th>
+                    <th class="headerRow">Hotel Name</th>
+                    <th class="headerRow">Contact Name</th>
+                    <th class="headerRow">Title</th>
+                    <th class="headerRow">Email Address</th>
+                </tr>
+                <apex:repeat value="{!SelectedAccounts}" var="index">
+                <apex:repeat value="{!SelectedAccounts[index]}" var="sel">
+                    <tr class="dataRow">
+                    <td class="dataRow">{!sel.Acct.Expedia_Hotel_Id__c}</td>
+                    <td class="dataRow">{!sel.Acct.Name}</td>
+                    <td class="dataRow">{!sel.SelectedContact.Name}</td>
+                    <td class="dataRow">{!sel.SelectedContact.Title}</td>
+                    <td class="dataRow">{!sel.SelectedContact.Email}</td>
+                    </tr>
+                </apex:repeat>
+                </apex:repeat>
+            </table>
+            </apex:outputPanel>
+        </apex:pageBlockSection>
+
+        <apex:pageBlockSection columns="1" title="Files Uploaded" rendered="{!displayAttachmentsButton}">
+            <apex:dataTable value="{!newAttachments}" var="att" cellpadding="5">
+                <apex:column >
+                    <apex:commandLink value="remove" action="{!removeFile}">
+                        <apex:param value="{!att.Id}" name="attachmentId"/>
+                    </apex:commandLink>
+                </apex:column>
+                <apex:column value="{!att.Name}"/>
+            </apex:dataTable>
+        </apex:pageBlockSection>
+
+    </apex:pageBlock>
+    </apex:form>
+    </apex:define>
+  </apex:composition>
+</apex:page>

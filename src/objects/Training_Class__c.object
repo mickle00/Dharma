@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Class is junction between Account and Training Sessions</description>
+    <enableActivities>false</enableActivities>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Account__c</fullName>
+        <description>Account signing up for training</description>
+        <externalId>false</externalId>
+        <label>Account</label>
+        <referenceTo>Account</referenceTo>
+        <relationshipLabel>Training Classes</relationshipLabel>
+        <relationshipName>Training_Classes</relationshipName>
+        <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
+        <type>MasterDetail</type>
+        <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Case__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Case that prompted training class</description>
+        <externalId>false</externalId>
+        <label>Case</label>
+        <referenceTo>Case</referenceTo>
+        <relationshipLabel>Training Classes</relationshipLabel>
+        <relationshipName>Training_Classes</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Date_of_Last_Status__c</fullName>
+        <description>Date of last status update</description>
+        <externalId>false</externalId>
+        <label>Date of Last Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Date_of_Session__c</fullName>
+        <description>Date session will be held</description>
+        <externalId>false</externalId>
+        <formula>Training_Session__r.Date_of_Session__c</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Date of Session</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Initiative__c</fullName>
+        <description>initiative class is for</description>
+        <externalId>false</externalId>
+        <formula>TEXT(Training_Session__r.Initiative__c)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Initiative</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Training_Session__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Training session class is attending</description>
+        <externalId>false</externalId>
+        <label>Training Session</label>
+        <referenceTo>Training_Session__c</referenceTo>
+        <relationshipLabel>Training Classes</relationshipLabel>
+        <relationshipName>Training_Classes</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Training_Status__c</fullName>
+        <description>Custom roll up summary.  Will be set via apex to last entry in rollout step.</description>
+        <externalId>false</externalId>
+        <label>Training Status</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <label>Training Class</label>
+    <nameField>
+        <displayFormat>TC-{00000000}</displayFormat>
+        <label>Training Class Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <namedFilters>
+        <fullName>nf_01IC0000000b1DiMAI_00NC0000004zPlmMAE</fullName>
+        <active>true</active>
+        <field>Training_Attendee__c.Training_Class__c</field>
+        <filterItems>
+            <field>$Source.Account__c</field>
+            <operation>equals</operation>
+            <valueField>Training_Class__c.Account__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+        <name>Training Attendee_Training Class</name>
+        <sourceObject>Training_Attendee__c</sourceObject>
+    </namedFilters>
+    <pluralLabel>Training Classes</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Training_Session__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Date_of_Session__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Initiative__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Training_Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Date_of_Last_Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Case__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>UPDATEDBY_USER</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Account__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Training_Session__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Date_of_Session__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Initiative__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Training_Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Date_of_Last_Status__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Case__c</lookupDialogsAdditionalFields>
+        <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Training_Session__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Date_of_Session__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Initiative__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Training_Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Date_of_Last_Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Case__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>UPDATEDBY_USER</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ControlledByParent</sharingModel>
+</CustomObject>

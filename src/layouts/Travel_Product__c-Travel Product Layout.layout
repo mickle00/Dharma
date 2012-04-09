@@ -62,6 +62,7 @@
         <style>CustomLinks</style>
     </layoutSections>
     <relatedLists>
+        <excludeButtons>New</excludeButtons>
         <fields>Case.NAME</fields>
         <fields>Case.CASE_TYPE</fields>
         <fields>Case.CASE_SUBJECT</fields>
@@ -70,11 +71,24 @@
         <fields>Owner.CASE_OWNER_NAME</fields>
         <relatedList>Case_Point_of_Sale__c.Travel_Product__c</relatedList>
     </relatedLists>
+    <relatedLists>
+        <fields>NAME</fields>
+        <fields>Status__c</fields>
+        <fields>Arrival_Date__c</fields>
+        <fields>New_Vendor__c</fields>
+        <fields>New_Expedia_Booking_ID__c</fields>
+        <fields>Booking_Net_Difference__c</fields>
+        <fields>Difference_Absorbed_By__c</fields>
+        <fields>Guest_Email__c</fields>
+        <relatedList>Guest__c.Travel_Product__c</relatedList>
+    </relatedLists>
     <showEmailCheckbox>false</showEmailCheckbox>
+    <showHighlightsPanel>false</showHighlightsPanel>
+    <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>
-        <masterLabel>00hM0000000Ihmq</masterLabel>
+        <masterLabel>00hC000000J9qPK</masterLabel>
         <sizeX>4</sizeX>
         <sizeY>0</sizeY>
         <summaryLayoutStyle>Default</summaryLayoutStyle>

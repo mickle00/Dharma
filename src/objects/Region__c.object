@@ -79,6 +79,7 @@
     </fields>
     <fields>
         <fullName>Super_Region__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <description>Super region the regions maps to</description>
         <externalId>false</externalId>
         <label>Super Region</label>
@@ -91,6 +92,10 @@
     <label>Region</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>External_Region_Id__c</columns>
+        <columns>Expedia_Region_Id__c</columns>
+        <columns>Active__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>

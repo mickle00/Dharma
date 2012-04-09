@@ -9,16 +9,8 @@
         <label>Contact Information</label>
         <layoutColumns>
             <layoutItems>
-                <behavior>Edit</behavior>
-                <field>OwnerId</field>
-            </layoutItems>
-            <layoutItems>
                 <behavior>Required</behavior>
                 <field>Name</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
-                <field>AccountId</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -34,11 +26,11 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Priority__c</field>
+                <field>Case_Priority__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>Case_Priority__c</field>
+                <field>Integrated_With_PSG__c</field>
             </layoutItems>
         </layoutColumns>
         <layoutColumns>
@@ -51,7 +43,7 @@
                 <field>MobilePhone</field>
             </layoutItems>
             <layoutItems>
-                <behavior>Edit</behavior>
+                <behavior>Required</behavior>
                 <field>Email</field>
             </layoutItems>
             <layoutItems>
@@ -61,6 +53,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>ReportsToId</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>RecordTypeId</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -180,10 +176,6 @@
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
-                <field>RecordTypeId</field>
-            </layoutItems>
-            <layoutItems>
-                <behavior>Edit</behavior>
                 <field>Integration_Contact_Key__c</field>
             </layoutItems>
         </layoutColumns>
@@ -191,6 +183,10 @@
             <layoutItems>
                 <behavior>Readonly</behavior>
                 <field>LastModifiedById</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>AccountId</field>
             </layoutItems>
         </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
@@ -222,29 +218,22 @@
     </layoutSections>
     <miniLayout>
         <fields>Name</fields>
+        <fields>Title</fields>
+        <fields>Email</fields>
+        <fields>MailingAddress</fields>
         <fields>AccountId</fields>
         <relatedLists>
-            <fields>Account.NAME</fields>
-            <fields>Account.Expedia_Hotel_Id__c</fields>
-            <fields>Account.Venere_Id__c</fields>
-            <fields>Account.Super_Region__c</fields>
-            <fields>Account.Region__c</fields>
-            <fields>Account.Market__c</fields>
-            <fields>Account.Submarket__c</fields>
             <relatedList>Account_Contact__c.Contact__c</relatedList>
         </relatedLists>
         <relatedLists>
             <fields>CASES.CASE_NUMBER</fields>
             <fields>CASES.SUBJECT</fields>
-            <fields>CASES.PRIORITY</fields>
-            <fields>CASES.CREATED_DATE</fields>
-            <fields>CASES.STATUS</fields>
-            <fields>OWNER_NAME</fields>
             <relatedList>RelatedCaseList</relatedList>
         </relatedLists>
     </miniLayout>
     <relatedLists>
         <excludeButtons>New</excludeButtons>
+        <fields>Number__c</fields>
         <fields>Account.NAME</fields>
         <fields>Account.Expedia_Hotel_Id__c</fields>
         <fields>Account.Venere_Id__c</fields>
@@ -252,13 +241,11 @@
         <fields>Account.Region__c</fields>
         <fields>Account.Market__c</fields>
         <fields>Account.Submarket__c</fields>
+        <fields>Active__c</fields>
+        <fields>Integration_Status__c</fields>
         <relatedList>Account_Contact__c.Contact__c</relatedList>
         <sortField>Account.NAME</sortField>
         <sortOrder>Asc</sortOrder>
-    </relatedLists>
-    <relatedLists>
-        <fields>NAME</fields>
-        <relatedList>Account_Internal_Contact__c.Internal_Contact__c</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>TASK.SUBJECT</fields>
@@ -278,13 +265,6 @@
         <fields>CORE.USERS.FULL_NAME</fields>
         <fields>TASK.LAST_UPDATE</fields>
         <relatedList>RelatedHistoryList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>OPPORTUNITY.NAME</fields>
-        <fields>OPPORTUNITY.STAGE_NAME</fields>
-        <fields>OPPORTUNITY.AMOUNT</fields>
-        <fields>OPPORTUNITY.CLOSE_DATE</fields>
-        <relatedList>RelatedOpportunityList</relatedList>
     </relatedLists>
     <relatedLists>
         <fields>CASES.CASE_NUMBER</fields>
@@ -307,23 +287,12 @@
         <relatedList>RelatedEmailStatusList</relatedList>
     </relatedLists>
     <relatedLists>
-        <fields>CAMPAIGN.NAME</fields>
-        <fields>CAMPAIGN.START_DATE</fields>
-        <fields>CAMPAIGN.CAMPAIGN_TYPE</fields>
-        <fields>CM.STATUS</fields>
-        <fields>CM.RESPONDED</fields>
-        <fields>CM.LAST_UPDATE</fields>
-        <relatedList>RelatedCampaignList</relatedList>
-    </relatedLists>
-    <relatedLists>
-        <fields>CASES.CASE_NUMBER</fields>
-        <fields>CASES.SUBJECT</fields>
-        <fields>CASES.CREATED_DATE</fields>
-        <fields>CASES.PRIORITY</fields>
-        <relatedList>Case.Contact__c</relatedList>
+        <relatedList>RelatedEntityHistoryList</relatedList>
     </relatedLists>
     <relatedObjects>AccountId</relatedObjects>
     <showEmailCheckbox>false</showEmailCheckbox>
+    <showHighlightsPanel>false</showHighlightsPanel>
+    <showInteractionLogPanel>false</showInteractionLogPanel>
     <showRunAssignmentRulesCheckbox>false</showRunAssignmentRulesCheckbox>
     <showSubmitAndAttachButton>false</showSubmitAndAttachButton>
     <summaryLayout>

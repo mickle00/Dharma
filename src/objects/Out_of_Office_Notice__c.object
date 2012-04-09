@@ -34,20 +34,23 @@
     </actionOverrides>
     <deploymentStatus>Deployed</deploymentStatus>
     <enableActivities>false</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <fields>
-        <fullName>End__c</fullName>
+        <fullName>End_Date__c</fullName>
+        <description>Date Out of Office Notice will end and case assignment will resume</description>
         <externalId>false</externalId>
-        <inlineHelpText>This should be your Back in the Office Date</inlineHelpText>
-        <label>End</label>
+        <inlineHelpText>The day you will be back in the office</inlineHelpText>
+        <label>End Date</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Date</type>
     </fields>
     <fields>
         <fullName>Group_Member__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Group Member</label>
         <referenceTo>Assignment_Groups__c</referenceTo>
@@ -57,9 +60,10 @@
         <type>Lookup</type>
     </fields>
     <fields>
-        <fullName>Start__c</fullName>
+        <fullName>Start_Date__c</fullName>
+        <description>Start Date Out of Office Notice is effective</description>
         <externalId>false</externalId>
-        <label>Start</label>
+        <label>Start Date</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Date</type>
@@ -110,6 +114,7 @@
     </fields>
     <fields>
         <fullName>User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>User</label>
         <referenceTo>User</referenceTo>
@@ -121,18 +126,32 @@
     <label>Out of Office Notice</label>
     <listViews>
         <fullName>All_DS</fullName>
+        <columns>NAME</columns>
+        <columns>User__c</columns>
+        <columns>Type__c</columns>
+        <columns>Start_Date__c</columns>
+        <columns>End_Date__c</columns>
+        <columns>CREATEDBY_USER.ALIAS</columns>
+        <columns>CREATED_DATE</columns>
         <filterScope>Everything</filterScope>
         <label>All DS</label>
+        <sharedTo>
+            <group>Administrators</group>
+            <group>Destination Services</group>
+        </sharedTo>
     </listViews>
     <listViews>
         <fullName>My_Out_of_Office</fullName>
         <columns>NAME</columns>
         <columns>User__c</columns>
         <columns>Type__c</columns>
-        <columns>Start__c</columns>
-        <columns>End__c</columns>
+        <columns>Start_Date__c</columns>
+        <columns>End_Date__c</columns>
         <filterScope>Mine</filterScope>
         <label>My Out of Office</label>
+        <sharedTo>
+            <group>Destination Services</group>
+        </sharedTo>
     </listViews>
     <nameField>
         <displayFormat>OOF-{00000}</displayFormat>
@@ -144,24 +163,24 @@
     <searchLayouts>
         <customTabListAdditionalFields>User__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Type__c</customTabListAdditionalFields>
-        <customTabListAdditionalFields>Start__c</customTabListAdditionalFields>
-        <customTabListAdditionalFields>End__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Start_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>End_Date__c</customTabListAdditionalFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>
         <fullName>Date_Validation</fullName>
         <active>true</active>
         <description>End date should be greater than Start date</description>
-        <errorConditionFormula>End__c &lt;= Start__c</errorConditionFormula>
-        <errorDisplayField>End__c</errorDisplayField>
+        <errorConditionFormula>End_Date__c &lt;= Start_Date__c</errorConditionFormula>
+        <errorDisplayField>End_Date__c</errorDisplayField>
         <errorMessage>End date should be greater than Start Date</errorMessage>
     </validationRules>
     <validationRules>
         <fullName>End_Date</fullName>
         <active>true</active>
         <description>End date cannot be null when Start date is not null</description>
-        <errorConditionFormula>NOT(ISNULL(Start__c))  &amp;&amp;  ISNULL(End__c)</errorConditionFormula>
-        <errorDisplayField>End__c</errorDisplayField>
+        <errorConditionFormula>NOT(ISNULL(Start_Date__c))  &amp;&amp;  ISNULL(End_Date__c)</errorConditionFormula>
+        <errorDisplayField>End_Date__c</errorDisplayField>
         <errorMessage>Please enter End Date</errorMessage>
     </validationRules>
 </CustomObject>

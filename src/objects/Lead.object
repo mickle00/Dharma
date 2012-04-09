@@ -253,7 +253,7 @@
         <picklist>
             <picklistValues>
                 <fullName>Contacted</fullName>
-                <converted>true</converted>
+                <converted>false</converted>
                 <default>false</default>
             </picklistValues>
             <picklistValues>

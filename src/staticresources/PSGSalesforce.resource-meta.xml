@@ -2,5 +2,5 @@
 <StaticResource xmlns="http://soap.sforce.com/2006/04/metadata">
     <cacheControl>Public</cacheControl>
     <contentType>application/x-zip-compressed</contentType>
-    <description>The Javascript, CSS, and Image Files from PSG Salesforce</description>
+    <description>All of the CSS and Javascript from PSG Salesforce, used for Salesforce Sites</description>
 </StaticResource>

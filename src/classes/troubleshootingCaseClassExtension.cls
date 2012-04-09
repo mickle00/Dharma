@@ -1,12 +1,12 @@
-public with sharing class troubleshootingCaseClassExtension {
+public class troubleshootingCaseClassExtension {
 
 //for Before Insert
 public void beforeNewTroubleshootingCase(List<Case> myCases){
   for (Case myCase : myCases){
-  	// If initially creating a Troubleshooting Case, then set the owner to the Troubleshooting Queue
-  	// and build out the picklist values
+    // If initially creating a Troubleshooting Case, then set the owner to the Troubleshooting Queue
+    // and build out the picklist values
     if (myCase.RecordTypeId == troubleshootingRecordType){
-      myCase.OwnerId = troubleshootingQueueId;
+      myCase.OwnerId = getTroubleshootingQueueId();
       myCase.Involved__c = getAllInvolvedTeamsPicklistValue();
     } 
   }
@@ -15,22 +15,22 @@ public void beforeNewTroubleshootingCase(List<Case> myCases){
 // for Before Update
 public void beforeUpdateTroubleshootingCase(Map<Id, Case> newCaseIDtoCaseMap, Map<Id, Case> oldCaseIDtoCaseMap){
   for (Case myCase : newCaseIDtoCaseMap.values()){
-  	// All cases that the Troubleshooting Queue owns should be Troubleshooting Record Type
-    if (myCase.OwnerId == troubleshootingQueueId) myCase.RecordTypeId = troubleshootingRecordType;
+    // All cases that the Troubleshooting Queue owns should be Troubleshooting Record Type
+    if (myCase.OwnerId == getTroubleshootingQueueId()) myCase.RecordTypeId = troubleshootingRecordType;
     // build logic for transferring a Case
     try {
-    	// Transferring from Non-Troubleshooting to Non-Troubleshooting
-    	if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId != troubleshootingRecordType){
-    		myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
-    	}
-    	// Transferring from Troubleshooting to non-Troubleshooting
-    	if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId == troubleshootingRecordType){
-    		myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
-    		myCase = removeInvolvedTeams(myCase);
-    	}
+        // Transferring from Non-Troubleshooting to Non-Troubleshooting
+        if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId != troubleshootingRecordType){
+            myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
+        }
+        // Transferring from Troubleshooting to non-Troubleshooting
+        if (myCase.Status == 'Transferred' && transportQueueIds().contains(myCase.OwnerId) && myCase.RecordTypeId == troubleshootingRecordType){
+            myCase.RecordTypeId = teamNameToRecordTypeMap().get(troubleshootingQueueIdToNameMap.get(myCase.OwnerId)).Id;
+            myCase = removeInvolvedTeams(myCase);
+        }
     }
     catch (Exception e){
-    	system.debug ('*** ERROR ' + e +' ***');
+        system.debug ('*** ERROR ' + e +' ***');
     }
     // If transferring from a non-Troubleshooting Case to a Troubleshooting Case, build out the picklist values.
     if (oldCaseIDtoCaseMap.get(myCase.id).RecordTypeId != troubleshootingRecordType && newCaseIDtoCaseMap.get(myCase.id).RecordTypeId == troubleshootingRecordType){
@@ -89,69 +89,81 @@ PRIVATE METHODS
 **/
 
 private Case removeInvolvedTeams (Case myCase){
-	List<Case_Process_Team__c> involvedCaseProcessTeams = [SELECT Id, Involved__c FROM Case_Process_Team__c WHERE Case__c = :myCase.Id];
-	delete involvedCaseProcessTeams;
-	myCase.Involved__c = '';
-	return myCase;
+    List<Case_Process_Team__c> involvedCaseProcessTeams = [SELECT Id, Involved__c FROM Case_Process_Team__c WHERE Case__c = :myCase.Id];
+    delete involvedCaseProcessTeams;
+    myCase.Involved__c = '';
+    return myCase;
 }
 
 private Id troubleshootingRecordType = teamNameToRecordTypeMap().get('Troubleshooting').Id;
 
+private Map<String, RecordType> myTeamNameToRecordTypeMap;
+
 private Map<String, RecordType> teamNameToRecordTypeMap(){
-	Map<String, RecordType> teamNameToRecordTypeMap = new Map<String, RecordType>();
-	for (RecordType myRecordType : 
-									[SELECT Id
-											,Name 
-                                      FROM  RecordType 
-                                     WHERE  sObjectType = 'Case']){
- 		teamNameToRecordTypeMap.put(myRecordType.Name, myRecordType);
-	}
-	return teamNameToRecordTypeMap;
+    if (this.myTeamNameToRecordTypeMap == NULL){
+        this.myTeamNameToRecordTypeMap = new Map<String, RecordType>();        
+        for (RecordType myRecordType : 
+                                        [SELECT Id
+                                                ,Name 
+                                          FROM  RecordType 
+                                         WHERE  sObjectType = 'Case']){
+            this.myTeamNameToRecordTypeMap.put(myRecordType.Name, myRecordType);
+        }
+    }
+    return this.myTeamNameToRecordTypeMap;
 }
 
-                              
-private Id troubleshootingQueueId = [SELECT Id
-                                            ,Name
-                                            ,(SELECT Id
-                                                     ,SobjectType 
-                                              FROM QueueSobjects 
-                                              WHERE SobjectType = 'Case') 
-                                      FROM Group 
-                                      WHERE Type = 'Queue' 
-                                      AND Name = 'Troubleshooting Transport Queue' LIMIT 1].Id;
+private Id troubleshootingQueueId;
+                                
+private Id getTroubleshootingQueueId() {
+    if (troubleshootingQueueId == NULL){
+        troubleshootingQueueId = [SELECT Id
+                                        ,Name
+                                        ,(SELECT Id
+                                                 ,SobjectType 
+                                          FROM QueueSobjects 
+                                          WHERE SobjectType = 'Case') 
+                                  FROM Group 
+                                  WHERE Type = 'Queue' 
+                                  AND Name = 'Troubleshooting Transport Queue' LIMIT 1].Id;
+    }
+    return troubleshootingQueueId;
+}
                                       
 private Map<Id, String> troubleshootingQueueIdToNameMap = new Map<Id, String>();
 
+private Set<Id> buildingTransportQueueIds;
 
-//TODO - Clean this up to reduce the number of queries  
-private Set<Id> transportQueueIds(){
-	Set<Id> buildingTransportQueueIds = new Set<Id>();
-	Set<String> transportTeamQueueNames = new Set<String>{'ADM'
-														  ,'Air CPR'
-														  ,'CarOps'
-														  ,'Commissions'
-														  ,'Fare Filing'
-														  ,'Quality'
-														  ,'Regional Team'
-														  ,'Schedule Change'
-														  ,'Settlement & Reporting'
-														  ,'Ticketing'
-														  ,'Training'
-														  };
-	
-	for (Group myGroup : [SELECT Id
-                                 ,Name
-                                 ,(SELECT Id
-                                          ,SobjectType 
-                                     FROM QueueSobjects 
-                                    WHERE SobjectType = 'Case') 
-                            FROM Group 
-                           WHERE Type = 'Queue' 
-                             AND Name IN :transportTeamQueueNames]){                
-   		buildingTransportQueueIds.add(myGroup.Id);
-   		troubleshootingQueueIdToNameMap.put(myGroup.Id, myGroup.Name);
-        }
-    return buildingTransportQueueIds;                             
+private Set<Id> transportQueueIds(){    
+    Set<String> transportTeamQueueNames = new Set<String>{'ADM'
+                                                          ,'Air CPR'
+                                                          ,'CarOps'
+                                                          ,'Commissions'
+                                                          ,'Fare Filing'
+                                                          ,'Quality'
+                                                          ,'Regional Team'
+                                                          ,'Schedule Change'
+                                                          ,'Settlement & Reporting'
+                                                          ,'Ticketing'
+                                                          ,'Training'
+                                                          };
+    
+    if(this.buildingTransportQueueIds == NULL){  
+    	this.buildingTransportQueueIds = new Set<Id>();  
+        for (Group myGroup : [SELECT Id
+                                     ,Name
+                                     ,(SELECT Id
+                                              ,SobjectType 
+                                         FROM QueueSobjects 
+                                        WHERE SobjectType = 'Case') 
+                                FROM Group 
+                               WHERE Type = 'Queue' 
+                                 AND Name IN :transportTeamQueueNames]){                
+            this.buildingTransportQueueIds.add(myGroup.Id);
+            troubleshootingQueueIdToNameMap.put(myGroup.Id, myGroup.Name);
+            }
+    }
+    return this.buildingTransportQueueIds;                             
 } 
 
 // List of all of the Checkoff Teams. Currently 11 Teams.

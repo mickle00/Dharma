@@ -26,7 +26,7 @@ private class CasePointOfSaleClass_Test {
         CasePointOfSaleClass objPOS = new CasePointOfSaleClass();
     
         List <Case> testCases = new List<Case>();
-        Case myCase = new Case(Subject = 'TestCase', Status = 'New', Points_of_Sale__c = 'Expedia Mexico-12;Expedia Norway-66');
+        Case myCase = new Case(Subject = 'TestCase', Status = 'New', Points_of_Sale__c = '12-Expedia Mexico;66-Expedia Norway');
         testCases.add(myCase);
         insert testCases;
         objPOS.insertCasePointsOfSaleForNewCases(testCases);    
@@ -37,7 +37,7 @@ private class CasePointOfSaleClass_Test {
             cMapOld.put(c.Id, c);
         }
         Case caseToUpdate = [SELECT Id, Points_of_Sale__c FROM Case WHERE Id = :myCase.Id];
-        caseToUpdate.Points_of_Sale__c = 'WWTE Sam\'s Club-30028';
+        caseToUpdate.Points_of_Sale__c = '30028-WWTE Sam\'s Club';
     
         cMapNew.put(caseToUpdate.Id, caseToUpdate);
         

@@ -91,8 +91,8 @@
 			<!--  can use inputFile accept = "image/gif, image/jpeg"  etc to explitily call for values; however  According to W3C : "The accept attribute is not properly supported by any of the major browsers."-->							 
 				 <apex:inputFile value="{!newAtt.body}" filename="{!newAtt.name}" id="file"/><br/> 					
 			</apex:repeat>			
-			<br/>
-            <apex:inputCheckbox value="{!sendConfirmationEmail}"/>Please send me a confirmation email<br/>
+            <br/> 
+            
 			<apex:commandButton action="{!save}" value="Submit Case" styleClass="btn" />
 			</center><br/>  
 			

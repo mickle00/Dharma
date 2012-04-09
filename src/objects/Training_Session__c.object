@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionOverrides>
+        <actionName>Accept</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Clone</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Delete</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Edit</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>List</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>New</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>Tab</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <actionOverrides>
+        <actionName>View</actionName>
+        <type>Default</type>
+    </actionOverrides>
+    <deploymentStatus>Deployed</deploymentStatus>
+    <description>Training sessions for new initiatives</description>
+    <enableActivities>false</enableActivities>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
+    <enableFeeds>false</enableFeeds>
+    <enableHistory>true</enableHistory>
+    <enableReports>true</enableReports>
+    <fields>
+        <fullName>Date_of_Session__c</fullName>
+        <description>date of training session</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Date training session will be held</inlineHelpText>
+        <label>Date of Session</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Initiative__c</fullName>
+        <description>Initiative training session is for</description>
+        <externalId>false</externalId>
+        <label>Initiative</label>
+        <picklist>
+            <picklistValues>
+                <fullName>ETP</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Language__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
+        <description>Language training class will be taught in</description>
+        <externalId>false</externalId>
+        <label>Language</label>
+        <referenceTo>Language__c</referenceTo>
+        <relationshipLabel>Training Sessions</relationshipLabel>
+        <relationshipName>Training_Sessions</relationshipName>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Registration_Status__c</fullName>
+        <description>Status of training session</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Hotels can only be added to open training sessions</inlineHelpText>
+        <label>Registration Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Closed</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Open</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <label>Training Session</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Date_of_Session__c</columns>
+        <columns>Initiative__c</columns>
+        <columns>Language__c</columns>
+        <columns>Registration_Status__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>TS-{00000000}</displayFormat>
+        <label>Training Session Number</label>
+        <trackHistory>false</trackHistory>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Training Sessions</pluralLabel>
+    <searchLayouts>
+        <customTabListAdditionalFields>Language__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Date_of_Session__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Initiative__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Registration_Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>UPDATEDBY_USER</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Language__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Date_of_Session__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Initiative__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Registration_Status__c</lookupDialogsAdditionalFields>
+        <lookupFilterFields>Date_of_Session__c</lookupFilterFields>
+        <lookupFilterFields>Initiative__c</lookupFilterFields>
+        <lookupFilterFields>Language__c</lookupFilterFields>
+        <lookupFilterFields>Registration_Status__c</lookupFilterFields>
+        <searchResultsAdditionalFields>Language__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Date_of_Session__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Initiative__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Registration_Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>UPDATEDBY_USER</searchResultsAdditionalFields>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+</CustomObject>

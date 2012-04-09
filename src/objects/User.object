@@ -15,19 +15,217 @@
     </fields>
     <fields>
         <fullName>Assignment_Group_Active__c</fullName>
-        <defaultValue>true</defaultValue>
+        <defaultValue>false</defaultValue>
         <externalId>false</externalId>
         <inlineHelpText>Can this user be assigned records in the Assignment Group process.  Uncheck to mark this use as inactive on all assignment groups</inlineHelpText>
         <label>Assignment Group Active</label>
         <trackFeedHistory>false</trackFeedHistory>
         <type>Checkbox</type>
     </fields>
+    <fields>
+        <fullName>Employment_Status__c</fullName>
+        <externalId>false</externalId>
+        <label>Employment Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>FTE</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Contractor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Temp</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vendor</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Next_Week__c</fullName>
+        <externalId>false</externalId>
+        <formula>Today()+7</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Next Week</label>
+        <required>false</required>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Office_Location__c</fullName>
+        <externalId>false</externalId>
+        <label>Office Location</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Bellevue</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Bellevue - remote</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Berlin</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Dallas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Denver</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Kuala Lumpur</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Las Vegas</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>London</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Madrid</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Milan</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Montreal</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Munich</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Paris</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Prague</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Rome</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Springfield</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Virtual Office</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Team__c</fullName>
+        <externalId>false</externalId>
+        <label>Team</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Compliance &amp; Recovery</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Destination Services</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Expedia Virtual Card</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>FinOps</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Geography</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>GSO Systems</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>HDM</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Localisation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lodging Content</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Lodging Support Services</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Media / Virtual Tours</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>PAC / SAM</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Star Ratings</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Supplier Relations</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>UGC</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Vendor Banking</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>User_Reports_To__c</fullName>
+        <externalId>false</externalId>
+        <label>User Reports To?</label>
+        <relationshipName>User</relationshipName>
+        <restrictedAdminField>false</restrictedAdminField>
+        <trackFeedHistory>false</trackFeedHistory>
+        <type>Hierarchy</type>
+    </fields>
     <listViews>
-        <fullName>ActiveUsers</fullName>
+        <fullName>Active_Users</fullName>
         <columns>FULL_NAME</columns>
         <columns>CORE.USERS.ALIAS</columns>
         <columns>CORE.USERS.USERNAME</columns>
+        <columns>Office_Location__c</columns>
         <columns>CORE.USERS.LAST_LOGIN</columns>
+        <columns>CREATED_DATE</columns>
         <columns>CORE.USER_ROLE.NAME</columns>
         <columns>CORE.PROFILE.NAME</columns>
         <filterScope>Everything</filterScope>
@@ -67,7 +265,33 @@
         <label>All Users</label>
     </listViews>
     <namedFilters>
-        <fullName>nf_01IL000000008YtMAI_00NL0000000Fm4fMAC</fullName>
+        <fullName>Case_00NM0000000H8YaMAK</fullName>
+        <active>true</active>
+        <field>Case.Lodging_Operations_Agent__c</field>
+        <filterItems>
+            <field>User.Profile.Name</field>
+            <operation>contains</operation>
+            <value>Lodging Operations</value>
+        </filterItems>
+        <infoMessage>You must select a user assigned to an HPS profile</infoMessage>
+        <isOptional>false</isOptional>
+        <name>Case_Lodging Operations Agent</name>
+    </namedFilters>
+    <namedFilters>
+        <fullName>Case_00NM0000000HIJEMA4</fullName>
+        <active>true</active>
+        <field>Case.Accounting_Assigned_To__c</field>
+        <filterItems>
+            <field>User.Profile.Name</field>
+            <operation>equals</operation>
+            <value>Financial Operations</value>
+        </filterItems>
+        <infoMessage>You must assign the Accounting to a user in Financial Operations.</infoMessage>
+        <isOptional>false</isOptional>
+        <name>Case_Accounting Assigned To</name>
+    </namedFilters>
+    <namedFilters>
+        <fullName>nf_01IC0000000awAmMAI_00NC0000004yJncMAE</fullName>
         <active>true</active>
         <field>Out_of_Office_Notice__c.User__c</field>
         <filterItems>
@@ -76,6 +300,18 @@
             <value>True</value>
         </filterItems>
         <isOptional>false</isOptional>
-        <name>Out of Office_User</name>
+        <name>Out of Office Notice_User</name>
+    </namedFilters>
+    <namedFilters>
+        <fullName>nf_01IM00000000FFZMA2_00NM0000000HYu3MAG</fullName>
+        <active>true</active>
+        <field>Guest__c.Lodging_Operations_Agent_Lookup__c</field>
+        <filterItems>
+            <field>User.Profile.Name</field>
+            <operation>equals</operation>
+            <value>Lodging Operations - HPS,Lodging Operations - PAC</value>
+        </filterItems>
+        <isOptional>false</isOptional>
+        <name>Guest_Lodging Operations Agent</name>
     </namedFilters>
 </CustomObject>

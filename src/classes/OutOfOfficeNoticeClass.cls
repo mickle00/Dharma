@@ -23,12 +23,8 @@ public with sharing class OutOfOfficeNoticeClass {
     for(Out_of_Office_Notice__c notice : oofNotices) {
     	Assignment_Groups__c thisGroup = userIdToAssignmentGroup.get(notice.User__c);
     	thisGroup.Active__c = notice.Status__c == 'Active' ? 'True' : 'False';
-      groupsToUpdate.add(thisGroup);
+      // NOT DONE IN BULK AS THIS WAS CAUSING APEX ERRORS.  DUPLICATE ID IN LIST
+      update thisGroup;
     }
-    List<Database.SaveResult> SR = database.update(groupsToUpdate);
-    for (Database.SaveResult err : SR){
-    	system.debug(err.getErrors());
-    }
-    //update groupsToUpdate;
   }
 }

@@ -62,20 +62,24 @@
     </fields>
     <fields>
         <fullName>Lead__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <deprecated>false</deprecated>
         <externalId>false</externalId>
         <label>Lead</label>
         <referenceTo>Lead</referenceTo>
         <relationshipName>R00N40000001HggqEAC</relationshipName>
+        <required>false</required>
         <type>Lookup</type>
     </fields>
     <fields>
         <fullName>Opportunity__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <deprecated>false</deprecated>
         <externalId>false</externalId>
         <label>Opportunity</label>
         <referenceTo>Opportunity</referenceTo>
         <relationshipName>R00N40000001HggrEAC</relationshipName>
+        <required>false</required>
         <type>Lookup</type>
     </fields>
     <label>Google Campaign</label>

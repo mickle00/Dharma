@@ -35,9 +35,9 @@
     <deploymentStatus>Deployed</deploymentStatus>
     <description>Junction object linking a Contact record to an Account record.  Used so a contact can have many accounts without duplicating the contact information</description>
     <enableActivities>true</enableActivities>
-    <enableEnhancedLookup>false</enableEnhancedLookup>
+    <enableEnhancedLookup>true</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
-    <enableHistory>false</enableHistory>
+    <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <fields>
         <fullName>Account__c</fullName>
@@ -48,8 +48,18 @@
         <relationshipLabel>Account Contacts</relationshipLabel>
         <relationshipName>Account_Contacts</relationshipName>
         <relationshipOrder>0</relationshipOrder>
+        <trackHistory>false</trackHistory>
         <type>MasterDetail</type>
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Active__c</fullName>
+        <defaultValue>true</defaultValue>
+        <description>Whether or not the contact is active for this particular account. Contacts can be made inactive on a hotel by hotel basis. A workflow rule date stamps the day the particular accountcontact was made inactive.</description>
+        <externalId>false</externalId>
+        <label>Active</label>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Contact__c</fullName>
@@ -60,8 +70,53 @@
         <relationshipLabel>Account Contacts</relationshipLabel>
         <relationshipName>Account_Contacts</relationshipName>
         <relationshipOrder>1</relationshipOrder>
+        <trackHistory>false</trackHistory>
         <type>MasterDetail</type>
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
+    </fields>
+    <fields>
+        <fullName>Full_Name__c</fullName>
+        <description>Full name of contact</description>
+        <externalId>false</externalId>
+        <formula>Contact__r.FirstName + &apos; &apos; +  Contact__r.LastName</formula>
+        <label>Full Name</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Inactive_Date__c</fullName>
+        <description>The date an AccountContact is marked as inactive. Set automatically via a workflow rule.</description>
+        <externalId>false</externalId>
+        <label>Inactive Date</label>
+        <required>false</required>
+        <trackHistory>true</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Integration_Status__c</fullName>
+        <description>Formula field to give quick and easy insight to if the AccountContact is currently synced (thus uneditable) with PSG Salesforce. Can&apos;t make a formula field a checkbox.</description>
+        <externalId>false</externalId>
+        <formula>IF(PSG_Contact_Id__c != null, &quot;Synced with PSG&quot;, &quot;Not Synced with PSG&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Integration Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Number__c</fullName>
+        <description>Hacky solution to make related list hyperlink column smaller, rather than &quot; the very wide, Account Contact: Account Contact Number&quot;</description>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;/&quot;&amp;Id , Name, &quot;_top&quot;)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Number</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>PSG_Account_Id__c</fullName>
@@ -70,6 +125,7 @@
         <label>PSG Account Id</label>
         <length>18</length>
         <required>false</required>
+        <trackHistory>false</trackHistory>
         <type>Text</type>
         <unique>false</unique>
     </fields>
@@ -81,6 +137,7 @@
         <label>PSG Contact Id</label>
         <length>18</length>
         <required>false</required>
+        <trackHistory>true</trackHistory>
         <type>Text</type>
         <unique>false</unique>
     </fields>
@@ -90,15 +147,91 @@
         <description>Indicates if contact is primary content contact for hotel</description>
         <externalId>false</externalId>
         <label>Primary Content Contact</label>
+        <trackHistory>true</trackHistory>
         <type>Checkbox</type>
     </fields>
+    <fields>
+        <fullName>Unique_Key__c</fullName>
+        <caseSensitive>true</caseSensitive>
+        <description>GSOAccountID:GSOContactID 
+
+Used to enforce uniqueness. Cannot have the same contact associated with the same account.</description>
+        <externalId>false</externalId>
+        <label>Unique Key</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
+    </fields>
     <label>Account Contact</label>
+    <listViews>
+        <fullName>All</fullName>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
     <nameField>
         <displayFormat>AC-{000000}</displayFormat>
         <label>Account Contact Number</label>
+        <trackHistory>false</trackHistory>
         <type>AutoNumber</type>
     </nameField>
+    <namedFilters>
+        <fullName>nf_01IC0000000b1DiMAI_00NC0000004zPlwMAE</fullName>
+        <active>true</active>
+        <field>Training_Attendee__c.Account_Contact__c</field>
+        <filterItems>
+            <field>$Source.Account__c</field>
+            <operation>equals</operation>
+            <valueField>Account_Contact__c.Account__c</valueField>
+        </filterItems>
+        <isOptional>false</isOptional>
+        <name>Training Attendee_Account Contact</name>
+        <sourceObject>Training_Attendee__c</sourceObject>
+    </namedFilters>
     <pluralLabel>Account Contacts</pluralLabel>
-    <searchLayouts/>
+    <searchLayouts>
+        <customTabListAdditionalFields>Account__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Contact__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Active__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Inactive_Date__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>Integration_Status__c</customTabListAdditionalFields>
+        <customTabListAdditionalFields>UPDATEDBY_USER</customTabListAdditionalFields>
+        <lookupDialogsAdditionalFields>Account__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Contact__c</lookupDialogsAdditionalFields>
+        <lookupDialogsAdditionalFields>Active__c</lookupDialogsAdditionalFields>
+        <lookupFilterFields>Account__c</lookupFilterFields>
+        <lookupFilterFields>Contact__c</lookupFilterFields>
+        <lookupFilterFields>Active__c</lookupFilterFields>
+        <searchFilterFields>Account__c</searchFilterFields>
+        <searchFilterFields>Contact__c</searchFilterFields>
+        <searchFilterFields>Active__c</searchFilterFields>
+        <searchFilterFields>Integration_Status__c</searchFilterFields>
+        <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Contact__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Active__c</searchResultsAdditionalFields>
+    </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
+    <validationRules>
+        <fullName>Cant_Edit_Integrated_Contacts</fullName>
+        <active>true</active>
+        <description>Only SysAdmin &amp; API can modify an AccountContact that is in sync with PSG.</description>
+        <errorConditionFormula>AND( 
+          PSG_Contact_Id__c != NULL, 
+         $Profile.Name != &quot;System Administrator&quot;, 
+         $Profile.Name != &quot;API Only&quot;
+)</errorConditionFormula>
+        <errorMessage>You can&apos;t modify an AccountContact that is currently integrated with PSG.</errorMessage>
+    </validationRules>
+    <webLinks>
+        <fullName>Create_Case</fullName>
+        <availability>online</availability>
+        <description>Create Case from Account Contact</description>
+        <displayType>button</displayType>
+        <linkType>url</linkType>
+        <masterLabel>Create Case</masterLabel>
+        <openType>replace</openType>
+        <protected>false</protected>
+        <url>/setup/ui/recordtypeselect.jsp?ent=Case&amp;retURL=%2F{!Account_Contact__c.ContactId__c}&amp;save_new_url=%2F500%2Fe%3FretURL%3D%252F{!Account_Contact__c.ContactId__c}%26def_contact_id%3D{!Account_Contact__c.ContactId__c}%26def_account_id%3D{!Account_Contact__c.AccountId__c}</url>
+    </webLinks>
 </CustomObject>

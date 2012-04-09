@@ -3,13 +3,31 @@
     <enableFeeds>true</enableFeeds>
     <fields>
         <fullName>Case_Priority__c</fullName>
+        <description>Used by internal contacts to set the priority on a case they create via email or web intake form</description>
         <externalId>false</externalId>
         <label>Case Priority</label>
-        <length>5</length>
-        <required>false</required>
+        <picklist>
+            <picklistValues>
+                <fullName>1</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>2</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>3</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>4</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
         <trackFeedHistory>false</trackFeedHistory>
-        <type>Text</type>
-        <unique>false</unique>
+        <trackHistory>true</trackHistory>
+        <type>Picklist</type>
     </fields>
     <fields>
         <fullName>Contact_Preference__c</fullName>
@@ -27,6 +45,7 @@
             <sorted>false</sorted>
         </picklist>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
         <type>Picklist</type>
     </fields>
     <fields>
@@ -45,7 +64,27 @@
             <sorted>false</sorted>
         </picklist>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Health_Safety_Contact__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Health &amp; Safety Contact</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
+        <fullName>Integrated_With_PSG__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Set via Informatica for Contacts that have been integrated via PSG Salesforce.</description>
+        <externalId>false</externalId>
+        <label>Integrated With PSG</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Integration_Contact_Key__c</fullName>
@@ -56,6 +95,7 @@
         <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
         <type>Text</type>
         <unique>true</unique>
     </fields>
@@ -116,6 +156,7 @@
         <label>Other Email</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
         <type>Email</type>
         <unique>false</unique>
     </fields>
@@ -125,6 +166,7 @@
         <label>Other Fax</label>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
         <type>Phone</type>
     </fields>
     <fields>
@@ -134,34 +176,19 @@
         <length>100</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
         <type>Text</type>
         <unique>false</unique>
     </fields>
     <fields>
-        <fullName>Priority__c</fullName>
+        <fullName>Prevent_Case_Auto_Association__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Prevents this Contact from being auto associated with a Case. Will be used for Contact&apos;s that deal primarily with Email Integration and 10,000+ Cases</description>
         <externalId>false</externalId>
-        <label>Priority</label>
-        <picklist>
-            <picklistValues>
-                <fullName>1</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>2</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>3</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>4</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
+        <label>Prevent Case Auto Association</label>
         <trackFeedHistory>false</trackFeedHistory>
-        <type>Picklist</type>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>Role__c</fullName>
@@ -275,6 +302,7 @@
             <sorted>false</sorted>
         </picklist>
         <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>true</trackHistory>
         <type>MultiselectPicklist</type>
         <visibleLines>4</visibleLines>
     </fields>
@@ -288,7 +316,10 @@
         <columns>CORE.USERS.ALIAS</columns>
         <filterScope>Everything</filterScope>
         <label>All Contacts</label>
-        <language>en_US</language>
+        <sharedTo>
+            <group>Administrators</group>
+            <group>Destination Services</group>
+        </sharedTo>
     </listViews>
     <listViews>
         <fullName>BirthdaysThisMonth</fullName>
@@ -308,6 +339,59 @@
         <label>Birthdays This Month</label>
     </listViews>
     <listViews>
+        <fullName>Destination_Services</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>CONTACT.TITLE</columns>
+        <columns>CONTACT.PHONE1</columns>
+        <columns>CONTACT.EMAIL</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <filterScope>Everything</filterScope>
+        <label>Destination Services</label>
+    </listViews>
+    <listViews>
+        <fullName>Health_Safety_Contacts</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>CONTACT.TITLE</columns>
+        <columns>CONTACT.PHONE1</columns>
+        <columns>CONTACT.EMAIL</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>Health_Safety_Contact__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>Health_Safety_Contact__c</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label>Health &amp; Safety Contacts</label>
+        <sharedTo>
+            <group>Administrators</group>
+            <group>Health &amp; Safety</group>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>Internal_Contacts</fullName>
+        <columns>FULL_NAME</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>CONTACT.TITLE</columns>
+        <columns>CONTACT.PHONE1</columns>
+        <columns>CONTACT.EMAIL</columns>
+        <columns>Case_Priority__c</columns>
+        <columns>CORE.USERS.ALIAS</columns>
+        <columns>CONTACT.RECORDTYPE</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CONTACT.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Contact.Internal_Contact</value>
+        </filters>
+        <label>Internal Contacts</label>
+        <sharedTo>
+            <group>Administrators</group>
+        </sharedTo>
+    </listViews>
+    <listViews>
         <fullName>NewThisWeek</fullName>
         <columns>FULL_NAME</columns>
         <columns>ACCOUNT.NAME</columns>
@@ -315,6 +399,7 @@
         <columns>CONTACT.PHONE1</columns>
         <columns>CONTACT.EMAIL</columns>
         <columns>CORE.USERS.ALIAS</columns>
+        <columns>CONTACT.CREATED_DATE</columns>
         <filterScope>Everything</filterScope>
         <filters>
             <field>CONTACT.CREATED_DATE</field>
@@ -323,35 +408,32 @@
         </filters>
         <label>New This Week</label>
     </listViews>
-    <namedFilters>
-        <fullName>nf_01IC0000000asfUMAQ_00NC0000004xa6MMAQ</fullName>
-        <active>true</active>
-        <field>Account_Contact__c.Contact__c</field>
-        <filterItems>
-            <field>Contact.RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Contact</value>
-        </filterItems>
-        <isOptional>false</isOptional>
-        <name>Account Contact_Contact</name>
-    </namedFilters>
-    <namedFilters>
-        <fullName>nf_01IM00000004ME0MAM_00NM0000000JsmmMAC</fullName>
-        <active>true</active>
-        <field>Account_Internal_Contact__c.Internal_Contact__c</field>
-        <filterItems>
-            <field>Contact.RecordTypeId</field>
-            <operation>equals</operation>
-            <value>Internal Contact</value>
-        </filterItems>
-        <isOptional>false</isOptional>
-        <name>Account Internal Contact_Internal Contac</name>
-    </namedFilters>
     <recordTypeTrackFeedHistory>false</recordTypeTrackFeedHistory>
+    <recordTypeTrackHistory>true</recordTypeTrackHistory>
     <recordTypes>
         <fullName>Contact</fullName>
         <active>true</active>
+        <description>Standard external contact</description>
         <label>Contact</label>
+        <picklistValues>
+            <picklist>Case_Priority__c</picklist>
+            <values>
+                <fullName>1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
         <picklistValues>
             <picklist>Contact_Preference__c</picklist>
             <values>
@@ -445,7 +527,119 @@
             </values>
         </picklistValues>
         <picklistValues>
-            <picklist>Priority__c</picklist>
+            <picklist>Role__c</picklist>
+            <values>
+                <fullName>Accounting%2FFinance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Alternative Reservations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Assistant General Manager</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Service</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>E-Commerce</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EQC Hotel Vendor Support</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Expedia Quick Connect</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Franchise Service Manager</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Front Desk Agent</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Front Office Manager</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>General Manager</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Guest Services Manager</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Health %26 Safety</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>IHG Primary Contact</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Marketing</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Marketing Agency</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Operations Manager</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Owner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Contact</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Primary Content Contact</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Reservations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tech Support</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Venere Connect</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Venere Connect Hotel Vendor Support</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Visa Support</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+    </recordTypes>
+    <recordTypes>
+        <fullName>Health_Safety</fullName>
+        <active>true</active>
+        <label>Health &amp; Safety</label>
+        <picklistValues>
+            <picklist>Case_Priority__c</picklist>
             <values>
                 <fullName>1</fullName>
                 <default>false</default>
@@ -460,6 +654,98 @@
             </values>
             <values>
                 <fullName>4</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Contact_Preference__c</picklist>
+            <values>
+                <fullName>Email</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Phone</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Gender__c</picklist>
+            <values>
+                <fullName>Female</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Male</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>LeadSource</picklist>
+            <values>
+                <fullName>Advertisement</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Employee Referral</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>External Referral</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Public Relations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Seminar - Internal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Seminar - Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Trade Show</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Web</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Word of mouth</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Name</picklist>
+            <values>
+                <fullName>Dr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mr%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mrs%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ms%2E</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prof%2E</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -574,7 +860,27 @@
     <recordTypes>
         <fullName>Internal_Contact</fullName>
         <active>true</active>
+        <description>Used for Expedia contacts that are not Salesforce users</description>
         <label>Internal Contact</label>
+        <picklistValues>
+            <picklist>Case_Priority__c</picklist>
+            <values>
+                <fullName>1</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>2</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>3</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>4</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
         <picklistValues>
             <picklist>Contact_Preference__c</picklist>
             <values>
@@ -664,25 +970,6 @@
             </values>
             <values>
                 <fullName>Prof%2E</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-        <picklistValues>
-            <picklist>Priority__c</picklist>
-            <values>
-                <fullName>1</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>2</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>3</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>4</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -794,6 +1081,18 @@
             </values>
         </picklistValues>
     </recordTypes>
+    <validationRules>
+        <fullName>Cant_Edit_Integrated_Contacts</fullName>
+        <active>true</active>
+        <description>Contacts that are integrated with PSG cannot be edited in GSO</description>
+        <errorConditionFormula>AND(
+           Integrated_With_PSG__c = TRUE, 
+           $Profile.Name != &quot;System Administrator&quot;, 
+           $Profile.Name != &quot;API Only&quot;,
+           NOT(ISCHANGED(Health_Safety_Contact__c))
+)</errorConditionFormula>
+        <errorMessage>You can&apos;t edit PSG Integrated Contact</errorMessage>
+    </validationRules>
     <webLinks>
         <fullName>GoogleMaps</fullName>
         <availability>online</availability>

@@ -118,12 +118,29 @@ CASE(User_Active__c &amp; IF(ISPICKVAL(Active__c,&quot;True&quot;)=True,&quot;Tr
     </fields>
     <fields>
         <fullName>User__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>User</label>
         <referenceTo>User</referenceTo>
         <relationshipName>R00N30000002Yj6ZEAS</relationshipName>
         <required>false</required>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Vacation_End__c</fullName>
+        <description>When the Queue member ends the vacation.</description>
+        <externalId>false</externalId>
+        <label>Vacation End</label>
+        <required>false</required>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Vacation_Start__c</fullName>
+        <description>When the queue member starts the vacation.</description>
+        <externalId>false</externalId>
+        <label>Vacation Start</label>
+        <required>false</required>
+        <type>DateTime</type>
     </fields>
     <label>Group Member</label>
     <nameField>

@@ -60,6 +60,7 @@
     </fields>
     <fields>
         <fullName>Country__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <externalId>false</externalId>
         <label>Country</label>
         <referenceTo>Country__c</referenceTo>
@@ -79,6 +80,16 @@
         <unique>true</unique>
     </fields>
     <label>Travel Product</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>TPID__c</columns>
+        <columns>Brand__c</columns>
+        <columns>Country__c</columns>
+        <columns>CREATED_DATE</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
     <nameField>
         <label>Travel Product Name</label>
         <type>Text</type>

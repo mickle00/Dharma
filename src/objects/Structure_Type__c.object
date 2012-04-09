@@ -41,6 +41,7 @@
     <enableReports>true</enableReports>
     <fields>
         <fullName>Booking_Type__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <description>Booking type that the structure type is associated with.</description>
         <externalId>false</externalId>
         <label>Booking Type</label>

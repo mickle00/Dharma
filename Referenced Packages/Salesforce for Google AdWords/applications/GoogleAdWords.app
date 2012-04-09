@@ -13,7 +13,4 @@
     <tab>Brand__c</tab>
     <tab>Chain__c</tab>
     <tab>Structure_Type__c</tab>
-    <tab>Email_Template__c</tab>
-    <tab>Out_of_Office_Notice__c</tab>
-    <tab>Process_Team__c</tab>
 </CustomApplication>

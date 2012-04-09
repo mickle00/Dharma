@@ -1,4 +1,4 @@
-public with sharing class CasePointOfSaleClass {
+public class CasePointOfSaleClass {
   
   //use this if trigger.isInsert....if it's insert cannot pass trigger.oldmap as it's null
   public void insertCasePointsOfSaleForNewCases(List<Case> myCases){

@@ -11,7 +11,7 @@ public with sharing class TaskClass {
 		Task newTask = new Task(WhatId = whatId
 		                       ,WhoId = whoId
 		                       ,OwnerId = ownerId
-		                       ,Description = description
+		                       ,Description = Utilities.truncateField(description, 32000, '\n')
 		                       ,Subject = subject
 		                       ,Status = status
 		                       ,ActivityDate = activityDate);
@@ -23,6 +23,9 @@ public with sharing class TaskClass {
 	  // initialize to null
 	  Id parentId = null;
 	  
+	  //if subject is null return null
+	  if(subject == null) return parentId;
+	  
 	  // check for a parent case if has :ref tags
 	  if (subject.contains(':ref') && subject.contains(':ref')) {
 	    parentId = this.emailThreadTaskParentId(subject);	
@@ -30,6 +33,21 @@ public with sharing class TaskClass {
 	  // return parentId ... null if no parent found
 		return parentId;
 	}
+    
+    public static List<Task> findEmailsByParentId(Id parentId){
+        List<Task> allEmails = new List<Task>();
+        allEmails = [SELECT Id
+                           ,Subject
+                           ,Description
+                           ,ActivityDate 
+                       FROM Task 
+                      WHERE WhatId = :parentId 
+                        AND Subject like 'Email%'
+                   order by ActivityDate desc];
+                        
+        return allEmails;
+    }
+	
 	
 	   private Id emailThreadTaskParentId(String subject) {
 	  // Returns the parent Case id by matching the reference id from and associated task

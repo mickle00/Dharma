@@ -71,6 +71,7 @@
     </fields>
     <fields>
         <fullName>Market__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <description>Links the Submarket to a market</description>
         <externalId>false</externalId>
         <label>Market</label>

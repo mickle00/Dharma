@@ -38,11 +38,6 @@
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <label>Process Team</label>
-    <listViews>
-        <fullName>All</fullName>
-        <filterScope>Everything</filterScope>
-        <label>All</label>
-    </listViews>
     <nameField>
         <label>Team</label>
         <trackHistory>false</trackHistory>

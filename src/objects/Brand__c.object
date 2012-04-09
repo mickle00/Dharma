@@ -49,6 +49,7 @@
     </fields>
     <fields>
         <fullName>Chain__c</fullName>
+        <deleteConstraint>SetNull</deleteConstraint>
         <description>Chain the brand rolls into</description>
         <externalId>false</externalId>
         <label>Chain</label>

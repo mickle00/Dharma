@@ -24,7 +24,7 @@ private class Utilities_Test {
 
     static testMethod void myUnitTest() {	
       Map<String,RecordType> mapRecordTypes = new Map<String,RecordType>();
-      mapRecordTypes = Utilities.getRecordTypesMap('Case');
+      mapRecordTypes = Utilities.getRecordTypesMap('Case',true);
       
       // test integration key building
       String integrationContactKey = Utilities.generateIntegrationContactKey('test@test.com','joe', 'blow');
@@ -50,8 +50,15 @@ private class Utilities_Test {
       //test truncate field      
       String longDescription = 'h';      
       for (integer i=0; i<35000; i++){
-      	longDescription = longDescription + 'i';
+        longDescription = longDescription + 'i';
       }
-      Utilities.truncateField(longDescription, 32000, '<br/>');      
+      Utilities.truncateField(longDescription, 32000, '<br/>');
+      
+      //Recursive trigger test
+      Utilities.hasAlreadyFiredTrigger();
+      Utilities.setAlreadyFiredTrigger();
+      
+      //QueueNameToIdMap
+      Map<String,Id> mapForTest = Utilities.getQueueNameToIdMap('Case');
     }
 }

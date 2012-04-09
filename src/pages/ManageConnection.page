@@ -32,11 +32,6 @@ function toggleHide(){
     j$('[id$=existingConnections]').toggle('slow');
     return false;
 }
-    
-function toggleHideETP(){
-    j$('[id$=etp_rollout_steps]').hide();
-    return false;
-}  
 </script>
     <div class="center" style="width:100%">
         <apex:pageMessages />
@@ -95,7 +90,14 @@ function toggleHideETP(){
                     <apex:pageBlockSection columns="2" title="{!Title}">
                         <apex:outputField value="{!myConnection.Account__c}" />
                         <apex:inputField value="{!myConnection.Status__c}"  />
-                        <apex:inputField value="{!myConnection.Connectivity_System__c}" />
+                        <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{!$ObjectType.Connection__c.Fields.Connectivity_System__c.Label}" />
+                        <apex:actionRegion >
+	                        <apex:inputField value="{!myConnection.Connectivity_System__c}" >
+	                            <apex:actionSupport event="onchange" rerender="systemType"/>
+	                        </apex:inputField>
+                        </apex:actionRegion>
+                        </apex:pageBlockSectionItem>
                          <apex:pageBlockSectionItem >
                             <apex:outputLabel value="{!$ObjectType.Connection__c.Fields.ETP_Status__c.Label}" />
                             <apex:actionRegion >
@@ -105,7 +107,7 @@ function toggleHideETP(){
                             </apex:actionRegion>          
                         </apex:pageBlockSectionItem>  
                         <apex:inputField value="{!myConnection.Platform__c}" required="true" />   
-                        <apex:outputField value="{!myConnection.Connectivity_System__r.Connectivity_System_Type__c}" />                                     
+                        <apex:outputField value="{!myConnection.Connectivity_System__r.Connectivity_System_Type__c}" id="systemType"/>                                     
                         <apex:inputField value="{!myConnection.Type__c}" />
                         <apex:outputText rendered="{!AccountRepcoSize == 0}"/>
                         
@@ -136,7 +138,6 @@ function toggleHideETP(){
                                         
                                             Edit
                                             </apex:outputLink>
-        
                                             <apex:outputText rendered="{!myConnectivityRollout.Id != null}"> 
                                                 &nbsp;|&nbsp; 
                                             </apex:outputText>
@@ -154,7 +155,7 @@ function toggleHideETP(){
                                             <apex:outputField value="{!myConnectivityRollout.Case__c}"/>
                                         </td>
                                         <td style="height:10px; width:314px">
-                                            <apex:inputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id == null}" styleClass="requiredInput"/>
+                                            <apex:inputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id == null}" styleClass="requiredInput" required="true"/>
                                             <apex:outputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id != null}" /> &nbsp; &nbsp;
                                         </td>
                                         <td style="height:10px; width:314px">
@@ -188,7 +189,7 @@ function toggleHideETP(){
                     </apex:outputPanel><br/>
                     <apex:outputPanel id="etp_rollout_steps">
 	  				<apex:pageBlockSection title="ETP Rollout Steps" columns="1" rendered="{!myConnection.ETP_Status__c != null}">
-	  					<apex:outputPanel id="rolloutStages">
+	  					<apex:outputPanel id="ETProlloutStages">
                             <table width="100%">
                                 <tr>
                                     <th> Action:</th>
@@ -197,49 +198,67 @@ function toggleHideETP(){
                                     <th>Time Completed:</th>
                                     <th>Owner Name:</th>
                                 </tr>                          
-                                <apex:repeat value="{!myConnectivityRollouts}" var="myConnectivityRollout" >
+                                <apex:repeat value="{!myETPRollouts}" var="myETPRollout" >
                                     <tr>
                                         <td style="height:10px; width:70px">
-                                            <apex:outputLink value="/{!myConnectivityRollout.Id}/e?retURL=/apex/ManageConnection?Id={!myConnection.Id}%26{!CaseQueryString}"
-                                                             rendered="{!myConnectivityRollout.Id != null}"
+                                            <apex:outputLink value="/{!myETPRollout.Id}/e?retURL=/apex/ManageConnection?Id={!myConnection.Id}%26{!CaseQueryString}"
+                                                             rendered="{!myETPRollout.Id != null}"
                                                              title="Edit Rollout Step"> <!--  %26 to URL Encode '&' -->
                                         
                                             Edit
                                             </apex:outputLink>
         
-                                            <apex:outputText rendered="{!myConnectivityRollout.Id != null}"> 
+                                            <apex:outputText rendered="{!myETPRollout.Id != null}"> 
                                                 &nbsp;|&nbsp; 
                                             </apex:outputText>
                                             <apex:commandLink action="{!deleteRolloutStep}" 
                                                               value="Del" 
-                                                              rendered="{!myConnectivityRollout.Id != null}" 
-                                                              reRender="rolloutStages">
+                                                              rendered="{!myETPRollout.Id != null}" 
+                                                              reRender="ETProlloutStages">
                                                 <apex:param name="rolloutStepToDelete" 
-                                                            value="{!myConnectivityRollout.Id}" 
+                                                            value="{!myETPRollout.Id}" 
                                                             assignTo="{!rolloutStepToDelete}"/>
                                             </apex:commandLink>
                                             
                                         </td> 
                                         <td>
-                                            <apex:outputField value="{!myConnectivityRollout.Case__c}"/>
+                                            <apex:outputField value="{!myETPRollout.Case__c}"/>
                                         </td>
                                         <td style="height:10px; width:314px">
-                                            <apex:inputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id == null}" styleClass="requiredInput"/>
-                                            <apex:outputField value="{!myConnectivityRollout.Rollout_Step__c}" rendered="{!myConnectivityRollout.Id != null}" /> &nbsp; &nbsp;
+                                            <apex:inputField value="{!myETPRollout.Rollout_Step__c}" rendered="{!myETPRollout.Id == null}" styleClass="requiredInput"/>
+                                            <apex:outputField value="{!myETPRollout.Rollout_Step__c}" rendered="{!myETPRollout.Id != null}" /> &nbsp; &nbsp;
                                         </td>
                                         <td style="height:10px; width:314px">
-                                            <apex:outputField value="{!myConnectivityRollout.Completed_Date__c}" rendered="{!myConnectivityRollout.Id != null}" />
-                                            <apex:inputField value="{!myConnectivityRollout.Completed_Date__c}" required="false" rendered="{!myConnectivityRollout.Id == null}"/>
+                                            <apex:outputField value="{!myETPRollout.Completed_Date__c}" rendered="{!myETPRollout.Id != null}" />
+                                            <apex:inputField value="{!myETPRollout.Completed_Date__c}" required="false" rendered="{!myETPRollout.Id == null}"/>
                                         </td>
                                         <td>                                                       
-                                            <apex:outputField value="{!myConnectivityRollout.Owner.Name}" rendered="{!myConnectivityRollout.Id != null}"/>
-                                            <apex:outputText value="{! $User.FirstName} {! $User.LastName}" rendered="{!myConnectivityRollout.Owner.Name == null}"/>
+                                            <apex:outputField value="{!myETPRollout.Owner.Name}" rendered="{!myETPRollout.Id != null}"/>
+                                            <apex:outputText value="{! $User.FirstName} {! $User.LastName}" rendered="{!myETPRollout.Owner.Name == null}"/>
                                         </td>
                                     </tr> 
                                 </apex:repeat>
                             </table>
                         </apex:outputPanel>                   
 	 				</apex:pageBlockSection>
+	 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <apex:commandButton reRender="ETProlloutStages, removeETPStep" 
+                                   action="{!addETPRolloutStage}" 
+                                   value="Additional ETP Rollout Step" 
+                                   styleClass="button" 
+                                   immediate="true"
+                                   rendered="{!myConnection.ETP_Status__c != null}">
+                    </apex:commandButton>                  
+                    <apex:outputPanel id="removeETPStep">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <apex:commandButton reRender="ETProlloutStages, removeStep" 
+                                            action="{!removeETPRolloutStage}" 
+                                            value="Remove Last ETP Rollout Step" 
+                                            styleClass="button" 
+                                            immediate="true" 
+                                            rendered="{!numberAdditionalETPRolloutSteps > 0}" />
+                    <br/>
+                    </apex:outputPanel><br/>
 					</apex:outputPanel>
                     <apex:pageBlockSection columns="1" title="Existing Notes" id="allNotes" rendered="{!myConnection.Id != null}">           
                         <apex:repeat value="{!allNotes}" var="note" >

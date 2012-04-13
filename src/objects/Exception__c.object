@@ -149,6 +149,7 @@
         <lookupPhoneDialogsAdditionalFields>Type_Name__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>CREATEDBY_USER</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>CREATED_DATE</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchResultsAdditionalFields>Message__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Type_Name__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>CREATEDBY_USER</searchResultsAdditionalFields>

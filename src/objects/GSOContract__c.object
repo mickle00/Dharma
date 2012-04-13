@@ -952,6 +952,7 @@ Furthest_EPC_Page_Number__c ,
         <customTabListAdditionalFields>Date_Contract_Started__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Contract_Term_months__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Status__c</customTabListAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>Account__c</searchFilterFields>
         <searchFilterFields>Expedia_Hotel_Id__c</searchFilterFields>
         <searchResultsAdditionalFields>Account__c</searchResultsAdditionalFields>

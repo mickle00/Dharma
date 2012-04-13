@@ -1208,6 +1208,7 @@
         <lookupPhoneDialogsAdditionalFields>National_Rating__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>UPDATEDBY_USER.ALIAS</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>LAST_UPDATE</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>Account__c</searchFilterFields>
         <searchFilterFields>Structure_Type__c</searchFilterFields>
         <searchFilterFields>Assigned_Star_Rating__c</searchFilterFields>

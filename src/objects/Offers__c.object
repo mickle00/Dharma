@@ -382,6 +382,7 @@
         <lookupPhoneDialogsAdditionalFields>Account__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>Offering_Category__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>Number_of_Images__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>Account__c</searchFilterFields>
         <searchFilterFields>Offering_ID__c</searchFilterFields>
         <searchFilterFields>Number_of_Images__c</searchFilterFields>

@@ -150,6 +150,7 @@
         <lookupDialogsAdditionalFields>Role__c</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>PSG_User__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>Role__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>PSG_User__c</searchFilterFields>
         <searchFilterFields>Role__c</searchFilterFields>
         <searchResultsAdditionalFields>PSG_User__c</searchResultsAdditionalFields>

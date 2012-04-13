@@ -1691,12 +1691,8 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
     <listViews>
         <fullName>AllAccounts</fullName>
         <columns>ACCOUNT.NAME</columns>
-        <columns>ACCOUNT.ADDRESS1_STATE</columns>
         <columns>Expedia_Hotel_Id__c</columns>
-        <columns>Venere_Id__c</columns>
-        <columns>Super_Region__c</columns>
-        <columns>Submarket__c</columns>
-        <columns>CORE.USERS.ALIAS</columns>
+        <columns>PSG_Language__c</columns>
         <filterScope>Everything</filterScope>
         <label>All Accounts</label>
     </listViews>

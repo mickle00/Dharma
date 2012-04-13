@@ -335,6 +335,7 @@
     <pluralLabel>Contract Loading Steps</pluralLabel>
     <searchLayouts>
         <lookupDialogsAdditionalFields>Contract_Loading_Step__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <webLinks>

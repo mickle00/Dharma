@@ -165,6 +165,7 @@
         <customTabListAdditionalFields>Type__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Start_Date__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>End_Date__c</customTabListAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
     <validationRules>

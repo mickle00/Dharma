@@ -151,6 +151,7 @@ CASE(User_Active__c &amp; IF(ISPICKVAL(Active__c,&quot;True&quot;)=True,&quot;Tr
     <pluralLabel>Group Members</pluralLabel>
     <searchLayouts>
         <customTabListAdditionalFields>Last_Assignment__c</customTabListAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
 </CustomObject>

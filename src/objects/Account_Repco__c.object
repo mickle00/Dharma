@@ -92,6 +92,7 @@
     <pluralLabel>Account Repcos</pluralLabel>
     <searchLayouts>
         <lookupDialogsAdditionalFields>Repco__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>Repco__c</searchFilterFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>

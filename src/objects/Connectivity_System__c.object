@@ -329,6 +329,7 @@
         <lookupDialogsAdditionalFields>Connectivity_Vendor__c</lookupDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>Connectivity_System_Type__c</lookupPhoneDialogsAdditionalFields>
         <lookupPhoneDialogsAdditionalFields>Connectivity_Vendor__c</lookupPhoneDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

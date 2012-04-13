@@ -203,6 +203,7 @@ Used to enforce uniqueness. Cannot have the same contact associated with the sam
         <lookupFilterFields>Account__c</lookupFilterFields>
         <lookupFilterFields>Contact__c</lookupFilterFields>
         <lookupFilterFields>Active__c</lookupFilterFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchFilterFields>Account__c</searchFilterFields>
         <searchFilterFields>Contact__c</searchFilterFields>
         <searchFilterFields>Active__c</searchFilterFields>

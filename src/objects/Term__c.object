@@ -177,6 +177,7 @@
         <lookupDialogsAdditionalFields>Description__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>Start_Date__c</lookupDialogsAdditionalFields>
         <lookupDialogsAdditionalFields>End_Date__c</lookupDialogsAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
         <searchResultsAdditionalFields>Description__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>Start_Date__c</searchResultsAdditionalFields>
         <searchResultsAdditionalFields>End_Date__c</searchResultsAdditionalFields>

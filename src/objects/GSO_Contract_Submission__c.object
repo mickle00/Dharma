@@ -155,6 +155,7 @@
         <customTabListAdditionalFields>PSG_User__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Approver__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>CREATED_DATE</customTabListAdditionalFields>
+        <searchFilterFields>NAME</searchFilterFields>
     </searchLayouts>
     <sharingModel>ReadWrite</sharingModel>
 </CustomObject>

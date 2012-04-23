@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -70,6 +71,10 @@
             <layoutItems>
                 <behavior>Edit</behavior>
                 <field>Fallback_Method__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Fallback_Notes__c</field>
             </layoutItems>
             <layoutItems>
                 <behavior>Edit</behavior>
@@ -610,8 +615,9 @@
         <fields>Connectivity_System_Vendor__c</fields>
         <fields>Go_Date__c</fields>
         <fields>Platform__c</fields>
-        <fields>Status__c</fields>
         <fields>Type__c</fields>
+        <fields>Status__c</fields>
+        <fields>ETP_Status__c</fields>
         <fields>Connectivity_System__c.NAME</fields>
         <fields>Connectivity_System__c.Connectivity_System_Type__c</fields>
         <fields>Connectivity_System__c.Connectivity_Vendor__c</fields>

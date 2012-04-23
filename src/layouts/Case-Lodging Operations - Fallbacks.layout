@@ -150,12 +150,18 @@
         <relatedList>RelatedCommentsList</relatedList>
     </relatedLists>
     <relatedLists>
+        <customButtons>Mass_Update</customButtons>
+        <customButtons>Export_Guest_List</customButtons>
+        <excludeButtons>New</excludeButtons>
         <fields>NAME</fields>
         <fields>Status__c</fields>
         <fields>Expedia_Booking_ID__c</fields>
         <fields>Days_Until_Arrival__c</fields>
         <fields>Arrival_Date__c</fields>
         <fields>Check_Out_Date__c</fields>
+        <fields>Original_Book_Date__c</fields>
+        <fields>Multiple_Booking__c</fields>
+        <fields>Original_Room_Type__c</fields>
         <relatedList>Guest__c.Case__c</relatedList>
         <sortField>Days_Until_Arrival__c</sortField>
         <sortOrder>Asc</sortOrder>

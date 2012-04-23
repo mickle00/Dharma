@@ -1,0 +1,7 @@
+<apex:page standardController="Guest__c" extensions="GuestAccountExtension">
+	<apex:PageBlock mode="maindetail">
+		<apex:PageBlockSection columns="1">
+		  <apex:outputField value="{!myGuest.Case__r.Account.Fallback_Notes__c}"/>
+		</apex:PageBlockSection>
+	</apex:PageBlock>
+</apex:page>

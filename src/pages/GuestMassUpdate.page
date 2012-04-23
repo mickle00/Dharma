@@ -1,0 +1,38 @@
+<apex:page standardController="Guest__c" 
+           recordSetVar="guests" 
+           tabStyle="Guest__c" 
+           extensions="GuestMassUpdateExtension"
+           title="Guests - Mass Close">
+   <apex:form >
+    <apex:PageBlock title="Mass Resolve Guests">
+        <apex:PageBlockButtons location="bottom" >
+            <apex:outputLabel > <strong>Status </strong>
+                <apex:inputField value="{!guestTemplate.Status__c}"/>
+            </apex:outputLabel>
+            <apex:commandButton action="{!updateAllGuests}" value="Change Selected Statuses" rerender="guestTable" status="updatingStatuses"/>
+            <apex:commandButton action="{!save}" value="Save"/>
+            <apex:commandButton action="{!cancel}" value="Cancel"/>
+        </apex:PageBlockButtons>
+        <apex:PageBlockSection columns="1" collapsible="false">
+        <apex:actionStatus id="selectAllStatus" startText="Selecting..."/>
+            <apex:PageBlockTable value="{!GuestWrappers}" var="guest" id="guestTable">
+                <apex:column >
+                    <apex:facet name="header">
+                        <apex:inputCheckbox value="{!allSelected}">
+                            <apex:actionSupport event="onchange" action="{!selectAll}" rerender="guestTable" status="selectAllStatus"/>
+                        </apex:inputCheckbox>
+                    </apex:facet>
+                    <apex:inputCheckbox value="{!guest.isSelected}"/>
+                </apex:column> 
+                <apex:column value="{!guest.myGuest.Name}"/>
+                <apex:column value="{!guest.myGuest.Expedia_Booking_ID__c}"/>
+                <apex:column value="{!guest.myGuest.Arrival_Date__c}"/>
+                <apex:column headerValue="Status">
+                    <apex:inputField value="{!guest.myGuest.Status__c}"/>
+                </apex:column>
+            </apex:PageBlockTable>
+        <apex:actionStatus id="updatingStatuses" startText="Updating..."/>
+        </apex:PageBlockSection>
+    </apex:PageBlock>
+    </apex:form>
+</apex:page>

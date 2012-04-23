@@ -488,15 +488,15 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Account_Repco__c</fields>
+        <fields>Connectivity_System_Vendor__c</fields>
         <fields>Go_Date__c</fields>
         <fields>Platform__c</fields>
-        <fields>Status__c</fields>
         <fields>Type__c</fields>
+        <fields>Status__c</fields>
+        <fields>ETP_Status__c</fields>
         <fields>Connectivity_System__c.NAME</fields>
-        <fields>Connectivity_System__c.Connectivity_Vendor__c</fields>
         <fields>Connectivity_System__c.Connectivity_System_Type__c</fields>
-        <fields>Integration_Connection_Key__c</fields>
+        <fields>Connectivity_System__c.Connectivity_Vendor__c</fields>
         <relatedList>Connection__c.Account__c</relatedList>
     </relatedLists>
     <relatedLists>

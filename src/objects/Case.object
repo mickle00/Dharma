@@ -874,6 +874,18 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Account_Location__c</fullName>
+        <externalId>false</externalId>
+        <formula>Account.BillingCity &amp;
+IF(ISBLANK(Account.BillingState), &quot;&quot;, &quot;, &quot; &amp; Account.BillingState) &amp;
+IF(ISBLANK(Account.BillingCountry),&quot;&quot;, &quot;, &quot;&amp;Account.BillingCountry)</formula>
+        <label>Account Location</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Account_Market__c</fullName>
         <externalId>false</externalId>
         <formula>Account.Market__r.Name</formula>
@@ -12663,6 +12675,7 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <columns>CASES.STATUS</columns>
         <columns>Earliest_Guest_Arrival__c</columns>
         <columns>ACCOUNT.NAME</columns>
+        <columns>Account_Location__c</columns>
         <columns>Account_Language__c</columns>
         <columns>SuperRegion__c</columns>
         <columns>Unresolved_Guests__c</columns>
@@ -17862,6 +17875,24 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <sharedTo>
             <group>Fare Filing</group>
         </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>My_Fallback_Cases</fullName>
+        <columns>CASES.CASE_NUMBER</columns>
+        <columns>CASES.STATUS</columns>
+        <columns>Earliest_Guest_Arrival__c</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>Account_Language__c</columns>
+        <columns>Account_Location__c</columns>
+        <columns>SuperRegion__c</columns>
+        <columns>Unresolved_Guests__c</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>CASES.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Case.Lodging_Operations_Fallback</value>
+        </filters>
+        <label># My Fallback Cases</label>
     </listViews>
     <listViews>
         <fullName>New_Transferred_SR</fullName>

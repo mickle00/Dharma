@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
+    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -221,11 +222,22 @@
         <fields>Name</fields>
         <fields>Super_Region__c</fields>
         <fields>Phone</fields>
+        <fields>Fax</fields>
         <fields>Expedia_Hotel_Id__c</fields>
         <fields>Vendor_Id__c</fields>
+        <fields>Market_Manager_Name__c</fields>
         <fields>Region__c</fields>
         <fields>BillingAddress</fields>
         <fields>ParentId</fields>
+        <relatedLists>
+            <fields>Number__c</fields>
+            <fields>Contact.CNTC_FIRST_NAME</fields>
+            <fields>Contact.NAME</fields>
+            <fields>Contact.CNTC_TITLE</fields>
+            <fields>Contact.CNTC_EMAIL</fields>
+            <fields>Contact.CNTC_PHONE1</fields>
+            <relatedList>Account_Contact__c.Account__c</relatedList>
+        </relatedLists>
     </miniLayout>
     <relatedLists>
         <fields>Number__c</fields>

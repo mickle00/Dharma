@@ -1,0 +1,7 @@
+<apex:page standardController="Case" extensions="CaseFallbackExtension">
+    <apex:PageBlock mode="maindetail">
+        <apex:PageBlockSection columns="1">
+          <apex:outputField value="{!myCase.Account.Fallback_Notes__c}"/>
+        </apex:PageBlockSection>
+    </apex:PageBlock>
+</apex:page>

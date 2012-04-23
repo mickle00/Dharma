@@ -4,8 +4,9 @@
 width:95%;
 height:100px;
 }
+.caseTeamError { color: blue; font-weight: strong;}
 </style>
-
+<apex:messages />
 <apex:pageBlock title="Transfer Case">
     <apex:pageBlockSection title="Original Case" collapsible="false">
         <apex:outputField value="{!Case.CaseNumber}"/>
@@ -21,14 +22,23 @@ height:100px;
         </apex:pageBlockSectionItem>
         <apex:outputField value="{!Case.Team__c}"/>
     </apex:pageBlockSection>
-    <apex:pageBlockSection title="Transfer Details" collapsible="false" columns="1">
-        <apex:form styleClass="detailList">
-            <apex:pageBlockSectionItem >
-                <apex:outputLabel value="New Case Team: " styleClass="labelCol" for="caseteam"/>
-                <apex:selectList value="{!transferringToCaseTeam}" size="1" title="Team" id="caseteam" >
-                    <apex:selectOptions value="{!CaseTeamPicklistOptions}"></apex:selectOptions>
-                </apex:selectList>
-            </apex:pageBlockSectionItem>
+    <apex:pageBlockSection title="Transfer Details" collapsible="false" columns="1" id="transferDetails">
+        <apex:form >
+                <apex:pageBlockSectionItem id="caseTeamSection" >
+                    <apex:outputLabel value="New Case Team: " styleClass="labelCol" for="caseteam"/>
+                    <apex:outputPanel styleClass="requiredInput" layout="block">
+                        <apex:outputPanel styleClass="requiredBlock" layout="block"/>
+                            <apex:actionRegion >
+                                <apex:selectList value="{!transferringToCaseTeam}" size="1" title="Team" id="caseteam">
+                                    <apex:selectOptions value="{!CaseTeamPicklistOptions}"></apex:selectOptions>
+                                    <apex:actionSupport event="onchange" reRender="transferDetails" action="{!changeCaseTeam}"/>
+                                </apex:selectList>
+                            </apex:actionRegion>
+                         <apex:outputPanel styleClass="errorMsg" layout="block" rendered="{!IF(validCaseTeamSelected, false, true)}">
+                            <strong>Error:</strong> You must enter a valid value.
+                        </apex:outputPanel>
+                </apex:outputPanel>
+                </apex:pageBlockSectionItem>
             <br/>
             <apex:pageBlockSectionItem >
                 <apex:outputLabel value="Reason for Transfer: " styleClass="labelCol" for="reasonForTransfer"/>

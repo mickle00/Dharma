@@ -3,12 +3,18 @@ public class CaseTransferController{
     public Case myCase {get;set;}
     public string transferReason {get;set;}
     public String transferringToCaseTeam {get;set;}
+    public List<selectOption> caseTeamPicklistOptions;
+    public boolean validCaseTeamSelected;
+    public boolean caseTeamSelected {get;set;}
     
     public CaseTransferController(ApexPages.StandardController stdController){
         // Get fields without needing to query for them
         // Hack to allow tests to run 
         if (!Test.isRunningTest()) stdController.addFields(this.FIELDNAMES);
         this.myCase = (Case)stdController.getRecord();
+        validCaseTeamSelected = false;
+        caseTeamSelected = false;
+        transferringToCaseTeam = '';
     }
     
     public PageReference returnToCase(){
@@ -16,8 +22,11 @@ public class CaseTransferController{
     }                                                           
     
     public PageReference transferCase(){
-        this.createTransferredCase(myCase);
-        return this.returnToCase();
+        this.changeCaseTeam();
+        if (this.validCaseTeamSelected){
+            this.createTransferredCase(myCase);
+            return this.returnToCase();
+        } return null;
     }
 
     public PageReference closeAndTransferCase(){
@@ -28,18 +37,34 @@ public class CaseTransferController{
     }
     
     public List<selectOption> getCaseTeamPicklistOptions() {
-        List<selectOption> options = new List<selectOption>();
-        String appendText;
-        for (Case_Team__c myCaseTeam : getAllCaseTeams()) {
-            appendText = myCaseTeam.Email__c == null ? '' : ' (' + myCaseTeam.Email__c + ')';
-            options.add(new selectOption(myCaseTeam.Name, myCaseTeam.Name + appendText));
+        if (this.caseTeamPicklistOptions == null){
+            this.caseTeamPicklistOptions = new List<selectOption>();
+            this.caseTeamPicklistOptions.add(new selectOption('', '--Please Select a Team--'));
+            String appendText;
+            for (Case_Team__c myCaseTeam : getAllCaseTeams()) {
+                appendText = myCaseTeam.Email__c == null ? '' : ' (' + myCaseTeam.Email__c + ')';
+                this.caseTeamPicklistOptions.add(new selectOption(myCaseTeam.Name, myCaseTeam.Name + appendText));
+            }
         }
-        return options;
+        return this.caseTeamPicklistOptions;
     }
     
     /**
     Move to CaseTeamClass???
     **/
+    
+    public void changeCaseTeam(){
+        this.caseTeamSelected = true;
+        if (this.transferringToCaseTeam != ''){
+            this.validCaseTeamSelected = true;
+        } else {
+            this.validCaseTeamSelected = false;
+        }
+    }
+    public boolean getValidCaseTeamSelected(){
+        if (this.caseTeamSelected) return validCaseTeamSelected;
+        return true;
+    }
     
     public Map<String, Id> getCaseTeamToRecordTypeIdMap(){
         if (this.caseTeamToRecordTypeIdMap == null){

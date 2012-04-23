@@ -12,6 +12,14 @@
                 <field>Name</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Group_Member__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Status__c</field>
+            </layoutItems>
+            <layoutItems>
                 <behavior>Required</behavior>
                 <field>User__c</field>
             </layoutItems>

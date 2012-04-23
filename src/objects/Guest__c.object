@@ -39,6 +39,17 @@
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <fields>
+        <fullName>Account_Fallback_Notes__c</fullName>
+        <externalId>false</externalId>
+        <formula>Case__r.Account.Fallback_Notes__c</formula>
+        <inlineHelpText>Only editable by selected users on the Account page</inlineHelpText>
+        <label>Account Fallback Notes</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Additional_Information__c</fullName>
         <externalId>false</externalId>
         <label>Additional Information</label>
@@ -46,6 +57,16 @@
         <trackHistory>false</trackHistory>
         <type>LongTextArea</type>
         <visibleLines>3</visibleLines>
+    </fields>
+    <fields>
+        <fullName>Admin_Tools_Link__c</fullName>
+        <externalId>false</externalId>
+        <formula>HYPERLINK(&quot;http://www.expedia.com&quot;, Expedia_Booking_ID__c , &quot;_blank&quot;)</formula>
+        <label>Admin Tools Link</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Age_days__c</fullName>
@@ -932,6 +953,16 @@ IF(Age_days__c&lt;3,&quot;48-72 hours&quot;,
         <type>Date</type>
     </fields>
     <fields>
+        <fullName>Closed_By__c</fullName>
+        <externalId>false</externalId>
+        <label>Closed By</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Closed_Date_Time__c</fullName>
         <externalId>false</externalId>
         <label>Closed Date/Time</label>
@@ -978,10 +1009,21 @@ IF(Age_days__c&lt;3,&quot;48-72 hours&quot;,
         <type>TextArea</type>
     </fields>
     <fields>
+        <fullName>Days_Before_Arrival_Completed__c</fullName>
+        <externalId>false</externalId>
+        <formula>Arrival_Date__c - DATEVALUE(Closed_Date_Time__c)</formula>
+        <label>Days Before Arrival Completed</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Days_Until_Arrival__c</fullName>
         <externalId>false</externalId>
-        <formula>Arrival_Date__c -  TODAY()</formula>
-        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <formula>IF (Arrival_Date__c -  TODAY() &gt;= 0, Arrival_Date__c -  TODAY(), null)</formula>
         <label>Days Until Arrival</label>
         <precision>18</precision>
         <required>false</required>
@@ -1182,6 +1224,16 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <required>false</required>
         <trackHistory>true</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Multiple_Booking__c</fullName>
+        <defaultValue>false</defaultValue>
+        <description>Whether the BookingItem was associated with a booking that had multiple BookingItems associated with it.</description>
+        <externalId>false</externalId>
+        <inlineHelpText>Whether the BookingItem was associated with a booking that had multiple BookingItems associated with it.</inlineHelpText>
+        <label>Multiple Booking</label>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
     </fields>
     <fields>
         <fullName>New_Booking_Rate__c</fullName>
@@ -1612,6 +1664,26 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
                 <fullName>Reassigned to APAC CS</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>New</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Relocated</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Resend</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Follow Up</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Confirmed</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>true</trackHistory>
@@ -1725,9 +1797,23 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <type>Text</type>
         <unique>false</unique>
     </fields>
+    <fields>
+        <fullName>of_Guests__c</fullName>
+        <externalId>false</externalId>
+        <formula>1</formula>
+        <label># of Guests</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>0</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
     <label>Guest</label>
     <listViews>
         <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Days_Until_Arrival__c</columns>
         <filterScope>Everything</filterScope>
         <label>All</label>
     </listViews>
@@ -4579,51 +4665,23 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <picklistValues>
             <picklist>Status__c</picklist>
             <values>
-                <fullName>Accommodated at Original Hotel</fullName>
+                <fullName>Confirmed</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Completed</fullName>
+                <fullName>Follow Up</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Credit Pending</fullName>
+                <fullName>New</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Relocated</fullName>
                 <default>false</default>
             </values>
             <values>
-                <fullName>Reassigned to APAC CS</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Reassigned to Europe CS</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Researching</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Response Submitted</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Submitted</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Waiting for Customer</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Waiting for Hotel</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Waiting for Legal</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Waiting for Market Management</fullName>
+                <fullName>Resend</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -4921,6 +4979,16 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <customTabListAdditionalFields>Difference_Absorbed_By__c</customTabListAdditionalFields>
         <customTabListAdditionalFields>Guest_Email__c</customTabListAdditionalFields>
         <searchFilterFields>NAME</searchFilterFields>
+        <searchFilterFields>Expedia_Booking_ID__c</searchFilterFields>
+        <searchFilterFields>Original_Hotel_Expedia_ID__c</searchFilterFields>
+        <searchFilterFields>Status__c</searchFilterFields>
+        <searchFilterFields>Arrival_Date__c</searchFilterFields>
+        <searchFilterFields>Closed__c</searchFilterFields>
+        <searchResultsAdditionalFields>Status__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Arrival_Date__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Original_Hotel_Expedia_ID__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Expedia_Booking_ID__c</searchResultsAdditionalFields>
+        <searchResultsAdditionalFields>Language__c</searchResultsAdditionalFields>
     </searchLayouts>
     <sharingModel>ControlledByParent</sharingModel>
     <validationRules>
@@ -5011,4 +5079,27 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <errorDisplayField>Check_Out_Date__c</errorDisplayField>
         <errorMessage>Check-out date cannot be the same or before the arrival date.</errorMessage>
     </validationRules>
+    <webLinks>
+        <fullName>Export_Guest_List</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Export Guest List</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+        <url>window.open(&quot;00Oc0000000F97M?pv0={!Case.Id}&amp;export=1&amp;enc=UTF-8&amp;xf=xls&quot;)</url>
+    </webLinks>
+    <webLinks>
+        <fullName>Mass_Update</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <height>600</height>
+        <linkType>page</linkType>
+        <masterLabel>Mass Update</masterLabel>
+        <openType>sidebar</openType>
+        <page>GuestMassUpdate</page>
+        <protected>false</protected>
+        <requireRowSelection>false</requireRowSelection>
+    </webLinks>
 </CustomObject>

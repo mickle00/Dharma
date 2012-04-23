@@ -613,6 +613,17 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Fallback_Notes__c</fullName>
+        <externalId>false</externalId>
+        <label>Fallback Notes</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Fax_to_Email_Address__c</fullName>
         <externalId>false</externalId>
         <label>Fax to Email Address</label>

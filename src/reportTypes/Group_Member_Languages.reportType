@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ReportType xmlns="http://soap.sforce.com/2006/04/metadata">
+    <baseObject>Group_Member_Language__c</baseObject>
+    <category>other</category>
+    <deployed>true</deployed>
+    <description>The Languages associated with a Group Memember</description>
+    <label>Group Member Languages</label>
+    <sections>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CreatedBy</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>CreatedDate</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Group_Member__c</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Id</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>true</checkedByDefault>
+            <field>Name</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Language__c</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>LastModifiedBy</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>LastModifiedDate</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Group Name</displayNameOverride>
+            <field>Group_Member__c.Group_Name__c</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <field>Group_Member__c.User__c.Name</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>User</displayNameOverride>
+            <field>Group_Member__c.User__c</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <columns>
+            <checkedByDefault>false</checkedByDefault>
+            <displayNameOverride>Language Name</displayNameOverride>
+            <field>Language__c.Name</field>
+            <table>Group_Member_Language__c</table>
+        </columns>
+        <masterLabel>Group Member Languages</masterLabel>
+    </sections>
+</ReportType>

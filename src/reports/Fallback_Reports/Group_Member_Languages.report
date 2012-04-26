@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>Group_Member_Language__c$Group_Member__c.User__c</field>
+    </columns>
+    <filter>
+        <criteriaItems>
+            <column>Group_Member_Language__c$Group_Member__c.Group_Name__c</column>
+            <operator>equals</operator>
+            <value>Fallback</value>
+        </criteriaItems>
+    </filter>
+    <format>Summary</format>
+    <groupingsDown>
+        <dateGranularity>Day</dateGranularity>
+        <field>Group_Member_Language__c$Language__c.Name</field>
+        <sortOrder>Asc</sortOrder>
+    </groupingsDown>
+    <name>Group Member Languages</name>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>Group_Member_Languages__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>Group_Member_Language__c$CreatedDate</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

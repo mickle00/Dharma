@@ -593,6 +593,15 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <unique>true</unique>
     </fields>
     <fields>
+        <fullName>Fallback_Exception_Hotel__c</fullName>
+        <defaultValue>false</defaultValue>
+        <externalId>false</externalId>
+        <label>Fallback Exception Hotel</label>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Checkbox</type>
+    </fields>
+    <fields>
         <fullName>Fallback_Method__c</fullName>
         <description>Booking delivery fallback method. Comes from PSG</description>
         <externalId>false</externalId>
@@ -616,12 +625,10 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <fullName>Fallback_Notes__c</fullName>
         <externalId>false</externalId>
         <label>Fallback Notes</label>
-        <length>255</length>
         <required>false</required>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
+        <type>TextArea</type>
     </fields>
     <fields>
         <fullName>Fax_to_Email_Address__c</fullName>

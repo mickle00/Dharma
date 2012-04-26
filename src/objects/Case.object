@@ -12441,7 +12441,7 @@ Media &amp; Lodging Content = Number of Properties/Updates</inlineHelpText>
         <summaryFilterItems>
             <field>Guest__c.Status__c</field>
             <operation>notEqual</operation>
-            <value>Reassigned to Europe CS, Accommodated at original hotel, Completed</value>
+            <value>Reassigned to Europe CS, Accommodated at original hotel, Completed,Relocated, Resend, Confirmed</value>
         </summaryFilterItems>
         <summaryForeignKey>Guest__c.Case__c</summaryForeignKey>
         <summaryOperation>count</summaryOperation>
@@ -12667,6 +12667,25 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <columns>CASES.RECORDTYPE</columns>
         <filterScope>Everything</filterScope>
         <label>All Cases</label>
+    </listViews>
+    <listViews>
+        <fullName>All_Exception_Fallback_Cases</fullName>
+        <columns>CASES.CASE_NUMBER</columns>
+        <columns>OWNER_NAME</columns>
+        <columns>CASES.STATUS</columns>
+        <columns>Earliest_Guest_Arrival__c</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>Account_Location__c</columns>
+        <columns>Account_Language__c</columns>
+        <columns>SuperRegion__c</columns>
+        <columns>Unresolved_Guests__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CASES.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Case.Lodging_Operations_Fallback</value>
+        </filters>
+        <label># All Exception Fallback Cases</label>
     </listViews>
     <listViews>
         <fullName>All_Fallback_Cases</fullName>
@@ -115351,20 +115370,12 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <fullName>Google_Translate</fullName>
         <availability>online</availability>
         <displayType>link</displayType>
-        <hasMenubar>false</hasMenubar>
-        <hasScrollbars>true</hasScrollbars>
-        <hasToolbar>false</hasToolbar>
-        <height>600</height>
-        <isResizable>true</isResizable>
-        <linkType>url</linkType>
+        <linkType>javascript</linkType>
         <masterLabel>Google Translate</masterLabel>
-        <openType>newWindow</openType>
-        <position>topLeft</position>
+        <openType>onClickJavaScript</openType>
         <protected>false</protected>
-        <showsLocation>false</showsLocation>
-        <showsStatus>false</showsStatus>
-        <url>http://translate.google.com/#?|en|{!MID(Case.Description,(FIND(&quot;------------------------------------------------------&quot;,Case.Description)), 32000)}</url>
-        <width>600</width>
+        <url>window.open(&apos;http://translate.google.com/#?|en|{!JSINHTMLENCODE(MID(Case.Description,(FIND(&quot;------------------------------------------------------&quot;,Case.Description)), 32000))}&apos;
+,&apos;_blank&apos;)</url>
     </webLinks>
     <webLinks>
         <fullName>Manage_Connections</fullName>

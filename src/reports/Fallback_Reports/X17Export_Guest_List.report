@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Report xmlns="http://soap.sforce.com/2006/04/metadata">
+    <columns>
+        <field>ACCOUNT.NAME</field>
+    </columns>
+    <columns>
+        <field>Guest__c.Expedia_Booking_ID__c</field>
+    </columns>
+    <columns>
+        <field>CUST_NAME</field>
+    </columns>
+    <columns>
+        <field>Guest__c.Arrival_Date__c</field>
+    </columns>
+    <columns>
+        <field>Guest__c.Check_Out_Date__c</field>
+    </columns>
+    <columns>
+        <field>Guest__c.Status__c</field>
+    </columns>
+    <columns>
+        <field>Guest__c.Hotel_Confirmation_Number__c</field>
+    </columns>
+    <description>DO NOT MODIFY -- TEMPLATE FOR EXPORTING GUEST LIST</description>
+    <filter>
+        <criteriaItems>
+            <column>CASE_ID</column>
+            <operator>equals</operator>
+            <value></value>
+        </criteriaItems>
+        <criteriaItems>
+            <column>Guest__c.Closed__c</column>
+            <operator>equals</operator>
+            <value>0</value>
+        </criteriaItems>
+    </filter>
+    <format>Tabular</format>
+    <name>17.0 Export Guest List</name>
+    <params>
+        <name>units</name>
+        <value>h</value>
+    </params>
+    <params>
+        <name>co</name>
+        <value>1</value>
+    </params>
+    <reportType>CaseCustomEntity$Guest__c</reportType>
+    <scope>organization</scope>
+    <showDetails>true</showDetails>
+    <timeFrameFilter>
+        <dateColumn>CREATED_DATEONLY</dateColumn>
+        <interval>INTERVAL_CUSTOM</interval>
+    </timeFrameFilter>
+</Report>

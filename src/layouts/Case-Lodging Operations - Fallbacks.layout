@@ -45,8 +45,24 @@
     <layoutSections>
         <customLabel>true</customLabel>
         <detailHeading>true</detailHeading>
+        <editHeading>false</editHeading>
+        <label>Account Details</label>
+        <layoutColumns>
+            <layoutItems>
+                <height>50</height>
+                <page>CaseFallbackWidget</page>
+                <showLabel>false</showLabel>
+                <showScrollbars>false</showScrollbars>
+                <width>100%</width>
+            </layoutItems>
+        </layoutColumns>
+        <style>OneColumn</style>
+    </layoutSections>
+    <layoutSections>
+        <customLabel>true</customLabel>
+        <detailHeading>true</detailHeading>
         <editHeading>true</editHeading>
-        <label>Case Details</label>
+        <label>Guest Details</label>
         <layoutColumns>
             <layoutItems>
                 <behavior>Readonly</behavior>
@@ -162,8 +178,9 @@
         <fields>Original_Book_Date__c</fields>
         <fields>Multiple_Booking__c</fields>
         <fields>Original_Room_Type__c</fields>
+        <fields>Sort_Order__c</fields>
         <relatedList>Guest__c.Case__c</relatedList>
-        <sortField>Days_Until_Arrival__c</sortField>
+        <sortField>Sort_Order__c</sortField>
         <sortOrder>Asc</sortOrder>
     </relatedLists>
     <relatedLists>

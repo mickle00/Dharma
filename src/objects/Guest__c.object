@@ -39,17 +39,6 @@
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
     <fields>
-        <fullName>Account_Fallback_Notes__c</fullName>
-        <externalId>false</externalId>
-        <formula>Case__r.Account.Fallback_Notes__c</formula>
-        <inlineHelpText>Only editable by selected users on the Account page</inlineHelpText>
-        <label>Account Fallback Notes</label>
-        <required>false</required>
-        <trackHistory>false</trackHistory>
-        <type>Text</type>
-        <unique>false</unique>
-    </fields>
-    <fields>
         <fullName>Additional_Information__c</fullName>
         <externalId>false</externalId>
         <label>Additional Information</label>
@@ -1109,6 +1098,14 @@ IF(Age_days__c&lt;3,&quot;48-72 hours&quot;,
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Expedia_Cancel_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Expedia Cancel Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
         <fullName>External_Guest_Id__c</fullName>
         <caseSensitive>true</caseSensitive>
         <description>External ID from PSG</description>
@@ -1133,6 +1130,32 @@ IF(Age_days__c&lt;3,&quot;48-72 hours&quot;,
         <fullName>Guest_Record_Closed_Time__c</fullName>
         <externalId>false</externalId>
         <label>Guest Record Closed Time</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Hotel_Cancel_Code__c</fullName>
+        <externalId>false</externalId>
+        <label>Hotel Cancel Code</label>
+        <length>255</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Hotel_Cancel_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Hotel Cancel Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Hotel_Confirmation_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Hotel Confirmation Date</label>
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>DateTime</type>
@@ -1212,6 +1235,35 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>DateTime</type>
+    </fields>
+    <fields>
+        <fullName>Lodging_Booking_Status__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF ( 
+      $RecordType.DeveloperName = &quot;Fallback&quot;,
+      IF (
+            OR(
+                   NOT(ISBLANK(Expedia_Cancel_Date__c )),
+                   NOT(ISBLANK(Hotel_Cancel_Date__c))
+             )
+             ,&quot;Cancelled&quot;       
+             , IF (
+                     NOT(ISBLANK(Hotel_Confirmation_Date__c))
+                    ,&quot;Confirmed&quot;
+                    , IF( 
+                           Arrival_Date__c &lt;  TODAY()
+                           ,&quot;Past Arrival&quot;
+                           ,&quot;Unconfirmed&quot;
+                     )
+               )
+        )
+        ,&quot;&quot; /** not a Fallback Case **/
+)</formula>
+        <label>Lodging Booking Status</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Lodging_Operations_Agent_Lookup__c</fullName>
@@ -1612,6 +1664,27 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Sort_Order__c</fullName>
+        <externalId>false</externalId>
+        <formula>IF( 
+      $RecordType.DeveloperName = &quot;Fallback&quot;
+     ,IF(
+           Closed__c
+           ,100+((Arrival_Date__c  -  TODAY()) /100)
+           ,(Days_Until_Arrival__c/100)
+     )
+     ,NULL
+)</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Sort Order</label>
+        <precision>18</precision>
+        <required>false</required>
+        <scale>2</scale>
+        <trackHistory>false</trackHistory>
+        <type>Number</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Status__c</fullName>
         <externalId>false</externalId>
         <label>Status</label>
@@ -1684,6 +1757,14 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
                 <fullName>Confirmed</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Past Arrival</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Reopened</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>true</trackHistory>
@@ -1754,6 +1835,18 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <required>false</required>
         <trackHistory>false</trackHistory>
         <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Unique_Key__c</fullName>
+        <caseSensitive>false</caseSensitive>
+        <description>Used to force BookingItemIDs to be unique, but only for within the Fallback RecordType.</description>
+        <externalId>true</externalId>
+        <label>Unique Key</label>
+        <length>50</length>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>true</unique>
     </fields>
     <fields>
         <fullName>User__c</fullName>

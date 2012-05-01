@@ -608,6 +608,39 @@ Furthest_EPC_Page_Number__c ,
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Market_Manager_Email__c</fullName>
+        <description>Email for market manager that submitted contract</description>
+        <externalId>false</externalId>
+        <formula>GSO_Contract_Submission__r.Market_Manager_Email__c</formula>
+        <label>Market Manager Email</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Market_Manager_Phone__c</fullName>
+        <description>Phone number of person that submitted contract</description>
+        <externalId>false</externalId>
+        <formula>GSO_Contract_Submission__r.Market_Manager_Phone__c</formula>
+        <label>Market Manager Phone</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
+        <fullName>Market_Manager__c</fullName>
+        <description>User that submitted the Contract</description>
+        <externalId>false</externalId>
+        <formula>GSO_Contract_Submission__r.PSG_User__r.Name</formula>
+        <label>Market Manager</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Offline_Contract__c</fullName>
         <defaultValue>false</defaultValue>
         <description>Indicates if the contract will be processed by ORT</description>

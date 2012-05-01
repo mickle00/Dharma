@@ -560,7 +560,7 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <fullName>Expedia_Hotel_Id__c</fullName>
         <caseSensitive>false</caseSensitive>
         <description>Id that is unique identifier in Lodging Catalog Master database</description>
-        <externalId>false</externalId>
+        <externalId>true</externalId>
         <label>Expedia Hotel Id</label>
         <length>18</length>
         <required>false</required>
@@ -1556,6 +1556,17 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Venere_Commission__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere Commission %</label>
+        <precision>6</precision>
+        <required>false</required>
+        <scale>3</scale>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Percent</type>
+    </fields>
+    <fields>
         <fullName>Venere_Contract_Status__c</fullName>
         <description>Status of the venere contracting process</description>
         <externalId>false</externalId>
@@ -1604,6 +1615,57 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <type>Picklist</type>
     </fields>
     <fields>
+        <fullName>Venere_EEM_Availability_Policy__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere/EEM Availability Policy</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Both</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>IB - instant booking policy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>OR - on request policy</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Venere_EEM_Hotel_Login__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere/EEM Hotel Login</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>TextArea</type>
+    </fields>
+    <fields>
+        <fullName>Venere_EEM_Last_Contract_Signed_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere/EEM Last Contract Signed Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Venere_Hotel_Email__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere Hotel Email</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Email</type>
+        <unique>false</unique>
+    </fields>
+    <fields>
         <fullName>Venere_Id__c</fullName>
         <description>Unique id for Venere property</description>
         <externalId>true</externalId>
@@ -1616,6 +1678,15 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Venere_Last_Activation_Date__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere Last Activation Date</label>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Venere_Last_Date_Inventory__c</fullName>
         <externalId>false</externalId>
         <label>Venere Last Date Inventory</label>
@@ -1623,6 +1694,18 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Date</type>
+    </fields>
+    <fields>
+        <fullName>Venere_Page_Status__c</fullName>
+        <description>From PSG Salesforce.</description>
+        <externalId>false</externalId>
+        <label>Venere Page Status</label>
+        <length>255</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>Venere_Status__c</fullName>
@@ -1691,6 +1774,41 @@ Users should NOT be able to edit this field, as that could cause it to get out o
         <type>Checkbox</type>
     </fields>
     <fields>
+        <fullName>inserted__c</fullName>
+        <externalId>false</externalId>
+        <label>Venere Page Status</label>
+        <picklist>
+            <picklistValues>
+                <fullName>inserted</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>inprogress</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>made</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>approved</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>to train</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>trained</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Picklist</type>
+    </fields>
+    <fields>
         <fullName>of_Accounts__c</fullName>
         <description>Used in summary reporting to get the unique number of accounts, when there may be multiple rows of the same account.
 
@@ -1711,6 +1829,7 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <columns>ACCOUNT.NAME</columns>
         <columns>Expedia_Hotel_Id__c</columns>
         <columns>PSG_Language__c</columns>
+        <columns>ACCOUNT.LAST_UPDATE</columns>
         <filterScope>Everything</filterScope>
         <label>All Accounts</label>
     </listViews>
@@ -1838,6 +1957,24 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             <value>THIS_WEEK</value>
         </filters>
         <label>New This Week</label>
+    </listViews>
+    <listViews>
+        <fullName>Transport</fullName>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>ACCOUNT.PHONE1</columns>
+        <columns>Super_Region__c</columns>
+        <columns>Region__c</columns>
+        <columns>ACCOUNT.ADDRESS1_STATE</columns>
+        <columns>Market_Manager_Name__c</columns>
+        <columns>Market_Manager_Phone__c</columns>
+        <columns>Market_Manager_Email__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>ACCOUNT.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Account.Air,Account.Car,Account.Transportation</value>
+        </filters>
+        <label>Transport</label>
     </listViews>
     <namedFilters>
         <fullName>nf_01IM00000000FFZMA2_00NM0000000H8NGMA0</fullName>

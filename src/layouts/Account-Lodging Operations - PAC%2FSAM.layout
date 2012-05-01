@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Layout xmlns="http://soap.sforce.com/2006/04/metadata">
-    <excludeButtons>DataDotComClean</excludeButtons>
     <excludeButtons>Submit</excludeButtons>
     <layoutSections>
         <customLabel>false</customLabel>
@@ -260,6 +259,18 @@
                 <field>Venere_Contract_Status__c</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>inserted__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Venere_Hotel_Email__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Venere_EEM_Hotel_Login__c</field>
+            </layoutItems>
+            <layoutItems>
                 <height>200</height>
                 <page>VenereLinksonAccount</page>
                 <showLabel>false</showLabel>
@@ -267,7 +278,24 @@
                 <width>100%</width>
             </layoutItems>
         </layoutColumns>
-        <layoutColumns/>
+        <layoutColumns>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Venere_EEM_Last_Contract_Signed_Date__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Venere_Commission__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Venere_EEM_Availability_Policy__c</field>
+            </layoutItems>
+            <layoutItems>
+                <behavior>Edit</behavior>
+                <field>Venere_Last_Activation_Date__c</field>
+            </layoutItems>
+        </layoutColumns>
         <style>TwoColumnsTopToBottom</style>
     </layoutSections>
     <layoutSections>
@@ -488,15 +516,15 @@
     </relatedLists>
     <relatedLists>
         <fields>NAME</fields>
-        <fields>Connectivity_System_Vendor__c</fields>
+        <fields>Account_Repco__c</fields>
         <fields>Go_Date__c</fields>
         <fields>Platform__c</fields>
-        <fields>Type__c</fields>
         <fields>Status__c</fields>
-        <fields>ETP_Status__c</fields>
+        <fields>Type__c</fields>
         <fields>Connectivity_System__c.NAME</fields>
-        <fields>Connectivity_System__c.Connectivity_System_Type__c</fields>
         <fields>Connectivity_System__c.Connectivity_Vendor__c</fields>
+        <fields>Connectivity_System__c.Connectivity_System_Type__c</fields>
+        <fields>Integration_Connection_Key__c</fields>
         <relatedList>Connection__c.Account__c</relatedList>
     </relatedLists>
     <relatedLists>

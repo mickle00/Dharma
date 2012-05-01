@@ -218,26 +218,6 @@
         </picklistValues>
     </recordTypes>
     <recordTypes>
-        <fullName>ETP</fullName>
-        <active>true</active>
-        <label>ETP</label>
-        <picklistValues>
-            <picklist>Rollout_Step__c</picklist>
-            <values>
-                <fullName>Not Trained</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Scheduled</fullName>
-                <default>false</default>
-            </values>
-            <values>
-                <fullName>Trained</fullName>
-                <default>false</default>
-            </values>
-        </picklistValues>
-    </recordTypes>
-    <recordTypes>
         <fullName>Training</fullName>
         <active>true</active>
         <label>Training</label>

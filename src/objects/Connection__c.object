@@ -119,24 +119,6 @@
         <writeRequiresMasterRead>false</writeRequiresMasterRead>
     </fields>
     <fields>
-        <fullName>ETP_Status__c</fullName>
-        <externalId>false</externalId>
-        <label>ETP Status</label>
-        <picklist>
-            <picklistValues>
-                <fullName>In Progress</fullName>
-                <default>false</default>
-            </picklistValues>
-            <picklistValues>
-                <fullName>Completed</fullName>
-                <default>false</default>
-            </picklistValues>
-            <sorted>false</sorted>
-        </picklist>
-        <trackFeedHistory>false</trackFeedHistory>
-        <type>Picklist</type>
-    </fields>
-    <fields>
         <fullName>Expedia_ID__c</fullName>
         <description>Used for Mail Merge Templates</description>
         <externalId>false</externalId>

@@ -35,6 +35,7 @@
     <deploymentStatus>Deployed</deploymentStatus>
     <description>Guest Object</description>
     <enableActivities>true</enableActivities>
+    <enableEnhancedLookup>false</enableEnhancedLookup>
     <enableFeeds>false</enableFeeds>
     <enableHistory>true</enableHistory>
     <enableReports>true</enableReports>
@@ -960,6 +961,16 @@ IF(Age_days__c&lt;3,&quot;48-72 hours&quot;,
         <type>DateTime</type>
     </fields>
     <fields>
+        <fullName>Closed_Date__c</fullName>
+        <externalId>false</externalId>
+        <formula>DATEVALUE( Closed_Date_Time__c )</formula>
+        <formulaTreatBlanksAs>BlankAsZero</formulaTreatBlanksAs>
+        <label>Closed Date</label>
+        <required>false</required>
+        <trackHistory>false</trackHistory>
+        <type>Date</type>
+    </fields>
+    <fields>
         <fullName>Closed__c</fullName>
         <defaultValue>false</defaultValue>
         <externalId>false</externalId>
@@ -1000,7 +1011,7 @@ IF(Age_days__c&lt;3,&quot;48-72 hours&quot;,
     <fields>
         <fullName>Days_Before_Arrival_Completed__c</fullName>
         <externalId>false</externalId>
-        <formula>Arrival_Date__c - DATEVALUE(Closed_Date_Time__c)</formula>
+        <formula>IF( Closed__c, Arrival_Date__c -  Closed_Date__c, -1)</formula>
         <label>Days Before Arrival Completed</label>
         <precision>18</precision>
         <required>false</required>
@@ -1763,6 +1774,10 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
             </picklistValues>
             <picklistValues>
                 <fullName>Reopened</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cancelled</fullName>
                 <default>false</default>
             </picklistValues>
             <sorted>false</sorted>
@@ -5181,7 +5196,7 @@ OR(ISPICKVAL(Difference_Absorbed_By__c, &quot;Shared Hotel &amp; Expedia-DO NOT 
         <openType>onClickJavaScript</openType>
         <protected>false</protected>
         <requireRowSelection>false</requireRowSelection>
-        <url>window.open(&quot;00Oc0000000F97M?pv0={!Case.Id}&amp;export=1&amp;enc=UTF-8&amp;xf=xls&quot;)</url>
+        <url>window.open(&quot;00Oc0000000Nz6L?pv0={!Case.Id}&amp;export=1&amp;enc=UTF-8&amp;xf=xls&quot;)</url>
     </webLinks>
     <webLinks>
         <fullName>Mass_Update</fullName>

@@ -5469,6 +5469,22 @@ Added Egencia, Venere and All choices to accommodate UGC.</description>
                 <fullName>Zuzana Sebkova</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Brandon Snavely</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Cody McClafferty</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Jenny Slack</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Shaun Jordan</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackFeedHistory>false</trackFeedHistory>
@@ -5741,6 +5757,11 @@ Added Egencia, Venere and All choices to accommodate UGC.</description>
         <inlineHelpText>Check-in dates may vary in a single case; this field represents the earliest check-in date for guests associated with the case.</inlineHelpText>
         <label>Earliest Guest Arrival</label>
         <summarizedField>Guest__c.Arrival_Date__c</summarizedField>
+        <summaryFilterItems>
+            <field>Guest__c.Closed__c</field>
+            <operation>equals</operation>
+            <value>FALSE</value>
+        </summaryFilterItems>
         <summaryForeignKey>Guest__c.Case__c</summaryForeignKey>
         <summaryOperation>min</summaryOperation>
         <trackHistory>false</trackHistory>
@@ -6681,6 +6702,17 @@ Media &amp; Lodging Content = Number of Properties/Updates</inlineHelpText>
         <trackFeedHistory>false</trackFeedHistory>
         <trackHistory>false</trackHistory>
         <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Other_Reference_ID__c</fullName>
+        <externalId>false</externalId>
+        <label>Other Reference ID</label>
+        <length>15</length>
+        <required>false</required>
+        <trackFeedHistory>false</trackFeedHistory>
+        <trackHistory>false</trackHistory>
+        <type>Text</type>
+        <unique>false</unique>
     </fields>
     <fields>
         <fullName>PSG_Case_Id__c</fullName>
@@ -12441,7 +12473,7 @@ Media &amp; Lodging Content = Number of Properties/Updates</inlineHelpText>
         <summaryFilterItems>
             <field>Guest__c.Status__c</field>
             <operation>notEqual</operation>
-            <value>Reassigned to Europe CS, Accommodated at original hotel, Completed,Relocated, Resend, Confirmed</value>
+            <value>Reassigned to Europe CS, Accommodated at original hotel, Completed,Relocated, Resend, Confirmed, Cancelled, Past Arrival</value>
         </summaryFilterItems>
         <summaryForeignKey>Guest__c.Case__c</summaryForeignKey>
         <summaryOperation>count</summaryOperation>
@@ -12688,25 +12720,6 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <label># All Exception Fallback Cases</label>
     </listViews>
     <listViews>
-        <fullName>All_Fallback_Cases</fullName>
-        <columns>CASES.CASE_NUMBER</columns>
-        <columns>OWNER_NAME</columns>
-        <columns>CASES.STATUS</columns>
-        <columns>Earliest_Guest_Arrival__c</columns>
-        <columns>ACCOUNT.NAME</columns>
-        <columns>Account_Location__c</columns>
-        <columns>Account_Language__c</columns>
-        <columns>SuperRegion__c</columns>
-        <columns>Unresolved_Guests__c</columns>
-        <filterScope>Everything</filterScope>
-        <filters>
-            <field>CASES.RECORDTYPE</field>
-            <operation>equals</operation>
-            <value>Case.Lodging_Operations_Fallback</value>
-        </filters>
-        <label># All Fallback Cases</label>
-    </listViews>
-    <listViews>
         <fullName>All_HPS_Cases</fullName>
         <columns>CASES.CASE_NUMBER</columns>
         <columns>CASES.RECORDTYPE</columns>
@@ -12761,6 +12774,30 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             <group>HSTS Non-English</group>
             <group>Superuser</group>
         </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>All_Open_Fallback_Cases</fullName>
+        <columns>CASES.CASE_NUMBER</columns>
+        <columns>OWNER_NAME</columns>
+        <columns>CASES.STATUS</columns>
+        <columns>Earliest_Guest_Arrival__c</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>Account_Location__c</columns>
+        <columns>Account_Language__c</columns>
+        <columns>SuperRegion__c</columns>
+        <columns>Unresolved_Guests__c</columns>
+        <filterScope>Everything</filterScope>
+        <filters>
+            <field>CASES.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Case.Lodging_Operations_Fallback</value>
+        </filters>
+        <filters>
+            <field>CASES.CLOSED</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label># All Open Fallback Cases</label>
     </listViews>
     <listViews>
         <fullName>All_Ticketing_Cases</fullName>
@@ -17896,7 +17933,28 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         </sharedTo>
     </listViews>
     <listViews>
-        <fullName>My_Fallback_Cases</fullName>
+        <fullName>My_Closed_Cases</fullName>
+        <columns>CASES.CASE_NUMBER</columns>
+        <columns>CASES.CREATED_DATE</columns>
+        <columns>CASES.CLOSED_DATE</columns>
+        <columns>CASES.SUBJECT</columns>
+        <columns>NAME</columns>
+        <columns>CASES.STATUS</columns>
+        <columns>CASES.PRIORITY</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>CASES.CLOSED</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label>My Closed Cases</label>
+        <sharedTo>
+            <group>Administrators</group>
+            <group>Localisation</group>
+        </sharedTo>
+    </listViews>
+    <listViews>
+        <fullName>My_Closed_Fallback_Cases</fullName>
         <columns>CASES.CASE_NUMBER</columns>
         <columns>CASES.STATUS</columns>
         <columns>Earliest_Guest_Arrival__c</columns>
@@ -17911,7 +17969,35 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             <operation>equals</operation>
             <value>Case.Lodging_Operations_Fallback</value>
         </filters>
-        <label># My Fallback Cases</label>
+        <filters>
+            <field>CASES.CLOSED</field>
+            <operation>equals</operation>
+            <value>1</value>
+        </filters>
+        <label># My Closed Fallback Cases</label>
+    </listViews>
+    <listViews>
+        <fullName>My_Open_Fallback_Cases</fullName>
+        <columns>CASES.CASE_NUMBER</columns>
+        <columns>CASES.STATUS</columns>
+        <columns>Earliest_Guest_Arrival__c</columns>
+        <columns>ACCOUNT.NAME</columns>
+        <columns>Account_Language__c</columns>
+        <columns>Account_Location__c</columns>
+        <columns>SuperRegion__c</columns>
+        <columns>Unresolved_Guests__c</columns>
+        <filterScope>Mine</filterScope>
+        <filters>
+            <field>CASES.RECORDTYPE</field>
+            <operation>equals</operation>
+            <value>Case.Lodging_Operations_Fallback</value>
+        </filters>
+        <filters>
+            <field>CASES.CLOSED</field>
+            <operation>equals</operation>
+            <value>0</value>
+        </filters>
+        <label># My Open Fallback Cases</label>
     </listViews>
     <listViews>
         <fullName>New_Transferred_SR</fullName>
@@ -79794,6 +79880,25 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
         <businessProcess>Lodging Operations - HPS</businessProcess>
         <label>Lodging Operations - Fallback</label>
         <picklistValues>
+            <picklist>Activation_Type__c</picklist>
+            <values>
+                <fullName>Activation Only</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Contract Renewal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Standard</fullName>
+                <default>true</default>
+            </values>
+            <values>
+                <fullName>Training Only</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Additional_Status__c</picklist>
             <values>
                 <fullName>Destination Services</fullName>
@@ -79857,6 +79962,93 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
             <values>
                 <fullName>Virtual Tours Content</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Adjustment_Reason__c</picklist>
+            <values>
+                <fullName>365</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Affidavit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Contract%2FTax Rate Loading Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Care Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Escheat-Historical Thru 12%2F02</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exception Override</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Goodwill</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Guest Was Moved to This Hotel</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hotel Waived Reversed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mass Breakage Removal</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>No Adjustment Required</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Non-Confirmed Cancellation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ownership Change</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Promo Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Rack Rate</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Relocation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Special Rates</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>System Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Tolerance</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Math Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Volcano Flex Policy</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -80726,6 +80918,99 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Ids_Requested__c</picklist>
+            <values>
+                <fullName>Expedia Hotel ID</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Expedia Vendor ID</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Include_All_Bookings__c</picklist>
+            <values>
+                <fullName>No</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Internal_Reporting_Decision__c</picklist>
+            <values>
+                <fullName>Contract Rate%2FPromo%2FTax%2FCanx Loading Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Currency Conversion</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Customer Care Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EPay Invoiced Incorrectly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EVC Bookings Invoiced Incorrectly</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fraud Dispute Reversed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hotel Waived Reversed</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Insert Options from Spreadsheet</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Ownership Change</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PSG Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Payment Processing Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Promo - Full Rate Approved by PSG</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Relocation</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>System Error</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Banking Affidavit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Invoicing Error Approved by PSG Finance VP and VP Approval</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Invoicing Error Recommended by MM</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Investigation__c</picklist>
             <values>
                 <fullName>1st Chaser</fullName>
@@ -80823,6 +81108,21 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Management_s_Decision__c</picklist>
+            <values>
+                <fullName>Approved</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Declined</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Pending</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Met_SLA__c</picklist>
             <values>
                 <fullName>No</fullName>
@@ -80830,6 +81130,45 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
             <values>
                 <fullName>Yes</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Method_Detail__c</picklist>
+            <values>
+                <fullName>Current Invoice Fax %23</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Exppayload</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Other</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PO Box</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PSG</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SR E-mail Alias</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>SR Fax %23</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Submitinvoice or Domesticbilling Alias</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Uploaded to ExpediaPay</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -80853,6 +81192,41 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
             <values>
                 <fullName>United States</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Operational_Unit__c</picklist>
+            <values>
+                <fullName>Collections</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>FinOps</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GSO</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>I%26CA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Kuala Lumpur</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Market Management</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Prague</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Teleperformance</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -80884,6 +81258,33 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
             <values>
                 <fullName>Phone</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Original_Invoicing_Method__c</picklist>
+            <values>
+                <fullName>E-mail%2FPaper</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EVC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Electronic%2FEPay or DMX</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fax%2FPaper</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Mail%2FPaper</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>PSG</fullName>
                 <default>false</default>
             </values>
         </picklistValues>
@@ -81604,6 +82005,45 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
         </picklistValues>
         <picklistValues>
+            <picklist>Resolution_Type__c</picklist>
+            <values>
+                <fullName>Compliance %26 Recovery</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>EVC</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Expedia Pay</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>GSO</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Health %26 Safety</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Hotel Collect</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>I%26CA</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Supplier Relations</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Vendor Banking</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
             <picklist>Resolution__c</picklist>
             <values>
                 <fullName>Audit Covers</fullName>
@@ -81671,6 +82111,29 @@ See also: http://success.salesforce.com/ideaView?c=09a30000000D9xo&amp;id=087300
             </values>
             <values>
                 <fullName>Strat Account</fullName>
+                <default>false</default>
+            </values>
+        </picklistValues>
+        <picklistValues>
+            <picklist>Responsible_for_Error__c</picklist>
+            <values>
+                <fullName>DS fraud</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Expedia</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Fraud</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Partner</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>TRX</fullName>
                 <default>false</default>
             </values>
         </picklistValues>

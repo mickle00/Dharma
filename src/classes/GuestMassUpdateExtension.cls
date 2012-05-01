@@ -1,28 +1,43 @@
 public with sharing class GuestMassUpdateExtension {
     
-    public List<Guest__c> openGuests;
+    public Map<Id, Guest__c> openGuests;
+    public Map<Id, Guest__c> openGuestsOriginal;
     List<GuestWrapper> myGuestWrappers;
     public Guest__c guestTemplate;
     public boolean allSelected {get;set;}
     
+    
+    //Extension
     public GuestMassUpdateExtension (ApexPages.StandardSetController controller) {
-        controller.setPageSize(100);
         this.allSelected = false;
     }
     
     public List<Guest__c> getOpenGuests(){
         if (this.openGuests == null){
-            this.openGuests = new List<Guest__c>();
-            this.openGuests =  [SELECT  Id
-                                   ,Name
-                                   ,Expedia_Booking_ID__c
-                                   ,Status__c
-                                   ,Arrival_Date__c 
-                              FROM Guest__c 
-                             WHERE Case__c = :ApexPages.currentPage().getParameters().get('Id')
-                               AND Closed__c = false
-                          ORDER BY Arrival_Date__c ASC];
-        } return this.openGuests;
+            this.openGuests =  new Map<Id, Guest__c> ([SELECT  Id
+					                                   ,Name
+					                                   ,Expedia_Booking_ID__c
+					                                   ,Status__c
+					                                   ,Arrival_Date__c 
+					                              FROM Guest__c 
+					                             WHERE Case__c = :ApexPages.currentPage().getParameters().get('Id')
+					                               AND Closed__c = false
+					                          ORDER BY Arrival_Date__c ASC]
+            );
+            this.openGuestsOriginal = this.openGuests.deepClone();
+        } return this.openGuests.values();
+    }
+    
+    public PageReference Save(){
+    	List<Guest__c> guestsToBeUpdated = new List<Guest__c>();
+    	for (GuestWrapper myGuestWrapper : myGuestWrappers){
+    		if (myGuestWrapper.myGuest.Status__c != openGuestsOriginal.get(myGuestWrapper.myGuest.Id).Status__c){
+    			guestsToBeUpdated.add(myGuestWrapper.myGuest);
+    		}
+    	}
+    	update guestsToBeUpdated;
+    	
+    	return new ApexPages.StandardController(new Case(Id=ApexPages.currentPage().getParameters().get('Id'))).view();
     }
     
     public void selectAll(){
@@ -48,10 +63,9 @@ public with sharing class GuestMassUpdateExtension {
     }
     
     public Guest__c getGuestTemplate(){
-        //TODO: Look at StandardSetController.getRecord()
-        //TODO: Scope RecordType
+        //TODO: Get RecordTypeID via Utilities Method
         if (this.guestTemplate == null){
-            this.guestTemplate = new Guest__c(RecordTypeId = '012c00000008U8L');
+            this.guestTemplate = new Guest__c(RecordTypeId = '012c000000008AO');
         } return this.guestTemplate;    
     }
     
@@ -75,5 +89,7 @@ public with sharing class GuestMassUpdateExtension {
             this.myGuest = myGuest;
             this.isSelected = false;
         }
+        public GuestWrapper(){}
+        
     }
 }

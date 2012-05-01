@@ -1,14 +1,4 @@
 public class ConnectionController{
-	/**
-	   TODO: GET ROLLOUTSTEP RECORDTYPE MAP
-	   TODO: SAVE ETP ROLLOUT STEPS TO DATABASE
-	   TODO: REDUCE DUPLICATE METHODS
-	   TODO: UPDATE EXCEPTION HANDLING
-	   TODO: REMOVE HARDCODING IN newETPRolloutStep
-	   TODO: REMOVE HARDCODED EMAIL TEMPLATE FOLDERS
-	   TODO: CREATE NEW CONNECTION PAGE LAYOUT FOR EC ROLLOUT TEAM
-	   TODO: ADD CUSTOM ETP STATUS ROLLUP
-	**/
   
     public final Set<String> TEMPLATE_FOLDERS = new Set<String>{'EQC_Maintenance', 'EQC_Soft_Launch', 'Venere_Connect'};
     public final String FROM_ADDRESS = 'eqchelp@expedia.com';   
@@ -16,15 +6,13 @@ public class ConnectionController{
     public Connection__c myConnection {get; set;}
     public Case myCase {get; set;}
     public Note myNote {get; set;}
-    public List<Rollout_Step__c> myConnectivityRollouts {get; set;}
-    public List<Rollout_Step__c> myETPRollouts {get; set;}        
+    public List<Rollout_Step__c> myConnectivityRollouts {get; set;}    
     public List<Connection__c> accountConnections{get; set;}
     public List<Note> allNotes{get; set;}
     public boolean isCreatingNewConnection {get; set;}   
     public boolean renderConnectionDetails {get; set;}
     public final id originalCaseId{get; set;}
     public integer numberAdditionalRolloutSteps{get;set;}
-    public integer numberAdditionalETPRolloutSteps{get;set;}
     public Id rolloutStepToDelete{get;set;}
     public Id connectionIdToEdit {get; set;}
     public EmailWidgetWrapper myEmailWidget{get; set;}
@@ -33,8 +21,7 @@ public class ConnectionController{
     public ConnectionController(ApexPages.StandardController stdController){
         this.myConnection = (Connection__c)stdController.getRecord();
         renderConnectionDetails = false;
-        numberAdditionalRolloutSteps = 0;
-        numberAdditionalETPRolloutSteps = 0;        
+        numberAdditionalRolloutSteps = 0;       
         if (ApexPages.currentPage().getParameters().containsKey('CaseID')){
            if (ApexPages.currentPage().getParameters().containsKey('new'))renderConnectionDetails = true;
            originalCaseId = ApexPages.currentPage().getParameters().get('CaseID');
@@ -93,18 +80,10 @@ public class ConnectionController{
         numberAdditionalRolloutSteps++;
         myConnectivityRollouts.add(newRolloutStep());
     }
-    public void addETPRolloutStage(){
-        numberAdditionalETPRolloutSteps++;
-        myETPRollouts.add(newETPRolloutStep());
-    }
     
     public void removeRolloutStage(){
         numberAdditionalRolloutSteps--;
         myConnectivityRollouts.remove(myConnectivityRollouts.size()-1);
-    }
-    public void removeETPRolloutStage(){
-        numberAdditionalETPRolloutSteps--;
-        myETPRollouts.remove(myConnectivityRollouts.size()-1);
     }
     
     public void deleteRolloutStep(){
@@ -116,6 +95,7 @@ public class ConnectionController{
             this.buildConnectivityRollouts();
         }
     }
+
     public PageReference Save(){
         try{
             ConnectionClass.upsertConnection(myConnection);            
@@ -261,7 +241,6 @@ public class ConnectionController{
     
     private void buildConnectivityRollouts(){
           myConnectivityRollouts = new List<Rollout_Step__c>();
-          myETPRollouts = new List<Rollout_Step__c>{newETPRolloutStep()};
           if (myConnection.Status__c != 'Connected' && myConnection.Status__c !='Disconnected'){
           	myConnectivityRollouts.add(newRolloutStep());
           }
@@ -272,14 +251,7 @@ public class ConnectionController{
                                   ,Connection__c = myConnection.Id
                                   ,Completed_Date__c = system.now()
                                   ,RecordTypeId = getConnectivityRolloutStepRecordType().Id);
-    }
-
-    private Rollout_Step__c newETPRolloutStep(){
-        return new Rollout_Step__c(Case__c = originalCaseId
-                                  ,Connection__c = myConnection.Id
-                                  ,Completed_Date__c = system.now()
-                                  ,RecordTypeId = '012c00000008U5b');
-    }
+    }    
    
     private void noAccount(){  
         ApexPages.Message myError = new ApexPages.Message(ApexPages.Severity.FATAL, 'Warning - Case has no associated account, please update the case prior to creating a connection.');

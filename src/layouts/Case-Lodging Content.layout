@@ -112,6 +112,10 @@
                 <field>IsEscalated</field>
             </layoutItems>
             <layoutItems>
+                <behavior>Edit</behavior>
+                <field>DM_Case__c</field>
+            </layoutItems>
+            <layoutItems>
                 <emptySpace>true</emptySpace>
             </layoutItems>
             <layoutItems>

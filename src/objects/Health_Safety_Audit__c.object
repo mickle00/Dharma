@@ -121,6 +121,18 @@
                 <fullName>Self Assessment</fullName>
                 <default>false</default>
             </picklistValues>
+            <picklistValues>
+                <fullName>Investigation</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Desktop Review</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Excursion Audit</fullName>
+                <default>false</default>
+            </picklistValues>
             <sorted>false</sorted>
         </picklist>
         <trackHistory>true</trackHistory>
@@ -362,6 +374,15 @@
         <unique>false</unique>
     </fields>
     <fields>
+        <fullName>Risk_Score__c</fullName>
+        <externalId>false</externalId>
+        <label>Risk Score</label>
+        <length>32768</length>
+        <trackHistory>false</trackHistory>
+        <type>LongTextArea</type>
+        <visibleLines>2</visibleLines>
+    </fields>
+    <fields>
         <fullName>Target_Group_Name__c</fullName>
         <externalId>false</externalId>
         <label>Target Group Name</label>
@@ -586,6 +607,18 @@
         </picklistValues>
         <picklistValues>
             <picklist>Audit__c</picklist>
+            <values>
+                <fullName>Desktop Review</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Excursion Audit</fullName>
+                <default>false</default>
+            </values>
+            <values>
+                <fullName>Investigation</fullName>
+                <default>false</default>
+            </values>
             <values>
                 <fullName>Physical Audit</fullName>
                 <default>false</default>

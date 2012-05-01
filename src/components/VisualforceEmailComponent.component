@@ -1,0 +1,5 @@
+<apex:component access="Global" controller="VisualforceEmail">
+    <apex:attribute name="Case_Id" type="Id" description="The Case Id" assignTo="{!Case_Id}"  />
+{!EmailBody}
+{!GSOContract.Id}
+</apex:component>

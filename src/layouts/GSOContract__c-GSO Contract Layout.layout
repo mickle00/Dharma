@@ -35,6 +35,10 @@
                 <behavior>Edit</behavior>
                 <field>Date_Contract_Completed__c</field>
             </layoutItems>
+            <layoutItems>
+                <behavior>Readonly</behavior>
+                <field>Market_Manager_Email__c</field>
+            </layoutItems>
         </layoutColumns>
         <layoutColumns>
             <layoutItems>

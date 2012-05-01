@@ -25,7 +25,7 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
         
         objCaseClass.linkAccountAndContactToCase(casesToMatchContactAndAccount);
         CaseEx.beforeNewTroubleshootingCase(trigger.new);
-        CaseTimeObj.createCaseTimesForNewCases(trigger.New);
+        //CaseTimeObj.createCaseTimesForNewCases(trigger.New);
     }
     
     if (trigger.isBefore && trigger.isUpdate){
@@ -35,7 +35,7 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
     if (trigger.isAfter && trigger.isInsert){
         objPOS.insertCasePointsOfSaleForNewCases(trigger.new);
         CaseEx.afterNewTroubleshootingCase(trigger.new);
-        CaseTimeObj.updateCaseTimeAfterInsert(trigger.New);
+        //CaseTimeObj.updateCaseTimeAfterInsert(trigger.New);
     }   
     
     if(trigger.isAfter && trigger.isUpdate){
@@ -44,9 +44,8 @@ trigger CaseTrigger on Case (before insert, before update, after insert, after u
     objCaseClass.ReportRecontractingCaseClosed(trigger.new, trigger.oldMap);
     
     if (!Utilities.hasAlreadyFiredTrigger()){
-      Utilities.setAlreadyFiredTrigger();
-      objCaseClass.afterUpdateCloneAndTransferCase(trigger.newMap, trigger.oldMap);
-      TimeLogObj.logCaseTime(trigger.New, trigger.oldMap);
+      Utilities.setAlreadyFiredTrigger();      
+      //TimeLogObj.logCaseTime(trigger.New, trigger.oldMap);
     }     
     }
 
